@@ -16,7 +16,7 @@ export function AddWordForm({ studentId }: { studentId: string }) {
         <Field label="Słówko / fraza (EN)">
           <input name="term" required maxLength={120} autoComplete="off" className={inputClass} />
         </Field>
-        <Field label="Tłumaczenie (PL)">
+        <Field label="Tłumaczenie (PL)" hint="kilka: „/”, opcjonalne: (…)">
           <input
             name="translation"
             required

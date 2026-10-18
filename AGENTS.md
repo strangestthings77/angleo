@@ -31,6 +31,7 @@ and URLs migrated from the Webflow site at angleo.pl; redesigned as a premium ed
 pnpm dev            # dev server
 pnpm build          # production build — run before claiming things compile
 pnpm check          # format:check + lint + typecheck — the gate
+pnpm test           # vitest (lib/*.test.ts)
 pnpm check:meta     # meta & OG audit (needs a build + running server)
 ```
 
@@ -156,6 +157,12 @@ supabase/migrations/               schema as code — profiles (role), is_admin(
 - **Words:** added by the admin per student (`words.student_id`); the starter set was removed
   (migration `20261018170000`). `student_id = null` would still show to every student. `WordCard` shows the
   English side only; the Polish translation appears on hover (pointer) or tap/Enter (touch, keyboard).
+- **Panel tabs:** Ćwiczenia (placeholder) · Słówka (flip cards) · Test słówek (`WordQuiz`).
+  `components/ui/Tabs.tsx` is the accessible tabs primitive (arrow keys, `#hash` deep link).
+- **Word test answers** (`lib/answer-check.ts`, tested in `answer-check.test.ts`): case, spacing,
+  punctuation and Polish diacritics are ignored; `a / b` = alternatives; `(…)` = optional part;
+  small typos → "Prawie dobrze" (none for ≤4 letters). On a miss the student can overrule
+  ("Miałem(-am) rację") — self-study, so honesty-based. Results aren't stored yet.
 - **Session checks:** proxy and `getCurrentUser()` both use `auth.getClaims()` so they agree.
   A failed profile read throws (→ `app/panel/error.tsx`), it never redirects.
 - **One browser = one account.** The session is one cookie per site; to test admin and student

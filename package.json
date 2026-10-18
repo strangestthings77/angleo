@@ -14,7 +14,8 @@
     "check": "pnpm format:check && pnpm lint && pnpm typecheck",
     "check:meta": "tsx scripts/check-meta.mts --url http://localhost:3000",
     "db:push": "supabase db push",
-    "db:link": "supabase link --project-ref jeootpnfwdydeurqfohv"
+    "db:link": "supabase link --project-ref jeootpnfwdydeurqfohv",
+    "test": "vitest run"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
@@ -45,7 +46,8 @@
     "supabase": "^2.121.0",
     "tailwindcss": "^4",
     "tsx": "4.23.15",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "3.2.4"
   },
   "packageManager": "pnpm@10.33.0"
 }
