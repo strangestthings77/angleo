@@ -21,6 +21,7 @@ and URLs migrated from the Webflow site at angleo.pl; redesigned as a premium ed
 - TypeScript (strict), ESLint + Prettier
 - Content: MDX in repo (`@next/mdx`) — post bodies in `content/blog/*.mdx`, post metadata
   in `content/blog/posts.ts`, site copy in `content/site.ts`
+- Booking: custom UI on Cal.com API v2 (`lib/cal.ts`, server only) — see "Booking" below
 - Hosting: Vercel
 
 ## Commands
@@ -53,13 +54,15 @@ app/                           # Routes + root layout (html/body/fonts)
   blog/page.tsx                # /blog — featured + all posts, category chips
   blog/[slug]/                 # /blog/<slug> — article
   blog-post-categories/[slug]/ # category listing (old Webflow URL kept)
-  o-mnie/ · umow-lekcje/       # about · contact & booking
+  o-mnie/ · umow-lekcje/       # about · booking (custom Cal.com calendar)
+  api/booking/                 # POST create booking · slots/ GET availability
   styles/                      # tokens.css, utilities/layout.css
 components/
   ui/                          # Section, Container, Button, Icon
   text/                        # Heading, Text, Eyebrow, Accent (*word* → italic accent)
   blog/                        # PostCard/PostGrid, FeaturedPost, PostMeta, CategoryChips
   marketing/                   # SectionHeader, BookingCta, ContactList
+  booking/                     # BookingWidget ('use client'): MonthCalendar, TimeSlots, BookingForm, BookingSuccess
 sections/                      # Route-specific blocks: home/, blog/, about/, contact/
 layouts/                       # MainLayout, Header, MobileMenu ('use client'), Footer
 content/
@@ -70,6 +73,9 @@ content/
 mdx-components.tsx             # Article typography + <Figure>
 lib/
   blog.ts                      # Post/category helpers, formatDate (pl-PL), plural(), seoTitle()
+  booking.ts                   # zod schemas + shared booking types
+  cal.ts                       # Cal.com API v2 client ('server-only')
+  rate-limit.ts                # Per-instance limiter for the booking routes
   metadata.ts                  # buildMetadata()
   meta-audit/                  # Meta & OG audit module
 scripts/                       # check-meta.mts
@@ -92,6 +98,26 @@ page → MainLayout → sections → Section → container → content
 3. Put the cover in `public/images/blog/<slug>.jpg` (≤1600px wide).
 
 Titles over 60 chars are trimmed for `<title>` by `seoTitle()`; the on-page title is untouched.
+
+## Booking (Cal.com)
+
+Custom booking flow on `/umow-lekcje#rezerwacja`; Cal.com is only the backend (availability,
+calendar sync, Google Meet link, confirmation/reschedule emails).
+
+```text
+BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET /v2/slots
+                       → POST /api/booking      → lib/cal.ts → Cal.com POST /v2/bookings
+```
+
+- **Env:** `CAL_API_KEY` (server only — never `NEXT_PUBLIC_`), `CAL_EVENT_TYPE_ID`.
+- **API versions:** slots `2024-09-04`, bookings `2026-02-25`, event types `2024-06-14`
+  (`cal-api-version` header; wrong value silently falls back to an older contract).
+- **Plan:** hosted API v2 needs a paid Cal.com plan (Teams+); the free plan has no API access.
+- **Spam:** honeypot field `website`, 3 s timing trap (`renderedAt`), rate limit 5 bookings /
+  10 min / IP and 60 slot queries / min / IP (per instance — best effort on serverless).
+- **Time zones:** the widget uses the visitor's browser time zone; Cal returns slots grouped
+  by local date in that zone. Date math in `components/booking/dates.ts` is UTC-only.
+- `getLessonInfo()` (duration, online) is `'use cache'` with `cacheLife('hours')`.
 
 ## Design direction
 

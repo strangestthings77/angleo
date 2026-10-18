@@ -10,7 +10,7 @@ import { site } from '@/content/site';
 
 /** Ink band that closes most pages. */
 export function BookingCta() {
-  const { booking, contact } = site;
+  const { booking } = site;
 
   return (
     <section className="pb-section">
@@ -27,9 +27,9 @@ export function BookingCta() {
               </Text>
             </div>
             <div className="flex flex-col gap-8 lg:items-end">
-              <Button href={contact.calendarUrl} variant="light" className="w-full sm:w-auto">
+              <Button href={booking.href} variant="light" className="w-full sm:w-auto">
                 <CalendarIcon />
-                Otwórz kalendarz
+                Zarezerwuj termin
               </Button>
               <div className="lg:text-right">
                 <ContactList inverse />

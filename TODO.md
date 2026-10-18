@@ -9,6 +9,10 @@ Seeded from `.altalogy/BUILD.md`.
 
 ## Next
 
+- [ ] Switch `CAL_EVENT_TYPE_ID` / key to Nicole's Cal.com account; rotate the test key
+- [ ] Durable rate limit (Vercel KV / Upstash) if booking spam appears
+- [ ] Privacy policy naming Cal.com as processor of booking data
+
 - [ ] Real portrait/OG photography for the premium look (current photo is a webcam still)
 - [ ] Designed OG image
 - [ ] Real Instagram / Facebook links

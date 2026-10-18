@@ -1,0 +1,40 @@
+import { z } from 'zod';
+
+/** Shared between the booking route handlers and the client widget (types only on the client). */
+
+const isTimeZone = (tz: string) => {
+  try {
+    new Intl.DateTimeFormat('en', { timeZone: tz });
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const dateOnly = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+const timeZone = z.string().min(1).max(64).refine(isTimeZone, 'Nieprawidłowa strefa czasowa');
+
+export const slotsQuerySchema = z.object({ start: dateOnly, end: dateOnly, timeZone });
+
+export const bookingRequestSchema = z.object({
+  start: z.iso.datetime({ offset: true }),
+  timeZone,
+  name: z.string().trim().min(2, 'Podaj imię i nazwisko').max(100),
+  email: z.email('Podaj poprawny adres e-mail').max(200),
+  notes: z.string().trim().max(1000).optional().default(''),
+  /** Honeypot — real users never see or fill it. */
+  website: z.string().max(500).optional().default(''),
+  /** `Date.now()` when the form was shown — submissions faster than a human are rejected. */
+  renderedAt: z.number().int().positive(),
+});
+
+export type BookingRequest = z.input<typeof bookingRequestSchema>;
+
+/** Slots keyed by local date (`YYYY-MM-DD` in the requested time zone) → ISO start times. */
+export type SlotsByDate = Record<string, string[]>;
+
+export type SlotsResponse = { slots: SlotsByDate } | { error: string };
+
+export type BookingConfirmation = { start: string; end: string; location: string | null };
+
+export type BookingResponse = { booking: BookingConfirmation } | { error: string; code?: string };

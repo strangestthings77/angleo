@@ -34,4 +34,7 @@ licenses, search).
   Webflow CDN after migration.
 - **Meta:** two posts had no description; their first paragraph is used. Long titles and
   descriptions are trimmed for meta tags only (audit limits).
-- **Booking** stays on the existing Google Apps Script calendar.
+- **Booking rebuilt on Cal.com API v2 (custom UI, not the embed).** Replaces the Google Apps
+  Script calendar. Hosted API v2 requires a paid Cal.com plan (Teams+); the free plan has no
+  API access — confirmed against Cal.com docs 2026-10-18. Key stays server-side; spam
+  protection = honeypot + timing trap + per-IP rate limit (no captcha yet).

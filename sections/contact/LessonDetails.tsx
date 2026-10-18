@@ -1,0 +1,63 @@
+import { ContactList } from '@/components/marketing/ContactList';
+import { Eyebrow } from '@/components/text/Eyebrow';
+import { site } from '@/content/site';
+import { getLessonInfo } from '@/lib/cal';
+
+const STEPS = [
+  'Wybierz dzień i godzinę',
+  'Podaj imię, e-mail i cel lekcji',
+  'Potwierdzenie i link do spotkania przyjdą e-mailem',
+];
+
+/** Left column next to the booking widget: what you're booking, how it works, contact. */
+export async function LessonDetails() {
+  const lesson = await getLessonInfo();
+  const { company } = site;
+
+  return (
+    <aside className="flex flex-col gap-10">
+      <div className="flex flex-col gap-4">
+        <Eyebrow>Lekcja</Eyebrow>
+        <p className="font-serif text-display-sm tracking-display text-foreground">
+          {site.booking.lessonName}
+        </p>
+        <ul className="flex flex-wrap gap-2 text-sm text-foreground">
+          {lesson && (
+            <li className="rounded-full border border-border px-3 py-1.5">
+              {lesson.lengthInMinutes} min
+            </li>
+          )}
+          <li className="rounded-full border border-border px-3 py-1.5">
+            {lesson?.online === false ? 'Spotkanie' : 'Online · Google Meet'}
+          </li>
+        </ul>
+      </div>
+
+      <ol className="flex flex-col gap-4">
+        {STEPS.map((step, i) => (
+          <li key={step} className="flex gap-4 text-sm/6 text-foreground-muted">
+            <span className="font-serif text-title leading-none text-accent tabular-nums">
+              {i + 1}
+            </span>
+            {step}
+          </li>
+        ))}
+      </ol>
+
+      <div className="flex flex-col gap-3 border-t border-border pt-8">
+        <p className="text-sm text-foreground-muted">Wolisz najpierw porozmawiać?</p>
+        <ContactList />
+      </div>
+
+      <address className="flex flex-col text-xs/5 text-foreground-muted not-italic">
+        <span className="font-medium text-foreground">
+          {site.owner} – {site.role}
+        </span>
+        <span>
+          {company.street}, {company.city}
+        </span>
+        <span>NIP: {company.nip}</span>
+      </address>
+    </aside>
+  );
+}

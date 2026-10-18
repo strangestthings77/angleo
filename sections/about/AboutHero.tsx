@@ -9,7 +9,7 @@ import { Container } from '@/components/ui/Container';
 import { site } from '@/content/site';
 
 export function AboutHero() {
-  const { about, portrait, contact } = site;
+  const { about, portrait } = site;
 
   return (
     <section className="pt-12 pb-20 md:pt-20 md:pb-28">
@@ -32,8 +32,8 @@ export function AboutHero() {
           <Text variant="lead">{about.lead}</Text>
           <ContactList />
           <div>
-            <Button href={contact.calendarUrl} arrow>
-              Otwórz kalendarz
+            <Button href={site.booking.href} arrow>
+              Zarezerwuj termin
             </Button>
           </div>
         </div>

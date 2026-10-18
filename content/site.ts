@@ -91,15 +91,20 @@ export const site = {
   booking: {
     eyebrow: 'Umów lekcję',
     heading: 'Zrób pierwszy krok do *pewnego* angielskiego.',
-    lead: 'Kliknij w poniższy przycisk i wybierz dogodny termin! Wolisz porozmawiać najpierw? Napisz albo zadzwoń.',
+    lead: 'Wybierz dogodny termin w kalendarzu — potwierdzenie dostaniesz od razu e-mailem. Wolisz porozmawiać najpierw? Napisz albo zadzwoń.',
+    /** Booking page (`/umow-lekcje`). */
+    pageEyebrow: 'Rezerwacja',
+    pageHeading: 'Umów *lekcję.*',
+    pageLead:
+      'Angielski w pracy i biznesie — dopasowany do sytuacji, w których naprawdę go używasz. Wybierz termin, który Ci pasuje.',
+    lessonName: 'Lekcja angielskiego biznesowego',
+    href: '/umow-lekcje#rezerwacja',
   },
 
   contact: {
     email: 'nicolekurek.info@gmail.com',
     phone: '+48 502 968 538',
     phoneHref: 'tel:+48502968538',
-    calendarUrl:
-      'https://script.google.com/macros/s/AKfycbyZ5Cb77iHqLp0mVz2Z4KR5cgUza0_Tdvyl3b736-cytxmdVktr7zCdnSuuoV9fgmZy/exec',
   },
 
   company: {

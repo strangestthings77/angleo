@@ -20,10 +20,12 @@ pnpm dev
 
 ## Environment variables
 
-| Variable               | Required | What it is                                                   |
-| ---------------------- | -------- | ------------------------------------------------------------ |
-| `NEXT_PUBLIC_SITE_URL` | yes      | Public origin, used for canonical and OG URLs                |
-| `SITE_URL`             | yes      | Origin used by `next-sitemap` for `sitemap.xml`/`robots.txt` |
+| Variable               | Required | What it is                                                                                   |
+| ---------------------- | -------- | -------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL` | yes      | Public origin, used for canonical and OG URLs                                                |
+| `SITE_URL`             | yes      | Origin used by `next-sitemap` for `sitemap.xml`/`robots.txt`                                 |
+| `CAL_API_KEY`          | yes      | Cal.com API v2 key (Settings → Developer → API keys). Server only. Needs a paid Cal.com plan |
+| `CAL_EVENT_TYPE_ID`    | yes      | Id of the lesson event type in Cal.com                                                       |
 
 ## Commands
 
@@ -37,12 +39,15 @@ Vercel builds `main`; PRs get a preview. Build: `pnpm build`. Output: `.next`.
 
 - **Blog posts:** body in `content/blog/<slug>.mdx`, metadata (title, date, category,
   excerpt, cover) in `content/blog/posts.ts`. See "Adding a blog post" in `AGENTS.md`.
+- **Booking:** availability, lesson length and the Google Meet location are managed in
+  Cal.com (event type `CAL_EVENT_TYPE_ID`); the site only renders and submits.
 - **All page copy** (home, about, contact, CTA band, footer) and contact details:
   `content/site.ts`. Wrap a word in `*asterisks*` in a heading to give it the italic accent.
 
 ## Outstanding
 
-- [ ] Connect Vercel and set `NEXT_PUBLIC_SITE_URL` / `SITE_URL`; point angleo.pl at it
+- [ ] Connect Vercel and set `NEXT_PUBLIC_SITE_URL`, `SITE_URL`, `CAL_API_KEY`, `CAL_EVENT_TYPE_ID`; point angleo.pl at it
+- [ ] Move booking to Nicole's own Cal.com account + event type (currently a test event)
 - [ ] Client review of the new headline copy (listed in `.altalogy/BUILD.md`)
 - [ ] Designed OG image to replace `public/og.svg` (posts already use their cover)
 - [ ] Instagram / Facebook profile URLs (the Webflow site links to generic placeholders)
