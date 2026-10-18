@@ -9,6 +9,8 @@
   --accent: #8c6a35; /* brass — AA on ivory for small text */
   --accent-light: #d9b77c; /* brass on ink */
   --inverse-muted: #b7beca; /* secondary text on ink */
+  --success: #2f6b4f; /* exercise: correct gap */
+  --danger: #a3442f; /* exercise: wrong gap */
 }
 
 @theme inline {
@@ -21,6 +23,8 @@
   --color-accent: var(--accent);
   --color-accent-light: var(--accent-light);
   --color-inverse-muted: var(--inverse-muted);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
   --font-sans: var(--font-geist);
   --font-serif: var(--font-instrument-serif);
 }

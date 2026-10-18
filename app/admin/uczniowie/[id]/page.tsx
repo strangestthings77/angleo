@@ -8,9 +8,12 @@ import { Eyebrow } from '@/components/text/Eyebrow';
 import { Heading } from '@/components/text/Heading';
 import { Container } from '@/components/ui/Container';
 import { AddWordForm } from '@/components/words/AddWordForm';
+import { AdminExerciseList } from '@/components/exercises/AdminExerciseList';
+import { CreateExerciseForm } from '@/components/exercises/CreateExerciseForm';
 import { MainLayout } from '@/layouts/MainLayout';
 import { deleteWord } from '@/lib/admin-actions';
 import { getStudent, getStudentWords } from '@/lib/auth';
+import { getStudentExercises } from '@/lib/exercises';
 import { buildMetadata } from '@/lib/metadata';
 
 export const metadata = buildMetadata({
@@ -42,7 +45,10 @@ async function StudentDetail({ params }: { params: PageProps<'/admin/uczniowie/[
   // getStudent() runs requireAdmin() — non-admins are redirected before any data is read.
   const student = await getStudent(id);
   if (!student) notFound();
-  const words = await getStudentWords(student.id);
+  const [words, exercises] = await Promise.all([
+    getStudentWords(student.id),
+    getStudentExercises(student.id),
+  ]);
 
   return (
     <>
@@ -72,6 +78,24 @@ async function StudentDetail({ params }: { params: PageProps<'/admin/uczniowie/[
           <div className="flex flex-col gap-3 rounded-3xl border border-border p-6">
             <p className="text-sm font-medium text-foreground">Zmień liczbę ukończonych lekcji</p>
             <LessonsEditor studentId={student.id} lessons={student.lessons} />
+          </div>
+        </section>
+
+        <section className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3">
+            <Eyebrow>Ćwiczenia ucznia</Eyebrow>
+            <Heading size="sm">
+              Dodaj <em>ćwiczenie</em>
+            </Heading>
+            <p className="text-sm text-foreground-muted">
+              Tekst z lukami do uzupełnienia. W „Podgląd na żywo” widzisz, co uczeń wpisuje.
+            </p>
+          </div>
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+            <div className="rounded-3xl border border-border bg-surface p-6 sm:p-8">
+              <CreateExerciseForm studentId={student.id} />
+            </div>
+            <AdminExerciseList studentId={student.id} exercises={exercises} />
           </div>
         </section>
 

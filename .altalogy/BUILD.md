@@ -54,3 +54,9 @@ licenses, search).
   Script calendar. Hosted API v2 requires a paid Cal.com plan (Teams+); the free plan has no
   API access — confirmed against Cal.com docs 2026-10-18. Key stays server-side; spam
   protection = honeypot + timing trap + per-IP rate limit (no captcha yet).
+- **Exercises with a live view (2026-10-18):** gap-fill text written by Nicole per student.
+  "Watch them type" = debounced autosave to `exercise_attempts` + Supabase Realtime on the
+  admin side — no extra service, free tier. Answers never reach the student's browser before
+  submitting (column privileges + security-definer RPCs); grading happens in the database so a
+  score can't be faked. Strict spelling (only case/spaces/punctuation forgiven), unlike the
+  word test. First exercise: "Zadanie 3 — mail o szkoleniu" for Kuba.

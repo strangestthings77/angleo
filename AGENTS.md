@@ -138,14 +138,17 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
 proxy.ts → lib/supabase/proxy.ts   refreshes the session cookie; /panel, /admin → /logowanie if signed out
                                    (never redirects away from /logowanie — that caused a reload loop)
 lib/supabase/server.ts             server client (Server Components, Actions, Route Handlers)
+lib/supabase/client.ts             browser client — only for exercise autosave + Realtime
 lib/auth.ts                        DAL: getCurrentUser, requireUser, requireAdmin, getMyWords, getStudents
+lib/exercise.ts · lib/exercises.ts gap-fill format/parser (shared) · exercise reads (server-only)
 lib/auth-actions.ts                Server Actions: signIn, signUp, signOut
 app/auth/callback/route.ts         email-link landing (PKCE code or token_hash) → session
 supabase/migrations/               schema as code — profiles (role), is_admin(), words + RLS
 ```
 
-- **Routes:** `/logowanie`, `/rejestracja`, `/panel` (student: exercises placeholder + words),
-  `/admin` (admin: all students). All `noindex` and excluded from the sitemap.
+- **Routes:** `/logowanie`, `/rejestracja`, `/panel` (student: exercises + words), `/panel/cwiczenia/[id]`,
+  `/admin` (admin: all students), `/admin/uczniowie/[id]` (one student),
+  `/admin/uczniowie/[id]/cwiczenia/[exerciseId]` (live view). All `noindex` and excluded from the sitemap.
 - **Roles:** every sign-up gets a `profiles` row with `role = 'student'` (trigger). Promote an
   admin from the terminal (uses the CLI login, no DB password):
   `pnpm exec supabase db query --linked "update public.profiles set role = 'admin' where email = '…';"`
@@ -158,7 +161,7 @@ supabase/migrations/               schema as code — profiles (role), is_admin(
 - **Words:** added by the admin per student (`words.student_id`); the starter set was removed
   (migration `20261018170000`). `student_id = null` would still show to every student. `WordCard` shows the
   English side only; the Polish translation appears on hover (pointer) or tap/Enter (touch, keyboard).
-- **Panel tabs:** Ćwiczenia (placeholder) · Słówka (flip cards) · Test słówek (`WordQuiz`).
+- **Panel tabs:** Ćwiczenia (gap-fill list) · Słówka (flip cards) · Test słówek (`WordQuiz`).
   `components/ui/Tabs.tsx` is the accessible tabs primitive (arrow keys, `#hash` deep link).
 - **Word test answers** (`lib/answer-check.ts`, tested in `answer-check.test.ts`): case, spacing,
   punctuation and Polish diacritics are ignored; `a / b` = alternatives; `(…)` = optional part;
@@ -170,6 +173,17 @@ supabase/migrations/               schema as code — profiles (role), is_admin(
   → "loop in"). Used for the admin's **Podpowiedz** chips (`suggestTranslations`) and for the
   test's "other" verdict: a real meaning of the word that isn't the lesson's one still counts.
   Readable by signed-in users only (RLS).
+- **Exercises (gap-fill):** the admin writes text with `[[answer]]` gaps on the student's page —
+  `[[enquiry|q]]` reveals a letter, `[[attend|3]]` the 3rd letter, `[[enquiry/inquiry]]`
+  accepts several answers (`lib/exercise.ts`, tested). Stored as `exercises` (template + hints
+  public, `answers` column **not granted** to students) and `exercise_attempts` (one row per
+  exercise). The student's typing autosaves (400 ms debounce, browser client); the admin's
+  **Podgląd na żywo** subscribes to that row via Supabase Realtime (`postgres_changes`, RLS
+  applies) and shows each gap as it's typed, coloured right/wrong. **Sprawdź odpowiedzi** →
+  `submit_exercise()` grades in the DB (`normalise_gap()`: case, spaces, edge punctuation; no
+  typo tolerance — spelling is the point), stores the score and locks the attempt;
+  `exercise_answers()` reveals answers only to the admin or after submitting.
+  **Pozwól poprawić** (`reopen_exercise()`) unlocks it. Keep `normaliseGap()` in sync with SQL.
 - **Session checks:** proxy and `getCurrentUser()` both use `auth.getClaims()` so they agree.
   A failed profile read throws (→ `app/panel/error.tsx`), it never redirects.
 - **One browser = one account.** The session is one cookie per site; to test admin and student
@@ -302,14 +316,18 @@ new tokens, one-line gotchas. When a section outgrows this file, move it to
 
 ## Features
 
-| Route                          | Sections                                                         | Notes                                            |
-| ------------------------------ | ---------------------------------------------------------------- | ------------------------------------------------ |
-| `/`                            | Hero, Credentials, Offer, Topics, LatestPosts, Quote, BookingCta | `#tematy` anchor; featured = `featuredSlug`      |
-| `/blog`                        | BlogHeader + CategoryChips, FeaturedPost, PostGrid               |                                                  |
-| `/blog/[slug]`                 | ArticleHeader, MDX body, AuthorBox, RelatedPosts, BookingCta     | Unknown slug → `notFound()` (200 + noindex, PPR) |
-| `/blog-post-categories/[slug]` | BlogHeader (active chip), PostGrid                               | Old Webflow URL scheme kept, incl. `logistyka-2` |
-| `/o-mnie`                      | AboutHero, AboutDetails, Quote, BookingCta                       |                                                  |
-| `/umow-lekcje`                 | Header, ContactCards                                             | Booking = Google Apps Script calendar            |
+| Route                                          | Sections                                                           | Notes                                            |
+| ---------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------ |
+| `/`                                            | Hero, Credentials, Offer, Topics, LatestPosts, Quote, BookingCta   | `#tematy` anchor; featured = `featuredSlug`      |
+| `/blog`                                        | BlogHeader + CategoryChips, FeaturedPost, PostGrid                 |                                                  |
+| `/blog/[slug]`                                 | ArticleHeader, MDX body, AuthorBox, RelatedPosts, BookingCta       | Unknown slug → `notFound()` (200 + noindex, PPR) |
+| `/blog-post-categories/[slug]`                 | BlogHeader (active chip), PostGrid                                 | Old Webflow URL scheme kept, incl. `logistyka-2` |
+| `/o-mnie`                                      | AboutHero, AboutDetails, Quote, BookingCta                         |                                                  |
+| `/umow-lekcje`                                 | Header, ContactCards                                               | Booking = Google Apps Script calendar            |
+| `/panel`                                       | Name + ProgressInline, NextLessonCard, Tabs (exercises/words/test) | Session read inside `<Suspense>`                 |
+| `/panel/cwiczenia/[id]`                        | ExercisePlayer                                                     | Autosave + submit; result view once submitted    |
+| `/admin/uczniowie/[id]`                        | ProgressCard, LessonsEditor, CreateExerciseForm, AddWordForm       | Exercise list: live view, reopen, delete         |
+| `/admin/uczniowie/[id]/cwiczenia/[exerciseId]` | LiveExerciseView                                                   | Realtime on `exercise_attempts`                  |
 
 <!-- BEGIN:altalogy/mcp -->
 

@@ -2,14 +2,15 @@ import { Suspense } from 'react';
 import { PanelBar } from '@/components/auth/PanelBar';
 import { PanelSkeleton } from '@/components/auth/PanelSkeleton';
 import { NextLessonCard } from '@/components/progress/NextLessonCard';
+import { StudentExerciseList } from '@/components/exercises/StudentExerciseList';
 import { Tabs } from '@/components/ui/Tabs';
 import { WordCard } from '@/components/words/WordCard';
 import { WordQuiz } from '@/components/words/WordQuiz';
 import { Heading } from '@/components/text/Heading';
 import { Container } from '@/components/ui/Container';
-import { BookIcon } from '@/components/ui/Icon';
 import { MainLayout } from '@/layouts/MainLayout';
 import { getMyWords, requireUser } from '@/lib/auth';
+import { getMyExercises } from '@/lib/exercises';
 import { alternativesFor } from '@/lib/dictionary';
 import { normaliseTerm } from '@/lib/dictionary-terms';
 import { buildMetadata } from '@/lib/metadata';
@@ -45,7 +46,7 @@ export default function StudentPanelPage() {
 
 async function StudentDashboard() {
   const user = await requireUser('/panel');
-  const words = await getMyWords();
+  const [words, exercises] = await Promise.all([getMyWords(), getMyExercises()]);
   // Dictionary meanings let the test recognise "a real meaning, just not the lesson's one".
   const alternatives = await alternativesFor(words.map((w) => w.term)).catch(() => new Map());
   const quizWords = words.map((w) => ({
@@ -68,19 +69,8 @@ async function StudentDashboard() {
             {
               id: 'cwiczenia',
               label: 'Ćwiczenia',
-              content: (
-                <div className="flex flex-col items-start gap-4 rounded-3xl border border-dashed border-border p-8 sm:flex-row sm:items-center">
-                  <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-surface-muted text-accent">
-                    <BookIcon size={20} />
-                  </span>
-                  <div>
-                    <p className="font-medium text-foreground">Tu pojawią się Twoje ćwiczenia</p>
-                    <p className="text-sm text-foreground-muted">
-                      Po lekcji znajdziesz tutaj zadania przygotowane specjalnie dla Ciebie.
-                    </p>
-                  </div>
-                </div>
-              ),
+              badge: exercises.filter((e) => !e.attempt?.submittedAt).length || undefined,
+              content: <StudentExerciseList exercises={exercises} />,
             },
             {
               id: 'slowka',

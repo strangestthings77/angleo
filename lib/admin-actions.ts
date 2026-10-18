@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { requireAdmin } from '@/lib/auth';
 import { MAX_LESSONS } from '@/lib/progress';
 import { lookupTerm, posLabel } from '@/lib/dictionary';
+import { parseExercise } from '@/lib/exercise';
 import { createClient } from '@/lib/supabase/server';
 
 const lessonsSchema = z.object({
@@ -80,4 +81,61 @@ export async function suggestTranslations(term: string): Promise<Suggestion[]> {
   return senses
     .filter((s) => s.options.length > 0)
     .map((s) => ({ pos: posLabel(s.pos), options: s.options }));
+}
+
+const exerciseSchema = z.object({
+  studentId: z.uuid(),
+  title: z.string().trim().min(1, 'Podaj tytuł').max(160),
+  instructions: z.string().trim().max(500).optional(),
+  content: z.string().trim().min(1, 'Wpisz treść ćwiczenia').max(10000),
+});
+
+export type ExerciseFormState = { error?: string; ok?: number } | undefined;
+
+/** Admin creates a gap-fill exercise for one student. */
+export async function createExercise(
+  _: ExerciseFormState,
+  formData: FormData,
+): Promise<ExerciseFormState> {
+  await requireAdmin();
+  const parsed = exerciseSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const { studentId, title, instructions, content } = parsed.data;
+  const { template, hints, answers } = parseExercise(content);
+  if (answers.length === 0) {
+    return { error: 'Dodaj co najmniej jedną lukę w nawiasach: [[odpowiedź]].' };
+  }
+  if (answers.some((a) => a.length === 0)) return { error: 'Jedna z luk jest pusta.' };
+
+  const supabase = await createClient();
+  const { error } = await supabase.from('exercises').insert({
+    student_id: studentId,
+    title,
+    instructions: instructions || null,
+    template,
+    hints,
+    answers,
+  });
+  if (error) return { error: 'Nie udało się zapisać ćwiczenia. Spróbuj ponownie.' };
+
+  revalidatePath(`/admin/uczniowie/${studentId}`);
+  return { ok: Date.now() };
+}
+
+export async function deleteExercise(exerciseId: string, studentId: string): Promise<void> {
+  await requireAdmin();
+  if (!z.uuid().safeParse(exerciseId).success) return;
+  const supabase = await createClient();
+  await supabase.from('exercises').delete().eq('id', exerciseId);
+  revalidatePath(`/admin/uczniowie/${studentId}`);
+}
+
+export async function reopenExercise(exerciseId: string, studentId: string): Promise<void> {
+  await requireAdmin();
+  if (!z.uuid().safeParse(exerciseId).success) return;
+  const supabase = await createClient();
+  await supabase.rpc('reopen_exercise', { p_exercise: exerciseId });
+  revalidatePath(`/admin/uczniowie/${studentId}`);
+  revalidatePath(`/admin/uczniowie/${studentId}/cwiczenia/${exerciseId}`);
 }
