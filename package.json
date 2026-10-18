@@ -6,10 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint .",
+    "postbuild": "next-sitemap",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck",
+    "check:meta": "tsx scripts/check-meta.mts --url http://localhost:3000"
   },
   "dependencies": {
     "next": "16.4.2",
+    "next-sitemap": "^4.2.3",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
@@ -20,7 +27,13 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
+    "eslint-config-prettier": "10.1.8",
+    "lefthook": "2.2.2",
+    "linkedom": "0.18.13",
+    "prettier": "3.9.10",
+    "prettier-plugin-tailwindcss": "0.8.1",
     "tailwindcss": "^4",
+    "tsx": "4.23.15",
     "typescript": "^5"
   },
   "packageManager": "pnpm@10.33.0"

@@ -1,0 +1,11 @@
+@utility px-container {
+  padding-inline: 1.5rem;
+}
+
+@utility py-section {
+  padding-block: 4rem;
+}
+
+@utility max-w-content {
+  max-width: 72rem;
+}

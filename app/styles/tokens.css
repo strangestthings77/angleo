@@ -1,0 +1,27 @@
+:root {
+  --background: #fbf8f3;
+  --foreground: #1f1a16;
+  --foreground-muted: #6b6159;
+  --surface: #f2ebe1;
+  --border: #e3d8ca;
+  --accent: #8a5a2b;
+  --accent-foreground: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-fraunces);
+}
+
+@theme {
+  --breakpoint-xs: 23.4375rem; /* 375 */
+  --breakpoint-3xl: 108rem; /* 1728 */
+  --breakpoint-4xl: 120rem; /* 1920 */
+}
