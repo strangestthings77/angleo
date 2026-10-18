@@ -61,7 +61,7 @@ components/
   ui/                          # Section, Container, Button, Icon
   text/                        # Heading, Text, Eyebrow, Accent (*word* → italic accent)
   blog/                        # PostCard/PostGrid, FeaturedPost, PostMeta, CategoryChips
-  marketing/                   # SectionHeader, BookingCta, ContactList
+  marketing/                   # InkPanel, PageHero, SectionHeader, BookingCta, ContactList
   booking/                     # BookingWidget ('use client'): MonthCalendar, TimeSlots, BookingForm, BookingSuccess
 sections/                      # Route-specific blocks: home/, blog/, about/, contact/
 layouts/                       # MainLayout, Header, MobileMenu ('use client'), Footer
@@ -128,8 +128,9 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
 > Premium, editorial business-English brand. Warm ivory paper, deep ink-navy type, one brass
 > accent used sparingly (eyebrows, italic accent words, numerals, list markers). Large
 > Instrument Serif display headlines with an italic accent word; Geist for everything else.
-> Generous whitespace, hairline borders, soft rounded imagery, an ink CTA band closing each
-> page. Motion is limited to hover feedback — no scroll animations, no carousels.
+> Every page opens on an inset ink panel with film grain (`InkPanel` / `PageHero`); content
+> sits on ivory with hairline borders, bento cards and soft rounded imagery; an ink CTA band
+> closes each page. Motion is limited to hover feedback — no scroll animations, no carousels.
 > Deliberately _not_ a playful language-school look, not corporate-blue, not loud gradients.
 
 **This is the reference for any judgement call.** Check against it before guessing.
@@ -160,6 +161,7 @@ value.**
 | `--radius-arch`        | `rounded-t-arch`                    | Arched portrait top                        |
 | `--shadow-card`        | `shadow-card`                       | Featured card, floating badge              |
 | `--ease-out-soft`      | `ease-out-soft`                     | Hover transforms                           |
+| `bg-grain` (utility)   | `bg-grain`                          | Inline SVG noise on ink panels             |
 
 - **Typography:** `Heading` (serif; `size` xl/lg/md/sm; `<em>` → brass italic),
   `Text` (lead/body), `Eyebrow`. Copy strings in `content/site.ts` mark the accent word

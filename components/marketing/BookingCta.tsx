@@ -1,4 +1,5 @@
 import { ContactList } from '@/components/marketing/ContactList';
+import { InkPanel } from '@/components/marketing/InkPanel';
 import { Accent } from '@/components/text/Accent';
 import { Eyebrow } from '@/components/text/Eyebrow';
 import { Heading } from '@/components/text/Heading';
@@ -15,7 +16,7 @@ export function BookingCta() {
   return (
     <section className="pb-section">
       <Container>
-        <div className="overflow-hidden rounded-4xl bg-foreground px-6 py-16 sm:px-12 md:py-20 lg:px-20">
+        <InkPanel className="px-6 py-16 sm:px-12 md:py-20 lg:px-20">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-end">
             <div className="flex flex-col gap-6">
               <Eyebrow inverse>{booking.eyebrow}</Eyebrow>
@@ -36,7 +37,7 @@ export function BookingCta() {
               </div>
             </div>
           </div>
-        </div>
+        </InkPanel>
       </Container>
     </section>
   );

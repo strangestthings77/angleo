@@ -36,7 +36,7 @@ export default async function CategoryPage({ params }: PageProps<'/blog-post-cat
         lead={`Angielskie frazy i wskazówki z kategorii ${category.label} — gotowe do użycia w pracy.`}
         activeCategory={category.slug}
       />
-      <section className="pb-section">
+      <section className="py-section">
         <Container>
           <PostGrid posts={posts} />
         </Container>

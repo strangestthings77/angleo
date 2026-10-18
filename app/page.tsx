@@ -2,12 +2,14 @@ import { BookingCta } from '@/components/marketing/BookingCta';
 import { site } from '@/content/site';
 import { MainLayout } from '@/layouts/MainLayout';
 import { buildMetadata } from '@/lib/metadata';
-import { Credentials } from '@/sections/home/Credentials';
+import { AboutTeaser } from '@/sections/home/AboutTeaser';
+import { Audiences } from '@/sections/home/Audiences';
+import { Faq } from '@/sections/home/Faq';
 import { Hero } from '@/sections/home/Hero';
 import { LatestPosts } from '@/sections/home/LatestPosts';
 import { Offer } from '@/sections/home/Offer';
-import { Quote } from '@/sections/home/Quote';
-import { Topics } from '@/sections/home/Topics';
+import { Process } from '@/sections/home/Process';
+import { Specialties } from '@/sections/home/Specialties';
 
 export const metadata = buildMetadata({
   title: site.title,
@@ -19,11 +21,13 @@ export default function HomePage() {
   return (
     <MainLayout>
       <Hero />
-      <Credentials />
+      <Specialties />
+      <Audiences />
       <Offer />
-      <Topics />
+      <Process />
+      <AboutTeaser />
       <LatestPosts />
-      <Quote />
+      <Faq />
       <BookingCta />
     </MainLayout>
   );

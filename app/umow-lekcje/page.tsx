@@ -1,5 +1,5 @@
 import { BookingWidget } from '@/components/booking/BookingWidget';
-import { SectionHeader } from '@/components/marketing/SectionHeader';
+import { PageHero } from '@/components/marketing/PageHero';
 import { Container } from '@/components/ui/Container';
 import { site } from '@/content/site';
 import { MainLayout } from '@/layouts/MainLayout';
@@ -18,18 +18,13 @@ export default function BookingPage() {
 
   return (
     <MainLayout>
-      <section className="pt-16 pb-12 md:pt-24 md:pb-16">
-        <Container>
-          <SectionHeader
-            as="h1"
-            size="xl"
-            eyebrow={booking.pageEyebrow}
-            heading={booking.pageHeading}
-            lead={booking.pageLead}
-          />
-        </Container>
-      </section>
-      <section className="pb-section">
+      <PageHero
+        eyebrow={booking.pageEyebrow}
+        heading={booking.pageHeading}
+        lead={booking.pageLead}
+        compact
+      />
+      <section className="pt-10 pb-section md:pt-14">
         <Container className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)] lg:gap-16">
           <div className="order-2 lg:order-1">
             <LessonDetails />

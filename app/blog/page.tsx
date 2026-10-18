@@ -22,7 +22,7 @@ export default function BlogPage() {
   return (
     <MainLayout>
       <BlogHeader eyebrow={site.blog.eyebrow} heading={site.blog.heading} lead={site.blog.lead} />
-      <section className="pb-section">
+      <section className="py-section">
         <Container className="flex flex-col gap-20">
           {featured && <FeaturedPost post={featured} priority />}
           <PostGrid posts={rest} />
