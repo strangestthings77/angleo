@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Suspense } from 'react';
 import { PanelBar } from '@/components/auth/PanelBar';
 import { PanelSkeleton } from '@/components/auth/PanelSkeleton';
@@ -5,6 +6,7 @@ import { Eyebrow } from '@/components/text/Eyebrow';
 import { Heading } from '@/components/text/Heading';
 import { LessonsEditor } from '@/components/progress/LessonsEditor';
 import { Container } from '@/components/ui/Container';
+import { ArrowRightIcon } from '@/components/ui/Icon';
 import { MainLayout } from '@/layouts/MainLayout';
 import { getStudents, requireAdmin } from '@/lib/auth';
 import { pluralForm } from '@/lib/blog';
@@ -88,7 +90,15 @@ async function AdminDashboard() {
                     key={student.id}
                     className="transition-colors duration-150 hover:bg-background"
                   >
-                    <td className="px-6 py-4 font-medium text-foreground">{student.name ?? '—'}</td>
+                    <td className="px-6 py-4 font-medium text-foreground">
+                      <Link
+                        href={`/admin/uczniowie/${student.id}`}
+                        className="group inline-flex items-center gap-2 hover:text-accent"
+                      >
+                        {student.name ?? student.email}
+                        <ArrowRightIcon className="text-foreground-muted transition-transform duration-200 ease-out-soft group-hover:translate-x-0.5 group-hover:text-accent motion-reduce:transition-none" />
+                      </Link>
+                    </td>
                     <td className="px-6 py-4 text-foreground-muted">
                       <a href={`mailto:${student.email}`} className="hover:text-foreground">
                         {student.email}

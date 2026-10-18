@@ -49,16 +49,45 @@ export async function requireAdmin(): Promise<CurrentUser> {
   return user;
 }
 
-export type Word = { id: number; term: string; translation: string; example: string | null };
+export type Word = {
+  id: number;
+  term: string;
+  translation: string;
+  example: string | null;
+  /** true = added for this student, false = shared starter word. */
+  personal: boolean;
+};
 
+const WORD_COLUMNS = 'id, term, translation, example, student_id';
+
+type WordRow = {
+  id: number;
+  term: string;
+  translation: string;
+  example: string | null;
+  student_id: string | null;
+};
+
+const toWord = (w: WordRow): Word => ({
+  id: w.id,
+  term: w.term,
+  translation: w.translation,
+  example: w.example,
+  personal: w.student_id !== null,
+});
+
+/** The signed-in user's words: their own first (newest first), then shared starter words. */
 export async function getMyWords(): Promise<Word[]> {
-  await requireUser();
+  const user = await requireUser();
   const supabase = await createClient();
+  // Explicit filter: admins can read every row via RLS, but their panel shows only their own.
   const { data } = await supabase
     .from('words')
-    .select('id, term, translation, example')
-    .order('id', { ascending: true });
-  return data ?? [];
+    .select(WORD_COLUMNS)
+    .or(`student_id.is.null,student_id.eq.${user.id}`)
+    .order('id', { ascending: false });
+  const words = (data ?? []).map(toWord);
+  return [...words.filter((w) => w.personal), ...words.filter((w) => !w.personal).reverse()];
 }
 
 export type StudentRow = {
@@ -84,4 +113,38 @@ export async function getStudents(): Promise<StudentRow[]> {
     createdAt: p.created_at,
     lessons: p.lessons_completed ?? 0,
   }));
+}
+
+export type StudentDetail = StudentRow;
+
+/** One student, for the admin detail page. `null` when the id isn't a student. */
+export async function getStudent(id: string): Promise<StudentDetail | null> {
+  await requireAdmin();
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('profiles')
+    .select('id, email, full_name, created_at, lessons_completed')
+    .eq('id', id)
+    .eq('role', 'student')
+    .maybeSingle();
+  if (!data) return null;
+  return {
+    id: data.id,
+    email: data.email,
+    name: data.full_name,
+    createdAt: data.created_at,
+    lessons: data.lessons_completed ?? 0,
+  };
+}
+
+/** Words added for one student (admin view), newest first. */
+export async function getStudentWords(studentId: string): Promise<Word[]> {
+  await requireAdmin();
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('words')
+    .select(WORD_COLUMNS)
+    .eq('student_id', studentId)
+    .order('id', { ascending: false });
+  return (data ?? []).map(toWord);
 }

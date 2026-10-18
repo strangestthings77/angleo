@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { PanelBar } from '@/components/auth/PanelBar';
 import { PanelSkeleton } from '@/components/auth/PanelSkeleton';
 import { ProgressCard } from '@/components/progress/ProgressCard';
+import { WordCard } from '@/components/words/WordCard';
 import { Eyebrow } from '@/components/text/Eyebrow';
 import { Heading } from '@/components/text/Heading';
 import { Container } from '@/components/ui/Container';
@@ -12,7 +13,7 @@ import { buildMetadata } from '@/lib/metadata';
 
 export const metadata = buildMetadata({
   title: 'Strefa ucznia | Angleo',
-  description: 'Twoje słówka i ćwiczenia z angielskiego biznesowego w jednym miejscu.',
+  description: 'Twoje słówka, postęp i ćwiczenia z angielskiego biznesowego w jednym miejscu.',
   path: '/panel',
   noindex: true,
 });
@@ -67,10 +68,13 @@ async function StudentDashboard() {
 
         <section className="flex flex-col gap-8">
           <div className="flex flex-col gap-4">
-            <Eyebrow>Słówka</Eyebrow>
+            <Eyebrow>Słownik</Eyebrow>
             <Heading size="md">
-              Frazy, które <em>warto znać</em>
+              Moje <em>słówka</em>
             </Heading>
+            <p className="text-sm text-foreground-muted">
+              Najedź na kartę (albo ją dotknij), żeby zobaczyć tłumaczenie.
+            </p>
           </div>
           {words.length === 0 ? (
             <p className="text-foreground-muted">Nie masz jeszcze żadnych słówek.</p>
@@ -79,17 +83,9 @@ async function StudentDashboard() {
               {words.map((word, i) => (
                 <li
                   key={word.id}
-                  className={`flex animate-pop flex-col gap-3 rounded-3xl border border-border bg-surface p-6 ${STAGGER[Math.min(i, STAGGER.length - 1)]}`}
+                  className={`animate-pop ${STAGGER[Math.min(i, STAGGER.length - 1)]}`}
                 >
-                  <p className="font-serif text-title tracking-display text-foreground">
-                    {word.term}
-                  </p>
-                  <p className="text-sm text-accent">{word.translation}</p>
-                  {word.example && (
-                    <p className="mt-auto border-t border-border pt-3 text-sm/6 text-foreground-muted italic">
-                      {word.example}
-                    </p>
-                  )}
+                  <WordCard word={word} />
                 </li>
               ))}
             </ul>

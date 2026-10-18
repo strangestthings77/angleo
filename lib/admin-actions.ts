@@ -31,5 +31,40 @@ export async function setStudentLessons(
     return { error: 'Nie udało się zapisać. Spróbuj ponownie.' };
 
   revalidatePath('/admin');
+  revalidatePath(`/admin/uczniowie/${parsed.data.studentId}`);
   return { lessons: data };
+}
+
+const wordSchema = z.object({
+  studentId: z.uuid(),
+  term: z.string().trim().min(1, 'Wpisz słówko').max(120),
+  translation: z.string().trim().min(1, 'Wpisz tłumaczenie').max(200),
+  example: z.string().trim().max(300).optional(),
+});
+
+export type WordFormState = { error?: string; ok?: number } | undefined;
+
+/** Admin adds a word for one student. RLS ("words: admins manage") re-checks the role. */
+export async function addWord(_: WordFormState, formData: FormData): Promise<WordFormState> {
+  await requireAdmin();
+  const parsed = wordSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const { studentId, term, translation, example } = parsed.data;
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from('words')
+    .insert({ student_id: studentId, term, translation, example: example || null });
+  if (error) return { error: 'Nie udało się dodać słówka. Spróbuj ponownie.' };
+
+  revalidatePath(`/admin/uczniowie/${studentId}`);
+  return { ok: Date.now() };
+}
+
+export async function deleteWord(wordId: number, studentId: string): Promise<void> {
+  await requireAdmin();
+  if (!z.uuid().safeParse(studentId).success || !Number.isInteger(wordId)) return;
+  const supabase = await createClient();
+  await supabase.from('words').delete().eq('id', wordId).eq('student_id', studentId);
+  revalidatePath(`/admin/uczniowie/${studentId}`);
 }
