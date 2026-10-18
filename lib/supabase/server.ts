@@ -1,9 +1,12 @@
 import 'server-only';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import { connection } from 'next/server';
 
 /** Supabase client for Server Components, Server Actions and Route Handlers. */
 export async function createClient() {
+  // auth-js reads Date.now() while loading the session; keep it out of (runtime) prerendering.
+  await connection();
   const cookieStore = await cookies();
 
   return createServerClient(
