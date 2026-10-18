@@ -6,6 +6,15 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Only the student area and auth pages need the session — marketing pages stay static.
-  matcher: ['/panel/:path*', '/admin/:path*', '/logowanie', '/rejestracja', '/auth/:path*'],
+  // Only pages that read the session — marketing pages stay static. /umow-lekcje personalises
+  // the booking form, so its session must be refreshed too.
+  matcher: [
+    '/panel/:path*',
+    '/admin/:path*',
+    '/logowanie',
+    '/rejestracja',
+    '/auth/:path*',
+    '/umow-lekcje',
+    '/api/booking',
+  ],
 };

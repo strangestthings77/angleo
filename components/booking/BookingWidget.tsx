@@ -10,6 +10,7 @@ import {
   BOOKING_WINDOW_DAYS,
   bookingWindow,
   type BookingConfirmation,
+  type BookingViewer,
   type SlotsByDate,
   type SlotsResponse,
 } from '@/lib/booking';
@@ -31,7 +32,7 @@ const useTimeZone = () =>
 type SlotsResult = { key: string; slots: SlotsByDate; error: string | null };
 
 /** Custom booking flow on top of Cal.com: day → time → details → confirmation, two weeks ahead. */
-export function BookingWidget() {
+export function BookingWidget({ viewer = null }: { viewer?: BookingViewer | null }) {
   const timeZone = useTimeZone();
   const range = timeZone ? bookingWindow(timeZone) : null;
   const today = range?.first ?? '';
@@ -99,6 +100,7 @@ export function BookingWidget() {
     return (
       <div className="animate-fade">
         <BookingSuccess
+          signedIn={Boolean(viewer)}
           booking={step.booking}
           timeZone={timeZone}
           onReset={() => {
@@ -114,6 +116,7 @@ export function BookingWidget() {
     return (
       <div className="animate-fade">
         <BookingForm
+          viewer={viewer}
           start={step.start}
           date={step.date}
           timeZone={timeZone}
@@ -190,7 +193,7 @@ export function BookingWidget() {
   );
 }
 
-function WidgetSkeleton() {
+export function WidgetSkeleton() {
   return (
     <div aria-hidden className="grid gap-10 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-12">
       <div className="flex flex-col gap-6">

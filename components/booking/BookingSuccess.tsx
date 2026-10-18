@@ -1,13 +1,16 @@
 'use client';
 
+import Link from 'next/link';
 import { formatDay, formatTime } from '@/components/booking/dates';
 import { dateKeyIn, type BookingConfirmation } from '@/lib/booking';
 
 export function BookingSuccess({
   booking,
   timeZone,
+  signedIn = false,
   onReset,
 }: {
+  signedIn?: boolean;
   booking: BookingConfirmation;
   timeZone: string;
   onReset: () => void;
@@ -52,6 +55,14 @@ export function BookingSuccess({
         >
           Link do spotkania
         </a>
+      )}
+      {signedIn && (
+        <Link
+          href="/panel"
+          className="inline-flex h-12 items-center rounded-full bg-foreground px-6 text-sm font-medium text-background transition-[background-color,scale] duration-200 ease-out hover:bg-foreground/85 active:scale-97"
+        >
+          Zobacz w panelu
+        </Link>
       )}
       <button
         type="button"

@@ -38,8 +38,9 @@ export const slotsQuerySchema = z.object({ start: dateOnly, end: dateOnly, timeZ
 export const bookingRequestSchema = z.object({
   start: z.iso.datetime({ offset: true }),
   timeZone,
-  name: z.string().trim().min(2, 'Podaj imię i nazwisko').max(100),
-  email: z.email('Podaj poprawny adres e-mail').max(200),
+  // Optional: signed-in users book with their account details (filled in on the server).
+  name: z.string().trim().min(2, 'Podaj imię i nazwisko').max(100).optional(),
+  email: z.email('Podaj poprawny adres e-mail').max(200).optional(),
   notes: z.string().trim().max(1000).optional().default(''),
   /** Honeypot — real users never see or fill it. */
   website: z.string().max(500).optional().default(''),
@@ -48,6 +49,9 @@ export const bookingRequestSchema = z.object({
 });
 
 export type BookingRequest = z.input<typeof bookingRequestSchema>;
+
+/** Who is booking, when signed in — shown instead of the name/email fields. */
+export type BookingViewer = { name: string | null; email: string };
 
 /** Slots keyed by local date (`YYYY-MM-DD` in the requested time zone) → ISO start times. */
 export type SlotsByDate = Record<string, string[]>;

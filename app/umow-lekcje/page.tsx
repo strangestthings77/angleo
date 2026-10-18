@@ -1,8 +1,10 @@
-import { BookingWidget } from '@/components/booking/BookingWidget';
+import { Suspense } from 'react';
+import { BookingWidget, WidgetSkeleton } from '@/components/booking/BookingWidget';
 import { PageHero } from '@/components/marketing/PageHero';
 import { Container } from '@/components/ui/Container';
 import { site } from '@/content/site';
 import { MainLayout } from '@/layouts/MainLayout';
+import { getViewer } from '@/lib/auth';
 import { buildMetadata } from '@/lib/metadata';
 import { LessonDetails } from '@/sections/contact/LessonDetails';
 
@@ -33,10 +35,18 @@ export default function BookingPage() {
             id="rezerwacja"
             className="order-1 scroll-mt-24 rounded-3xl bg-surface p-5 shadow-card sm:p-10 lg:order-2"
           >
-            <BookingWidget />
+            <Suspense fallback={<WidgetSkeleton />}>
+              <ViewerBookingWidget />
+            </Suspense>
           </div>
         </Container>
       </section>
     </MainLayout>
   );
+}
+
+/** Reads the session (if any) so signed-in students skip the name/email fields. */
+async function ViewerBookingWidget() {
+  const viewer = await getViewer();
+  return <BookingWidget viewer={viewer ? { name: viewer.name, email: viewer.email } : null} />;
 }

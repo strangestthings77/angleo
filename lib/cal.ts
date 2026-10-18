@@ -100,3 +100,23 @@ export async function getLessonInfo(): Promise<LessonInfo | null> {
     return null;
   }
 }
+
+export type UpcomingLesson = { uid: string; start: string; end: string; location: string | null };
+
+/** Upcoming lessons booked by this attendee email (live from Cal.com, so reschedules show up). */
+export async function getUpcomingLessons(email: string, limit = 3): Promise<UpcomingLesson[]> {
+  const { eventTypeId } = config();
+  const query = new URLSearchParams({
+    status: 'upcoming',
+    attendeeEmail: email,
+    eventTypeId: String(eventTypeId),
+    sortStart: 'asc',
+    limit: String(limit),
+  });
+  const body = await cal<{
+    data: { uid: string; start: string; end: string; status: string; location?: string | null }[];
+  }>(`/bookings?${query}`, '2026-05-01');
+  return (body.data ?? [])
+    .filter((b) => b.status === 'accepted' || b.status === 'pending')
+    .map(({ uid, start, end, location }) => ({ uid, start, end, location: location ?? null }));
+}

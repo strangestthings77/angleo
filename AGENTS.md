@@ -118,6 +118,12 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
 - **API versions:** slots `2024-09-04`, bookings `2026-02-25`, event types `2024-06-14`
   (`cal-api-version` header; wrong value silently falls back to an older contract).
 - **Plan:** hosted API v2 needs a paid Cal.com plan (Teams+); the free plan has no API access.
+- **Signed-in booking:** `/umow-lekcje` reads the session (`getViewer()`, inside Suspense). Signed-in
+  users don't see name/email fields; `/api/booking` takes both from the account and ignores
+  client values. The timing trap applies to anonymous visitors only.
+- **Next lesson:** `/panel` shows `NextLessonCard` only when Cal.com has ≥1 upcoming booking for
+  the student's email (`getUpcomingLessons()`, `GET /v2/bookings`, version `2026-05-01`) —
+  live, so reschedules/cancellations made from Cal emails are reflected.
 - **Spam:** honeypot field `website`, 3 s timing trap (`renderedAt`), rate limit 5 bookings /
   10 min / IP and 60 slot queries / min / IP (per instance — best effort on serverless).
 - **Time zones:** the widget uses the visitor's browser time zone; Cal returns slots grouped

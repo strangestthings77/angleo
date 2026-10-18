@@ -37,6 +37,15 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   };
 }
 
+/** Like getCurrentUser(), but never throws — for public pages that only personalise. */
+export async function getViewer(): Promise<CurrentUser | null> {
+  try {
+    return await getCurrentUser();
+  } catch {
+    return null;
+  }
+}
+
 export async function requireUser(next = '/panel'): Promise<CurrentUser> {
   const user = await getCurrentUser();
   if (!user) redirect(`/logowanie?next=${encodeURIComponent(next)}`);

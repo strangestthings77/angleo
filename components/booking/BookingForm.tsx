@@ -3,7 +3,12 @@
 import { useState } from 'react';
 import { formatDay, formatTime } from '@/components/booking/dates';
 import { ArrowRightIcon, CalendarIcon } from '@/components/ui/Icon';
-import type { BookingConfirmation, BookingRequest, BookingResponse } from '@/lib/booking';
+import type {
+  BookingConfirmation,
+  BookingRequest,
+  BookingResponse,
+  BookingViewer,
+} from '@/lib/booking';
 
 const field =
   'h-12 w-full rounded-xl border border-border bg-background px-4 text-base text-foreground placeholder:text-foreground-muted/60 transition-colors duration-200 focus:border-foreground focus:outline-none';
@@ -16,7 +21,9 @@ export function BookingForm({
   onBack,
   onBooked,
   onUnavailable,
+  viewer,
 }: {
+  viewer: BookingViewer | null;
   start: string;
   date: string;
   timeZone: string;
@@ -34,8 +41,10 @@ export function BookingForm({
     const payload: BookingRequest = {
       start,
       timeZone,
-      name: String(form.get('name') ?? ''),
-      email: String(form.get('email') ?? ''),
+      // Signed in: the server uses the account's name and email.
+      ...(viewer
+        ? {}
+        : { name: String(form.get('name') ?? ''), email: String(form.get('email') ?? '') }),
       notes: String(form.get('notes') ?? ''),
       website: String(form.get('website') ?? ''),
       renderedAt,
@@ -82,30 +91,42 @@ export function BookingForm({
         </button>
       </div>
 
+      {viewer && (
+        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-foreground-muted">
+          Rezerwujesz jako
+          <span className="font-medium text-foreground">{viewer.name ?? viewer.email}</span>
+          {viewer.name && <span>({viewer.email})</span>}
+        </p>
+      )}
+
       <div className="grid gap-5 sm:grid-cols-2">
-        <label className="flex flex-col gap-2">
-          <span className={label}>Imię i nazwisko</span>
-          <input
-            name="name"
-            required
-            minLength={2}
-            maxLength={100}
-            autoComplete="name"
-            className={field}
-          />
-        </label>
-        <label className="flex flex-col gap-2">
-          <span className={label}>E-mail</span>
-          <input
-            name="email"
-            type="email"
-            required
-            maxLength={200}
-            autoComplete="email"
-            inputMode="email"
-            className={field}
-          />
-        </label>
+        {!viewer && (
+          <>
+            <label className="flex flex-col gap-2">
+              <span className={label}>Imię i nazwisko</span>
+              <input
+                name="name"
+                required
+                minLength={2}
+                maxLength={100}
+                autoComplete="name"
+                className={field}
+              />
+            </label>
+            <label className="flex flex-col gap-2">
+              <span className={label}>E-mail</span>
+              <input
+                name="email"
+                type="email"
+                required
+                maxLength={200}
+                autoComplete="email"
+                inputMode="email"
+                className={field}
+              />
+            </label>
+          </>
+        )}
         <label className="flex flex-col gap-2 sm:col-span-2">
           <span className={label}>
             Czego chcesz się nauczyć?{' '}
