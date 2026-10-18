@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { requireAdmin } from '@/lib/auth';
 import { MAX_LESSONS } from '@/lib/progress';
@@ -121,6 +122,40 @@ export async function createExercise(
 
   revalidatePath(`/admin/uczniowie/${studentId}`);
   return { ok: Date.now() };
+}
+
+/** Admin edits an exercise; a submitted attempt is re-graded in the DB (update_exercise). */
+export async function updateExercise(
+  _: ExerciseFormState,
+  formData: FormData,
+): Promise<ExerciseFormState> {
+  await requireAdmin();
+  const parsed = exerciseSchema
+    .extend({ exerciseId: z.uuid() })
+    .safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const { exerciseId, studentId, title, instructions, content } = parsed.data;
+  const { template, hints, answers } = parseExercise(content);
+  if (answers.length === 0) {
+    return { error: 'Dodaj co najmniej jedną lukę w nawiasach: [[odpowiedź]].' };
+  }
+  if (answers.some((a) => a.length === 0)) return { error: 'Jedna z luk jest pusta.' };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc('update_exercise', {
+    p_exercise: exerciseId,
+    p_title: title,
+    p_instructions: instructions || null,
+    p_template: template,
+    p_hints: hints,
+    p_answers: answers,
+  });
+  if (error) return { error: 'Nie udało się zapisać zmian. Spróbuj ponownie.' };
+
+  revalidatePath(`/admin/uczniowie/${studentId}`);
+  revalidatePath(`/admin/uczniowie/${studentId}/cwiczenia/${exerciseId}`);
+  redirect(`/admin/uczniowie/${studentId}`);
 }
 
 export async function deleteExercise(exerciseId: string, studentId: string): Promise<void> {

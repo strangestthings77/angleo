@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isGapCorrect, parseExercise, patternFor, segments } from '@/lib/exercise';
+import { isGapCorrect, parseExercise, patternFor, segments, toSource } from '@/lib/exercise';
 
 describe('patternFor', () => {
   it('reveals one letter like the printed exercise', () => {
@@ -41,5 +41,19 @@ describe('isGapCorrect', () => {
     expect(isGapCorrect('inquiry.', ['enquiry', 'inquiry'])).toBe(true);
     expect(isGapCorrect('enqiury', ['enquiry'])).toBe(false);
     expect(isGapCorrect('', ['enquiry'])).toBe(false);
+  });
+});
+
+describe('toSource', () => {
+  it('round-trips through parseExercise', () => {
+    const source =
+      'Your [[enquiry/inquiry|q]] about the [[workshop|h]].\nPlease [[attend|3]], the [[fee]] and [[take off|o]].';
+    expect(toSource(parseExercise(source))).toBe(source);
+  });
+
+  it('writes a repeated letter as its position', () => {
+    // "|t" would mean the first t; the hint reveals the second one.
+    expect(toSource(parseExercise('[[attend|3]]'))).toBe('[[attend|3]]');
+    expect(toSource(parseExercise('[[attend|2]]'))).toBe('[[attend|t]]');
   });
 });

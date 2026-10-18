@@ -9,7 +9,7 @@ import { Heading } from '@/components/text/Heading';
 import { Container } from '@/components/ui/Container';
 import { AddWordForm } from '@/components/words/AddWordForm';
 import { AdminExerciseList } from '@/components/exercises/AdminExerciseList';
-import { CreateExerciseForm } from '@/components/exercises/CreateExerciseForm';
+import { ExerciseForm } from '@/components/exercises/ExerciseForm';
 import { MainLayout } from '@/layouts/MainLayout';
 import { deleteWord } from '@/lib/admin-actions';
 import { getStudent, getStudentWords } from '@/lib/auth';
@@ -93,7 +93,7 @@ async function StudentDetail({ params }: { params: PageProps<'/admin/uczniowie/[
           </div>
           <div className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
             <div className="rounded-3xl border border-border bg-surface p-6 sm:p-8">
-              <CreateExerciseForm studentId={student.id} />
+              <ExerciseForm studentId={student.id} />
             </div>
             <AdminExerciseList studentId={student.id} exercises={exercises} />
           </div>

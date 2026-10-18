@@ -50,6 +50,12 @@ async function LiveExercise({ params }: { params: Params }) {
           {exercise.title}
         </Heading>
         {exercise.instructions && <p className="text-foreground-muted">{exercise.instructions}</p>}
+        <Link
+          href={`/admin/uczniowie/${student.id}/cwiczenia/${exercise.id}/edytuj`}
+          className="inline-flex h-9 items-center self-start rounded-full border border-border px-4 text-xs text-foreground-muted transition-colors duration-150 hover:border-foreground/50 hover:text-foreground"
+        >
+          Edytuj ćwiczenie
+        </Link>
       </div>
       <LiveExerciseView
         exerciseId={exercise.id}

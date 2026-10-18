@@ -3,29 +3,49 @@
 import { useActionState, useState } from 'react';
 import { Field, FormMessage, SubmitButton, inputClass } from '@/components/auth/fields';
 import { ExerciseText, gapClass, gapWidth } from '@/components/exercises/ExerciseText';
-import { createExercise } from '@/lib/admin-actions';
+import { createExercise, updateExercise } from '@/lib/admin-actions';
 import { parseExercise } from '@/lib/exercise';
 
 const EXAMPLE =
   'Thank you for your [[enquiry|q]] concerning the [[workshop|h]]. Places are allocated on a first-come, first-[[served|v]] basis.';
 
-/** Admin: write the text with [[gaps]], see the student's view live, save. */
-export function CreateExerciseForm({ studentId }: { studentId: string }) {
-  const [state, action] = useActionState(createExercise, undefined);
+export type EditableExercise = {
+  id: string;
+  title: string;
+  instructions: string | null;
+  /** The [[…]] text, rebuilt by toSource(). */
+  source: string;
+};
+
+/**
+ * Admin: write the text with [[gaps]], see the student's view live, save. With `exercise` it
+ * edits that one (and returns to the student's page) instead of adding a new one.
+ */
+export function ExerciseForm({
+  studentId,
+  exercise,
+}: {
+  studentId: string;
+  exercise?: EditableExercise;
+}) {
+  const [state, action] = useActionState(exercise ? updateExercise : createExercise, undefined);
   return (
     <form action={action} className="flex flex-col gap-5">
       <input type="hidden" name="studentId" value={studentId} />
-      <ExerciseFields key={state?.ok ?? 'new'} />
+      {exercise && <input type="hidden" name="exerciseId" value={exercise.id} />}
+      <ExerciseFields key={state?.ok ?? 'new'} exercise={exercise} />
       <FormMessage error={state?.error} notice={state?.ok ? 'Ćwiczenie dodane.' : undefined} />
       <div className="sm:w-64">
-        <SubmitButton pending="Zapisuję…">Dodaj ćwiczenie</SubmitButton>
+        <SubmitButton pending="Zapisuję…">
+          {exercise ? 'Zapisz zmiany' : 'Dodaj ćwiczenie'}
+        </SubmitButton>
       </div>
     </form>
   );
 }
 
-function ExerciseFields() {
-  const [content, setContent] = useState('');
+function ExerciseFields({ exercise }: { exercise?: EditableExercise }) {
+  const [content, setContent] = useState(exercise?.source ?? '');
   const parsed = parseExercise(content);
 
   return (
@@ -35,6 +55,7 @@ function ExerciseFields() {
           <input
             name="title"
             required
+            defaultValue={exercise?.title}
             maxLength={160}
             placeholder="Zadanie 3"
             className={inputClass}
@@ -44,6 +65,7 @@ function ExerciseFields() {
           <input
             name="instructions"
             maxLength={500}
+            defaultValue={exercise?.instructions ?? undefined}
             placeholder="Uzupełnij treść maila odpowiednimi wyrazami."
             className={inputClass}
           />

@@ -50,6 +50,12 @@ export function AdminExerciseList({
               >
                 Podgląd na żywo
               </Link>
+              <Link
+                href={`/admin/uczniowie/${studentId}/cwiczenia/${exercise.id}/edytuj`}
+                className={small}
+              >
+                Edytuj
+              </Link>
               {exercise.attempt?.submittedAt && (
                 <form action={reopenExercise.bind(null, exercise.id, studentId)}>
                   <button type="submit" className={small}>

@@ -185,7 +185,10 @@ supabase/migrations/               schema as code — profiles (role), is_admin(
   `submit_exercise()` grades in the DB (`normalise_gap()`: case, spaces, edge punctuation; no
   typo tolerance — spelling is the point), stores the score and locks the attempt;
   `exercise_answers()` reveals answers only to the admin or after submitting.
-  **Pozwól poprawić** (`reopen_exercise()`) unlocks it. Keep `normaliseGap()` in sync with SQL.
+  **Pozwól poprawić** (`reopen_exercise()`) unlocks it. **Edytuj** (`…/[exerciseId]/edytuj`)
+  rebuilds the `[[…]]` text with `toSource()` (no stored source — answers stay in one column);
+  `update_exercise()` keeps typed answers by gap number and re-grades a submitted attempt
+  (`grade_exercise()`, shared with `submit_exercise()`). Keep `normaliseGap()` in sync with SQL.
 - **Session checks:** proxy and `getCurrentUser()` both use `auth.getClaims()` so they agree.
   A failed profile read throws (→ `app/panel/error.tsx`), it never redirects.
 - **One browser = one account.** The session is one cookie per site; to test admin and student
@@ -318,18 +321,19 @@ new tokens, one-line gotchas. When a section outgrows this file, move it to
 
 ## Features
 
-| Route                                          | Sections                                                           | Notes                                            |
-| ---------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------ |
-| `/`                                            | Hero, Credentials, Offer, Topics, LatestPosts, Quote, BookingCta   | `#tematy` anchor; featured = `featuredSlug`      |
-| `/blog`                                        | BlogHeader + CategoryChips, FeaturedPost, PostGrid                 |                                                  |
-| `/blog/[slug]`                                 | ArticleHeader, MDX body, AuthorBox, RelatedPosts, BookingCta       | Unknown slug → `notFound()` (200 + noindex, PPR) |
-| `/blog-post-categories/[slug]`                 | BlogHeader (active chip), PostGrid                                 | Old Webflow URL scheme kept, incl. `logistyka-2` |
-| `/o-mnie`                                      | AboutHero, AboutDetails, Quote, BookingCta                         |                                                  |
-| `/umow-lekcje`                                 | Header, ContactCards                                               | Booking = Google Apps Script calendar            |
-| `/panel`                                       | Name + ProgressInline, NextLessonCard, Tabs (exercises/words/test) | Session read inside `<Suspense>`                 |
-| `/panel/cwiczenia/[id]`                        | ExercisePlayer                                                     | Autosave + submit; result view once submitted    |
-| `/admin/uczniowie/[id]`                        | ProgressCard, LessonsEditor, CreateExerciseForm, AddWordForm       | Exercise list: live view, reopen, delete         |
-| `/admin/uczniowie/[id]/cwiczenia/[exerciseId]` | LiveExerciseView                                                   | Realtime on `exercise_attempts`                  |
+| Route                                                 | Sections                                                           | Notes                                            |
+| ----------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------ |
+| `/`                                                   | Hero, Credentials, Offer, Topics, LatestPosts, Quote, BookingCta   | `#tematy` anchor; featured = `featuredSlug`      |
+| `/blog`                                               | BlogHeader + CategoryChips, FeaturedPost, PostGrid                 |                                                  |
+| `/blog/[slug]`                                        | ArticleHeader, MDX body, AuthorBox, RelatedPosts, BookingCta       | Unknown slug → `notFound()` (200 + noindex, PPR) |
+| `/blog-post-categories/[slug]`                        | BlogHeader (active chip), PostGrid                                 | Old Webflow URL scheme kept, incl. `logistyka-2` |
+| `/o-mnie`                                             | AboutHero, AboutDetails, Quote, BookingCta                         |                                                  |
+| `/umow-lekcje`                                        | Header, ContactCards                                               | Booking = Google Apps Script calendar            |
+| `/panel`                                              | Name + ProgressInline, NextLessonCard, Tabs (exercises/words/test) | Session read inside `<Suspense>`                 |
+| `/panel/cwiczenia/[id]`                               | ExercisePlayer                                                     | Autosave + submit; result view once submitted    |
+| `/admin/uczniowie/[id]`                               | ProgressCard, LessonsEditor, ExerciseForm, AddWordForm             | Exercise list: live view, edit, reopen, delete   |
+| `/admin/uczniowie/[id]/cwiczenia/[exerciseId]`        | LiveExerciseView                                                   | Realtime on `exercise_attempts`                  |
+| `/admin/uczniowie/[id]/cwiczenia/[exerciseId]/edytuj` | ExerciseForm (edit mode)                                           | Warns if the student started / submitted         |
 
 <!-- BEGIN:altalogy/mcp -->
 

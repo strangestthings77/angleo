@@ -69,6 +69,38 @@ export function parseExercise(content: string): ParsedExercise {
   return { template, hints, answers };
 }
 
+/** Character index of the revealed letter in a hint pattern (inverse of patternFor). */
+function revealedAt(pattern: string): number | null {
+  let index = 0;
+  for (const word of pattern.split('   ')) {
+    for (const token of word.split(' ')) {
+      if (token !== '_') return index;
+      index++;
+    }
+    index++; // the space between words
+  }
+  return null;
+}
+
+/**
+ * Back to the editable [[…]] text — inverse of parseExercise(), for the admin's edit form.
+ * The reveal is written as a letter when that's unambiguous, otherwise as a position.
+ */
+export function toSource({ template, hints, answers }: ParsedExercise): string {
+  return template.replace(/\{\{(\d+)\}\}/g, (_, n: string) => {
+    const i = Number(n);
+    const accepted = answers[i] ?? [];
+    const first = accepted[0] ?? '';
+    const at = revealedAt(hints[i]?.pattern ?? '');
+    let spec = '';
+    if (at !== null && at < first.length) {
+      const letter = first[at];
+      spec = first.toLowerCase().indexOf(letter.toLowerCase()) === at ? `|${letter}` : `|${at + 1}`;
+    }
+    return `[[${accepted.join('/')}${spec}]]`;
+  });
+}
+
 /** Template → text and gap tokens, for rendering. */
 export type Segment = { type: 'text'; text: string } | { type: 'gap'; index: number };
 
