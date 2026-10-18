@@ -23,14 +23,14 @@ export async function Hero() {
     <section className="overflow-hidden border-b border-border">
       <Container className="grid items-center gap-16 pt-14 pb-20 md:pt-20 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-20 lg:pb-28">
         <div className="flex flex-col gap-8">
-          <Eyebrow>{hero.eyebrow}</Eyebrow>
-          <Heading as="h1" size="xl">
+          <Eyebrow className="animate-rise">{hero.eyebrow}</Eyebrow>
+          <Heading as="h1" size="xl" className="animate-rise rise-step-1">
             <Accent text={hero.heading} />
           </Heading>
-          <Text variant="lead" className="max-w-xl">
+          <Text variant="lead" className="max-w-xl animate-rise rise-step-2">
             {hero.lead}
           </Text>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex animate-rise flex-wrap gap-3 rise-step-3">
             <Button href={booking.href} arrow>
               {site.cta.label}
             </Button>
@@ -38,7 +38,7 @@ export async function Hero() {
               Jak to działa
             </Button>
           </div>
-          <dl className="mt-4 flex flex-wrap gap-x-10 gap-y-6 border-t border-border pt-8">
+          <dl className="mt-4 flex animate-rise flex-wrap gap-x-10 gap-y-6 border-t border-border pt-8 rise-step-4">
             {facts.map((fact) => (
               <div key={fact.value} className="flex flex-col gap-1">
                 <dt className="font-serif text-title tracking-display text-foreground">
@@ -50,7 +50,7 @@ export async function Hero() {
           </dl>
         </div>
 
-        <div className="relative isolate mx-auto w-full max-w-md lg:mx-0 lg:max-w-none">
+        <div className="relative isolate mx-auto w-full max-w-md animate-portrait rise-step-2 lg:mx-0 lg:max-w-none">
           {/* Soft arch block + brass outline behind the portrait. */}
           <div
             aria-hidden
@@ -70,7 +70,21 @@ export async function Hero() {
             sizes="(min-width: 1024px) 460px, 90vw"
             className="relative aspect-4/5 w-full rounded-t-arch rounded-b-3xl object-cover shadow-card"
           />
-          <div className="absolute right-4 -bottom-6 left-4 flex items-center gap-4 rounded-2xl bg-surface px-5 py-4 shadow-card sm:right-auto sm:-left-8">
+          {hero.phrases.map((phrase, i) => (
+            <figure
+              key={phrase.en}
+              aria-hidden
+              className={`absolute flex max-w-56 animate-pop flex-col gap-1 rounded-2xl bg-surface px-4 py-3 shadow-card ${i === 0 ? 'rise-step-8' : 'rise-step-10'} ${
+                i === 0
+                  ? '-top-8 -left-1 rounded-bl-md sm:top-10 sm:-left-12'
+                  : 'top-1/2 -right-3 hidden rounded-br-md sm:-right-10 sm:flex'
+              }`}
+            >
+              <span className="font-serif text-lg/6 text-foreground italic">{phrase.en}</span>
+              <span className="text-xs text-foreground-muted">{phrase.pl}</span>
+            </figure>
+          ))}
+          <div className="absolute right-4 -bottom-6 left-4 flex animate-pop items-center gap-4 rounded-2xl bg-surface px-5 py-4 shadow-card rise-step-6 sm:right-auto sm:-left-8">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-muted text-accent">
               <GraduationCapIcon size={20} />
             </span>

@@ -22,7 +22,7 @@ export function Button({
   className?: string;
   children: React.ReactNode;
 }) {
-  const classes = `group inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 text-sm font-medium transition-[background-color,border-color] duration-200 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-accent ${variants[variant]} ${className ?? ''}`;
+  const classes = `group inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 text-sm font-medium transition-[background-color,border-color,scale] duration-200 ease-out active:scale-97 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-accent ${variants[variant]} ${className ?? ''}`;
   const content = (
     <>
       {children}

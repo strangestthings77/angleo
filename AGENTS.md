@@ -131,7 +131,7 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
 > Heroes are light (ivory, hairline bottom border, brass-outlined portrait) — a dark hero was
 > tried and rejected. Ink with film grain (`InkPanel`) is reserved for accents: the offer
 > lead card and the CTA band that closes each page. Content sits on ivory with hairline
-> borders, bento cards and soft rounded imagery. Motion is limited to hover feedback — no scroll animations, no carousels.
+> borders, bento cards and soft rounded imagery. Motion is calm and CSS-only (see Motion).
 > Deliberately _not_ a playful language-school look, not corporate-blue, not loud gradients.
 
 **This is the reference for any judgement call.** Check against it before guessing.
@@ -172,6 +172,24 @@ value.**
 - **Buttons:** `Button` variants `primary` (ink), `secondary` (outline), `light` (on ink);
   `arrow` adds the animated arrow. Height 48px (44px+ tap target).
 - **Dates:** Polish long format via `formatDate()` ("27 lipca 2025"); counts via `articles()`.
+
+## Motion
+
+All in `app/styles/motion.css` — no animation library. Every effect is disabled under
+`prefers-reduced-motion`.
+
+| Utility / API                     | What it does                                                                                  |
+| --------------------------------- | --------------------------------------------------------------------------------------------- |
+| `animate-rise` + `rise-step-N`    | Hero entrance: fade + 14px rise + blur, staggered N × 90ms                                    |
+| `animate-portrait`, `animate-pop` | Portrait settle (scale .96→1), floating cards/bubbles pop                                     |
+| `reveal`                          | Scroll-driven entrance (`animation-timeline: view()`); unsupported browsers just show content |
+| `header-scrolled`                 | Header gains shadow over the first 120px of scroll (`scroll(root)`)                           |
+| `details-animate`                 | `<details>` open/close via `::details-content` + `interpolate-size`                           |
+| `animate-fade`                    | 280ms fade for UI state swaps (booking steps, times, menu icon)                               |
+| `<ViewTransition>`                | In `MainLayout`: route-change crossfade (`.page` class); header anchored via `vt-header`      |
+
+Rules: animate only transform/opacity (accordion height is the one exception); hovers use
+Tailwind `hover:` (pointer devices only); buttons press to `scale-97`; no marquees/carousels.
 
 ## Conventions
 

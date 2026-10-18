@@ -32,6 +32,9 @@ licenses, search).
   answers only state facts (Google Meet, length from Cal.com, 2-week window, reschedule link).
   "lekcja 1:1" assumes individual lessons — confirm with Nicole. Dark ink heroes were tried
   and rejected by the client; heroes stay light, ink is for the offer card and CTA band only.
+- **Motion pass:** CSS-only entrances, scroll-driven reveals, route view transitions, press /
+  hover / accordion / menu micro-interactions; all off under reduced motion. Notebook-ruled
+  hero box tried and rejected.
 - **Dates switched to Polish** ("27 lipca 2025").
 - **Posts migrated to MDX** (`@next/mdx`, no frontmatter plugin): bodies in `.mdx`, metadata
   in a typed `posts.ts`. Converted from the Webflow rich text by a one-off script; Webflow

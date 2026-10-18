@@ -22,7 +22,7 @@ export function TimeSlots({
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex animate-fade flex-col gap-5">
       <div>
         <p className="text-xs font-medium tracking-eyebrow text-accent uppercase">Wolne godziny</p>
         <h3 className="mt-2 font-serif text-title tracking-display text-foreground">

@@ -97,31 +97,35 @@ export function BookingWidget() {
 
   if (step.name === 'done') {
     return (
-      <BookingSuccess
-        booking={step.booking}
-        timeZone={timeZone}
-        onReset={() => {
-          setStep({ name: 'pick' });
-          refresh();
-        }}
-      />
+      <div className="animate-fade">
+        <BookingSuccess
+          booking={step.booking}
+          timeZone={timeZone}
+          onReset={() => {
+            setStep({ name: 'pick' });
+            refresh();
+          }}
+        />
+      </div>
     );
   }
 
   if (step.name === 'form') {
     return (
-      <BookingForm
-        start={step.start}
-        date={step.date}
-        timeZone={timeZone}
-        onBack={() => setStep({ name: 'pick' })}
-        onBooked={(booking) => setStep({ name: 'done', booking })}
-        onUnavailable={(message) => {
-          setStep({ name: 'pick' });
-          setReload((n) => n + 1);
-          setNotice(message);
-        }}
-      />
+      <div className="animate-fade">
+        <BookingForm
+          start={step.start}
+          date={step.date}
+          timeZone={timeZone}
+          onBack={() => setStep({ name: 'pick' })}
+          onBooked={(booking) => setStep({ name: 'done', booking })}
+          onUnavailable={(message) => {
+            setStep({ name: 'pick' });
+            setReload((n) => n + 1);
+            setNotice(message);
+          }}
+        />
+      </div>
     );
   }
 
@@ -129,7 +133,7 @@ export function BookingWidget() {
   const laterMonth = compareMonths(month, maxMonth) < 0 && available.size > 0;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex animate-fade flex-col gap-6">
       {error && (
         <div
           role="alert"
@@ -169,6 +173,7 @@ export function BookingWidget() {
             </p>
           ) : (
             <TimeSlots
+              key={selected ?? 'none'}
               date={loading ? null : selected}
               slots={selected ? (slots[selected] ?? []) : []}
               timeZone={timeZone}

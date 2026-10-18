@@ -36,12 +36,17 @@ export function MobileMenu({ items, cta }: { items: readonly Item[]; cta: Item }
         onClick={() => setOpen((v) => !v)}
         className="-mr-2 inline-flex size-11 items-center justify-center rounded-full text-foreground"
       >
-        {open ? <CloseIcon size={22} /> : <MenuIcon size={22} />}
+        <span key={open ? 'close' : 'menu'} className="animate-fade">
+          {open ? <CloseIcon size={22} /> : <MenuIcon size={22} />}
+        </span>
       </button>
       <div
         id="mobile-menu"
-        hidden={!open}
-        className="absolute inset-x-0 top-full border-b border-border bg-background"
+        inert={!open}
+        aria-hidden={!open}
+        className={`absolute inset-x-0 top-full border-b border-border bg-background shadow-card transition-[opacity,translate] duration-250 ease-out-soft motion-reduce:transition-none ${
+          open ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'
+        }`}
       >
         <nav aria-label="Menu" className="flex flex-col px-container py-4">
           {items.map((item) => (

@@ -21,9 +21,9 @@ export function AboutTeaser() {
           height={portrait.height}
           draggable={false}
           sizes="(min-width: 1024px) 460px, 100vw"
-          className="aspect-4/5 w-full rounded-3xl object-cover"
+          className="aspect-4/5 w-full reveal rounded-3xl object-cover"
         />
-        <div className="flex flex-col gap-8">
+        <div className="flex reveal flex-col gap-8">
           <Eyebrow>O mnie</Eyebrow>
           <Heading size="lg">
             <Accent text={about.heading} />

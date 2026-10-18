@@ -7,7 +7,7 @@ export function PostCard({ post }: { post: Post }) {
   const category = getCategory(post.category);
 
   return (
-    <article className="group relative flex flex-col gap-5">
+    <article className="group relative flex reveal flex-col gap-5">
       <div className="overflow-hidden rounded-2xl bg-surface-muted">
         <Image
           src={post.cover.src}

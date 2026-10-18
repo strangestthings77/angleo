@@ -27,9 +27,9 @@ export async function Faq() {
           <SectionHeader eyebrow={faq.eyebrow} heading={faq.heading} lead={faq.lead} />
           <ContactList />
         </div>
-        <div className="divide-y divide-border border-y border-border">
+        <div className="reveal divide-y divide-border border-y border-border">
           {items.map((item) => (
-            <details key={item.q} className="group">
+            <details key={item.q} className="group details-animate">
               <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 text-lg font-medium text-foreground [&::-webkit-details-marker]:hidden">
                 {item.q}
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition-transform duration-200 ease-out-soft group-open:rotate-45 motion-reduce:transition-none">

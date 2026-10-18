@@ -9,7 +9,7 @@ export function FeaturedPost({ post, priority = false }: { post: Post; priority?
   const category = getCategory(post.category);
 
   return (
-    <article className="group relative grid overflow-hidden rounded-3xl bg-surface shadow-card lg:grid-cols-2">
+    <article className="group relative grid reveal overflow-hidden rounded-3xl bg-surface shadow-card lg:grid-cols-2">
       <div className="overflow-hidden">
         <Image
           src={post.cover.src}

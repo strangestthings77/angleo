@@ -23,7 +23,7 @@ export function Process() {
           {process.steps.map((step, i) => (
             <li
               key={step.title}
-              className="relative flex flex-col gap-5 border-t border-foreground/15 pt-8"
+              className="relative flex reveal flex-col gap-5 border-t border-foreground/15 pt-8"
             >
               <span
                 aria-hidden

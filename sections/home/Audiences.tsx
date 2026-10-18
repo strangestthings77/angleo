@@ -21,7 +21,7 @@ export function Audiences() {
             return (
               <li
                 key={item.title}
-                className="flex flex-col gap-8 rounded-3xl border border-border bg-background p-8"
+                className="flex reveal flex-col gap-8 rounded-3xl border border-border bg-background p-8 transition-[translate,box-shadow] duration-300 ease-out-soft hover:-translate-y-1 hover:shadow-card motion-reduce:transition-none"
               >
                 <span className="flex size-12 items-center justify-center rounded-full border border-border text-accent">
                   <Icon size={20} />

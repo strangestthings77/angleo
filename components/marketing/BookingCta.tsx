@@ -16,7 +16,7 @@ export function BookingCta() {
   return (
     <section className="pb-section">
       <Container>
-        <InkPanel className="px-6 py-16 sm:px-12 md:py-20 lg:px-20">
+        <InkPanel className="reveal px-6 py-16 sm:px-12 md:py-20 lg:px-20">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-end">
             <div className="flex flex-col gap-6">
               <Eyebrow inverse>{booking.eyebrow}</Eyebrow>

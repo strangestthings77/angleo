@@ -6,7 +6,7 @@ import { MobileMenu } from '@/layouts/MobileMenu';
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-20 border-b border-border/70 bg-background/85 backdrop-blur-md">
+    <header className="sticky top-0 z-20 header-scrolled border-b border-border/70 bg-background/85 backdrop-blur-md vt-header">
       <Container className="relative flex h-18 items-center justify-between gap-8">
         <Link href="/" className="flex items-baseline gap-2 text-foreground">
           <span className="font-serif text-3xl tracking-display">{site.name}</span>
@@ -20,7 +20,7 @@ export function Header() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-foreground-muted transition-colors duration-200 hover:text-foreground"
+                  className="relative text-foreground-muted transition-colors duration-200 after:absolute after:inset-x-0 after:-bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 after:ease-out-soft hover:text-foreground hover:after:scale-x-100 motion-reduce:after:transition-none"
                 >
                   {item.label}
                 </Link>

@@ -16,7 +16,7 @@ export function Offer() {
   return (
     <Section>
       <Container className="grid gap-4 lg:grid-cols-3 lg:grid-rows-2">
-        <InkPanel className="flex flex-col justify-between gap-12 rounded-3xl p-8 sm:p-10 lg:row-span-2">
+        <InkPanel className="flex reveal flex-col justify-between gap-12 rounded-3xl p-8 sm:p-10 lg:row-span-2">
           <div className="flex flex-col gap-6">
             <Eyebrow inverse>{offer.eyebrow}</Eyebrow>
             <Heading size="md" inverse>
@@ -36,7 +36,7 @@ export function Offer() {
           {offer.items.map((item, i) => (
             <li
               key={item.title}
-              className="flex flex-col justify-between gap-10 rounded-3xl border border-border bg-surface p-8"
+              className="flex reveal flex-col justify-between gap-10 rounded-3xl border border-border bg-surface p-8 transition-[translate,box-shadow] duration-300 ease-out-soft hover:-translate-y-1 hover:shadow-card motion-reduce:transition-none"
             >
               <span className="font-serif text-display-sm text-accent italic tabular-nums">
                 {String(i + 1).padStart(2, '0')}

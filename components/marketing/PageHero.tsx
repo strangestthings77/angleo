@@ -27,16 +27,16 @@ export function PageHero({
         className={compact ? 'pt-12 pb-10 md:pt-16 md:pb-12' : 'pt-16 pb-14 md:pt-24 md:pb-20'}
       >
         <div className="flex max-w-3xl flex-col gap-6">
-          <Eyebrow>{eyebrow}</Eyebrow>
-          <Heading as="h1" size={compact ? 'lg' : 'xl'}>
+          <Eyebrow className="animate-rise">{eyebrow}</Eyebrow>
+          <Heading as="h1" size={compact ? 'lg' : 'xl'} className="animate-rise rise-step-1">
             <Accent text={heading} />
           </Heading>
           {lead && (
-            <Text variant="lead" className="max-w-2xl">
+            <Text variant="lead" className="max-w-2xl animate-rise rise-step-2">
               {lead}
             </Text>
           )}
-          {children && <div className="pt-4">{children}</div>}
+          {children && <div className="animate-rise pt-4 rise-step-3">{children}</div>}
         </div>
       </Container>
     </section>

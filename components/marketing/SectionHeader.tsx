@@ -21,7 +21,7 @@ export function SectionHeader({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+    <div className="flex reveal flex-col justify-between gap-8 md:flex-row md:items-end">
       <div className="flex max-w-3xl flex-col gap-5">
         <Eyebrow inverse={inverse}>{eyebrow}</Eyebrow>
         <Heading as={as} size={size} inverse={inverse}>

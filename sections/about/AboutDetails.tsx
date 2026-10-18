@@ -10,7 +10,7 @@ export function AboutDetails() {
 
   return (
     <Section tone="muted">
-      <Container className="grid gap-16 lg:grid-cols-2 lg:gap-24">
+      <Container className="grid reveal gap-16 lg:grid-cols-2 lg:gap-24">
         <div className="flex flex-col gap-8">
           <Eyebrow>Wykształcenie</Eyebrow>
           <Heading size="md">
