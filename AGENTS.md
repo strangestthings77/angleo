@@ -138,8 +138,9 @@ supabase/migrations/               schema as code — profiles (role), is_admin(
 - **Routes:** `/logowanie`, `/rejestracja`, `/panel` (student: exercises placeholder + words),
   `/admin` (admin: all students). All `noindex` and excluded from the sitemap.
 - **Roles:** every sign-up gets a `profiles` row with `role = 'student'` (trigger). Promote an
-  admin in the Supabase SQL editor:
-  `update public.profiles set role = 'admin' where email = '…';`
+  admin from the terminal (uses the CLI login, no DB password):
+  `pnpm exec supabase db query --linked "update public.profiles set role = 'admin' where email = '…';"`
+  — or run the same `update` in the Supabase SQL editor. Current admin: Nicole Kurek.
   There are no update policies, so users can never change their own role.
 - **RLS is the security boundary.** The publishable key is public; every table has RLS on.
   Admin reads go through `public.is_admin()` (security definer — avoids recursive policies).
