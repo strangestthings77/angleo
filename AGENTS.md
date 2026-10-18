@@ -128,6 +128,7 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
 
 ```text
 proxy.ts → lib/supabase/proxy.ts   refreshes the session cookie; /panel, /admin → /logowanie if signed out
+                                   (never redirects away from /logowanie — that caused a reload loop)
 lib/supabase/server.ts             server client (Server Components, Actions, Route Handlers)
 lib/auth.ts                        DAL: getCurrentUser, requireUser, requireAdmin, getMyWords, getStudents
 lib/auth-actions.ts                Server Actions: signIn, signUp, signOut
@@ -146,6 +147,10 @@ supabase/migrations/               schema as code — profiles (role), is_admin(
   the rule lives only in `lib/progress.ts`. Students see `ProgressCard` on `/panel`; admins edit
   per student on `/admin` (`LessonsEditor` → `setStudentLessons` action → DB function
   `set_student_lessons()`, which re-checks `is_admin()` and touches only that column).
+- **Session checks:** proxy and `getCurrentUser()` both use `auth.getClaims()` so they agree.
+  A failed profile read throws (→ `app/panel/error.tsx`), it never redirects.
+- **One browser = one account.** The session is one cookie per site; to test admin and student
+  side by side, use a second browser or a private window.
 - **RLS is the security boundary.** The publishable key is public; every table has RLS on.
   Admin reads go through `public.is_admin()` (security definer — avoids recursive policies).
 - **Cache Components:** anything reading the session lives inside `<Suspense>` (see

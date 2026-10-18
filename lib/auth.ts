@@ -15,23 +15,25 @@ export type CurrentUser = {
 
 export async function getCurrentUser(): Promise<CurrentUser | null> {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return null;
+  // Same check as proxy.ts (verifies the JWT), so the two never disagree about "signed in".
+  const { data } = await supabase.auth.getClaims();
+  const claims = data?.claims;
+  if (!claims?.sub) return null;
 
-  const { data: profile } = await supabase
+  const { data: profile, error } = await supabase
     .from('profiles')
     .select('full_name, role, lessons_completed')
-    .eq('id', user.id)
+    .eq('id', claims.sub)
     .single();
+  // A failed read is an error, not "signed out" — redirecting here could loop with the proxy.
+  if (error || !profile) throw new Error('Nie udało się wczytać profilu.');
 
   return {
-    id: user.id,
-    email: user.email ?? '',
-    name: profile?.full_name ?? null,
-    role: (profile?.role as Role | undefined) ?? 'student',
-    lessons: profile?.lessons_completed ?? 0,
+    id: claims.sub,
+    email: typeof claims.email === 'string' ? claims.email : '',
+    name: profile.full_name ?? null,
+    role: (profile.role as Role | undefined) ?? 'student',
+    lessons: profile.lessons_completed ?? 0,
   };
 }
 

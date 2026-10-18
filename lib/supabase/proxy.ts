@@ -4,7 +4,11 @@ import { NextResponse, type NextRequest } from 'next/server';
 /** Paths that need a signed-in user. Role checks happen in the pages themselves. */
 const PROTECTED = ['/panel', '/admin'];
 
-/** Refreshes the Supabase session cookie and guards protected paths. */
+/**
+ * Refreshes the Supabase session cookie and guards protected paths.
+ * Only ever redirects *to* the login page, never away from it — the pages make the final call,
+ * so a disagreement between this check and a page's check can't bounce the browser in a loop.
+ */
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
 
@@ -36,13 +40,6 @@ export async function updateSession(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = '/logowanie';
     url.search = `?next=${encodeURIComponent(pathname)}`;
-    return NextResponse.redirect(url);
-  }
-
-  if (signedIn && (pathname === '/logowanie' || pathname === '/rejestracja')) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/panel';
-    url.search = '';
     return NextResponse.redirect(url);
   }
 
