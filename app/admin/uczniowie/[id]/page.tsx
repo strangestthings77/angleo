@@ -83,10 +83,8 @@ async function StudentDetail({ params }: { params: PageProps<'/admin/uczniowie/[
                 Dodaj <em>słówko</em>
               </Heading>
               <p className="text-sm text-foreground-muted">
-                Uczeń zobaczy je w „Moje słówka” i w teście. W teście akceptujemy brak polskich
-                znaków i drobne literówki. Kilka poprawnych odpowiedzi oddziel ukośnikiem —{' '}
-                <span className="text-foreground">całować się / obściskiwać się</span> — a słowo
-                opcjonalne daj w nawias: <span className="text-foreground">całować (się)</span>.
+                Uczeń zobaczy je w „Moje słówka” i w teście. Test wybacza brak polskich znaków i
+                drobne literówki.
               </p>
             </div>
             <div className="rounded-3xl border border-border bg-surface p-6 sm:p-8">

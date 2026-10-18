@@ -48,7 +48,7 @@ function WordFields() {
 
   return (
     <>
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="flex flex-col gap-5">
         <Field label="Słówko / fraza (EN)">
           <span className="flex gap-2">
             <input
@@ -68,7 +68,7 @@ function WordFields() {
                   suggest();
                 }
               }}
-              className={inputClass}
+              className={`${inputClass} min-w-0 flex-1`}
             />
             <button
               type="button"
@@ -80,17 +80,22 @@ function WordFields() {
             </button>
           </span>
         </Field>
-        <Field label="Tłumaczenie (PL)" hint="kilka: „/”, opcjonalne: (…)">
-          <input
-            name="translation"
-            required
-            maxLength={200}
-            autoComplete="off"
-            value={translation}
-            onChange={(e) => setTranslation(e.target.value)}
-            className={inputClass}
-          />
-        </Field>
+        <div className="flex flex-col gap-2">
+          <Field label="Tłumaczenie (PL)">
+            <input
+              name="translation"
+              required
+              maxLength={200}
+              autoComplete="off"
+              value={translation}
+              onChange={(e) => setTranslation(e.target.value)}
+              className={inputClass}
+            />
+          </Field>
+          <p className="text-xs text-foreground-muted">
+            Kilka odpowiedzi oddziel „/”, słowo opcjonalne w nawiasie: całować (się)
+          </p>
+        </div>
       </div>
 
       {suggestions && (
