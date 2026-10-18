@@ -1,23 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { CloseIcon, MenuIcon } from '@/components/ui/Icon';
 
 type Item = { label: string; href: string };
 
-/** Disclosure menu for small screens; closes on navigation and Escape. */
+/**
+ * Disclosure menu for small screens; closes on link click and Escape.
+ * No usePathname(): it would force a Suspense boundary on every dynamic route.
+ */
 export function MobileMenu({ items, cta }: { items: readonly Item[]; cta: Item }) {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
-
-  // Close whenever the route changes.
-  const [lastPath, setLastPath] = useState(pathname);
-  if (pathname !== lastPath) {
-    setLastPath(pathname);
-    setOpen(false);
-  }
 
   useEffect(() => {
     if (!open) return;
