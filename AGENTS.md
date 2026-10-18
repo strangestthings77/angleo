@@ -147,8 +147,8 @@ supabase/migrations/               schema as code — profiles (role), is_admin(
   the rule lives only in `lib/progress.ts`. Students see `ProgressCard` on `/panel`; admins edit
   per student on `/admin` (`LessonsEditor` → `setStudentLessons` action → DB function
   `set_student_lessons()`, which re-checks `is_admin()` and touches only that column).
-- **Words:** `words.student_id` = personal word (added by the admin on the student's page),
-  `null` = shared starter word. Students see their own first, then shared. `WordCard` shows the
+- **Words:** added by the admin per student (`words.student_id`); the starter set was removed
+  (migration `20261018170000`). `student_id = null` would still show to every student. `WordCard` shows the
   English side only; the Polish translation appears on hover (pointer) or tap/Enter (touch, keyboard).
 - **Session checks:** proxy and `getCurrentUser()` both use `auth.getClaims()` so they agree.
   A failed profile read throws (→ `app/panel/error.tsx`), it never redirects.

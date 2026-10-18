@@ -24,11 +24,6 @@ export function WordCard({ word }: { word: Word }) {
       >
         {/* Front — English */}
         <span className="col-start-1 row-start-1 flex min-h-48 flex-col gap-3 rounded-3xl border border-border bg-surface p-6 backface-hidden">
-          {word.personal && (
-            <span className="self-start rounded-full bg-surface-muted px-2.5 py-1 text-xs font-medium tracking-eyebrow text-accent uppercase">
-              Dla Ciebie
-            </span>
-          )}
           <span className="font-serif text-title tracking-display text-foreground">
             {word.term}
           </span>

@@ -77,7 +77,9 @@ async function StudentDashboard() {
             </p>
           </div>
           {words.length === 0 ? (
-            <p className="text-foreground-muted">Nie masz jeszcze żadnych słówek.</p>
+            <p className="rounded-3xl border border-dashed border-border p-8 text-foreground-muted">
+              Słówka z Twoich lekcji pojawią się tutaj.
+            </p>
           ) : (
             <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {words.map((word, i) => (
