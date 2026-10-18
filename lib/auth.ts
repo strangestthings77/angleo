@@ -5,7 +5,13 @@ import { createClient } from '@/lib/supabase/server';
 /** Data Access Layer for the student area: every read re-checks the session server-side. */
 
 export type Role = 'admin' | 'student';
-export type CurrentUser = { id: string; email: string; name: string | null; role: Role };
+export type CurrentUser = {
+  id: string;
+  email: string;
+  name: string | null;
+  role: Role;
+  lessons: number;
+};
 
 export async function getCurrentUser(): Promise<CurrentUser | null> {
   const supabase = await createClient();
@@ -16,7 +22,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('full_name, role')
+    .select('full_name, role, lessons_completed')
     .eq('id', user.id)
     .single();
 
@@ -25,6 +31,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     email: user.email ?? '',
     name: profile?.full_name ?? null,
     role: (profile?.role as Role | undefined) ?? 'student',
+    lessons: profile?.lessons_completed ?? 0,
   };
 }
 
@@ -52,14 +59,20 @@ export async function getMyWords(): Promise<Word[]> {
   return data ?? [];
 }
 
-export type StudentRow = { id: string; email: string; name: string | null; createdAt: string };
+export type StudentRow = {
+  id: string;
+  email: string;
+  name: string | null;
+  createdAt: string;
+  lessons: number;
+};
 
 export async function getStudents(): Promise<StudentRow[]> {
   await requireAdmin();
   const supabase = await createClient();
   const { data } = await supabase
     .from('profiles')
-    .select('id, email, full_name, created_at')
+    .select('id, email, full_name, created_at, lessons_completed')
     .eq('role', 'student')
     .order('created_at', { ascending: false });
   return (data ?? []).map((p) => ({
@@ -67,5 +80,6 @@ export async function getStudents(): Promise<StudentRow[]> {
     email: p.email,
     name: p.full_name,
     createdAt: p.created_at,
+    lessons: p.lessons_completed ?? 0,
   }));
 }

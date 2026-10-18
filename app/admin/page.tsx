@@ -3,6 +3,7 @@ import { PanelBar } from '@/components/auth/PanelBar';
 import { PanelSkeleton } from '@/components/auth/PanelSkeleton';
 import { Eyebrow } from '@/components/text/Eyebrow';
 import { Heading } from '@/components/text/Heading';
+import { LessonsEditor } from '@/components/progress/LessonsEditor';
 import { Container } from '@/components/ui/Container';
 import { MainLayout } from '@/layouts/MainLayout';
 import { getStudents, requireAdmin } from '@/lib/auth';
@@ -64,7 +65,7 @@ async function AdminDashboard() {
           </p>
         ) : (
           <div className="animate-fade overflow-x-auto rounded-3xl border border-border bg-surface">
-            <table className="w-full min-w-xl text-left text-sm">
+            <table className="w-full min-w-3xl text-left text-sm">
               <thead className="border-b border-border text-xs tracking-eyebrow text-foreground-muted uppercase">
                 <tr>
                   <th scope="col" className="px-6 py-4 font-medium">
@@ -72,6 +73,9 @@ async function AdminDashboard() {
                   </th>
                   <th scope="col" className="px-6 py-4 font-medium">
                     E-mail
+                  </th>
+                  <th scope="col" className="px-6 py-4 font-medium">
+                    Postęp (lekcje)
                   </th>
                   <th scope="col" className="px-6 py-4 font-medium">
                     Dołączył(a)
@@ -89,6 +93,9 @@ async function AdminDashboard() {
                       <a href={`mailto:${student.email}`} className="hover:text-foreground">
                         {student.email}
                       </a>
+                    </td>
+                    <td className="px-6 py-4">
+                      <LessonsEditor studentId={student.id} lessons={student.lessons} />
                     </td>
                     <td className="px-6 py-4 text-foreground-muted tabular-nums">
                       {dateFormat.format(new Date(student.createdAt))}

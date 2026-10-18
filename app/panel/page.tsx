@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { PanelBar } from '@/components/auth/PanelBar';
 import { PanelSkeleton } from '@/components/auth/PanelSkeleton';
+import { ProgressCard } from '@/components/progress/ProgressCard';
 import { Eyebrow } from '@/components/text/Eyebrow';
 import { Heading } from '@/components/text/Heading';
 import { Container } from '@/components/ui/Container';
@@ -47,6 +48,8 @@ async function StudentDashboard() {
       <PanelBar user={user} area="student" />
 
       <Container className="flex flex-col gap-16 py-section">
+        <ProgressCard lessons={user.lessons} />
+
         <section className="flex flex-col gap-6">
           <Eyebrow>Ćwiczenia</Eyebrow>
           <div className="flex animate-fade flex-col items-start gap-4 rounded-3xl border border-dashed border-border p-8 sm:flex-row sm:items-center">

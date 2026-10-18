@@ -142,6 +142,10 @@ supabase/migrations/               schema as code — profiles (role), is_admin(
   `pnpm exec supabase db query --linked "update public.profiles set role = 'admin' where email = '…';"`
   — or run the same `update` in the Supabase SQL editor. Current admin: Nicole Kurek.
   There are no update policies, so users can never change their own role.
+- **Lessons & levels:** `profiles.lessons_completed` (0–1000). Level = ⌊lessons / 10⌋ + 1 —
+  the rule lives only in `lib/progress.ts`. Students see `ProgressCard` on `/panel`; admins edit
+  per student on `/admin` (`LessonsEditor` → `setStudentLessons` action → DB function
+  `set_student_lessons()`, which re-checks `is_admin()` and touches only that column).
 - **RLS is the security boundary.** The publishable key is public; every table has RLS on.
   Admin reads go through `public.is_admin()` (security definer — avoids recursive policies).
 - **Cache Components:** anything reading the session lives inside `<Suspense>` (see
