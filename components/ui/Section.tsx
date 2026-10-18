@@ -8,7 +8,7 @@ export function Section({
   id?: string;
 }) {
   return (
-    <section id={id} className={`py-section scroll-mt-16 ${className ?? ''}`}>
+    <section id={id} className={`py-section ${className ?? ''}`}>
       {children}
     </section>
   );

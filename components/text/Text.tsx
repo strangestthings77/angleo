@@ -1,9 +1,8 @@
-type Variant = 'body' | 'muted' | 'lead' | 'inverse';
+type Variant = 'body' | 'small' | 'label';
 const variants: Record<Variant, string> = {
-  body: 'text-base text-foreground',
-  muted: 'text-base text-foreground-muted',
-  lead: 'text-lg text-foreground-muted sm:text-xl',
-  inverse: 'text-base text-background/80',
+  body: 'text-base/7 text-foreground-muted',
+  small: 'text-sm/6 text-foreground-muted',
+  label: 'text-sm font-bold tracking-label text-foreground-muted uppercase',
 };
 
 export function Text({

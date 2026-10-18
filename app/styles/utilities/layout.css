@@ -3,9 +3,17 @@
 }
 
 @utility py-section {
-  padding-block: 4rem;
+  padding-block: 3.5rem;
+
+  @media (width >= 48rem) {
+    padding-block: 6.25rem;
+  }
 }
 
 @utility max-w-content {
-  max-width: 72rem;
+  max-width: 73.4375rem; /* 1175px */
+}
+
+@utility max-w-prose-narrow {
+  max-width: 46.25rem; /* 740px — Webflow inner-container */
 }

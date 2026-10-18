@@ -5,5 +5,5 @@ export function Container({
   children: React.ReactNode;
   className?: string;
 }) {
-  return <div className={`max-w-content px-container mx-auto ${className ?? ''}`}>{children}</div>;
+  return <div className={`mx-auto max-w-content px-container ${className ?? ''}`}>{children}</div>;
 }

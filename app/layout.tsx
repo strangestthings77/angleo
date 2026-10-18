@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
-import { Fraunces, Inter } from 'next/font/google';
+import { Manrope } from 'next/font/google';
 import './globals.css';
 
-const sans = Inter({ variable: '--font-inter', subsets: ['latin', 'latin-ext'] });
-const display = Fraunces({ variable: '--font-fraunces', subsets: ['latin', 'latin-ext'] });
+const manrope = Manrope({
+  variable: '--font-manrope',
+  subsets: ['latin', 'latin-ext'],
+  weight: ['300', '400', '500', '600', '700'],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
@@ -11,8 +14,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="pl" className={`${sans.variable} ${display.variable} antialiased`}>
-      <body className="bg-background text-foreground font-sans">{children}</body>
+    <html lang="pl" className={`${manrope.variable} antialiased`}>
+      <body className="bg-background font-sans text-base/7 text-foreground-muted">{children}</body>
     </html>
   );
 }

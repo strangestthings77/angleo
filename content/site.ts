@@ -1,81 +1,32 @@
-/**
- * Site content — copied from angleo.pl (Webflow). Edit here; every section reads from this
- * file, so there is no copy hard-coded in components.
- */
+/** Site-wide copy — taken from angleo.pl (Webflow). */
 export const site = {
   name: 'Angleo',
   owner: 'Nicole Kurek',
   role: 'Trener języka angielskiego',
-  title: 'Angleo – Nicole Kurek, trener angielskiego',
+  title: 'Angleo – Nicole Kurek, Twój trener angielskiego',
   description:
-    'Angielski w pracy i biznesie. Praktyczne porady, materiały i lekcje z Nicole Kurek, trenerką języka angielskiego.',
+    'Blog i lekcje dla osób, które chcą swobodnie używać angielskiego w pracy i biznesie. Praktyczne wskazówki, frazy i materiały od Nicole Kurek.',
 
   nav: [
-    { label: 'O mnie', href: '#o-mnie' },
-    { label: 'Tematy', href: '#tematy' },
-    { label: 'Kontakt', href: '#kontakt' },
+    { label: 'Strona Główna', href: '/' },
+    { label: 'O Mnie', href: '/o-mnie' },
+  ],
+  cta: { label: 'Umów Lekcję', href: '/umow-lekcje' },
+
+  portrait: {
+    src: '/images/nicole-kurek.jpg',
+    alt: 'Nicole Kurek, trenerka języka angielskiego',
+    width: 1200,
+    height: 900,
+  },
+
+  /** Sidebar author card. */
+  authorBio: [
+    'Cześć! Chcesz używać angielskiego w pracy i w biznesie?',
+    'Na moim blogu znajdziesz niezbędne wskazówki i metody. Zapraszam do czytania i nauki!',
   ],
 
-  hero: {
-    eyebrow: 'Angielski w pracy i biznesie',
-    heading: 'Cześć, jestem Nicole!',
-    lead: 'Pomagam osobom, które chcą z łatwością używać angielskiego w pracy i biznesie. Dzielę się praktycznymi poradami, wskazówkami i materiałami, które pomogą Ci w komunikacji w języku angielskim.',
-    image: {
-      src: '/images/nicole-kurek.jpg',
-      alt: 'Nicole Kurek, trenerka języka angielskiego',
-      width: 1200,
-      height: 900,
-    },
-  },
-
-  about: {
-    heading: 'O mnie',
-    paragraphs: [
-      'Moja przygoda z językiem zaczęła się na Uniwersytecie Śląskim, gdzie ukończyłam Filologię Angielską z dwoma specjalizacjami: Angielski w Biznesie (licencjat) oraz Media i Translacja (magister).',
-      'Wierzę, że wspólnie znajdziemy sposób, by komunikacja w języku angielskim stała się dla Ciebie łatwiejsza. Jeśli masz jakieś pytania lub pomysły na tematy, o których powinnam napisać, daj znać!',
-    ],
-  },
-
-  offer: {
-    heading: 'Czego się nauczysz?',
-    items: [
-      {
-        title: 'Praktyczne wskazówki',
-        body: 'Jak pisać profesjonalne e-maile, prezentować pomysły i negocjować po angielsku.',
-      },
-      {
-        title: 'Negocjacje i networking',
-        body: 'Skuteczne strategie prowadzenia negocjacji i nawiązywania kontaktów po angielsku.',
-      },
-      {
-        title: 'Kulturowe różnice',
-        body: 'Jak zrozumieć i uwzględnić niuanse komunikacyjne różnych kultur.',
-      },
-      {
-        title: 'Materiały językowe',
-        body: 'Listy przydatnych fraz, słownictwa i inne materiały dla profesjonalistów.',
-      },
-    ],
-  },
-
-  topics: {
-    heading: 'Tematy',
-    lead: 'Angielski dopasowany do sytuacji, w których naprawdę go używasz.',
-    items: [
-      'HR',
-      'Finanse',
-      'Spotkanie biznesowe',
-      'Podróż służbowa',
-      'Project management',
-      'Marketing',
-      'Logistyka',
-      'Rozmowa o pracę',
-    ],
-  },
-
   contact: {
-    heading: 'Kontakt',
-    lead: 'Kliknij w poniższy przycisk i wybierz dogodny termin!',
     email: 'nicolekurek.info@gmail.com',
     phone: '+48 502 968 538',
     phoneHref: 'tel:+48502968538',
@@ -87,6 +38,7 @@ export const site = {
     street: 'ul. Wrocławska 110A/1',
     city: '41-902 Bytom',
     nip: '6262972227',
+    linkedin: 'https://www.linkedin.com/in/nicolekurekinfo/',
   },
 
   social: [

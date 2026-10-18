@@ -5,15 +5,14 @@
 - [x] Base tech stack chosen — framework, CMS, hosting. Recorded in `stack.md`.
 - [ ] Figma: first views are dev-ready — final enough to build, not still moving.
 - [ ] Figma: design system defined — type scale, colour tokens, spacing as reusable styles.
-- [ ] Figma: design direction written down — the concept, the mood, the leading accent,
-      what the design deliberately is _not_. Copied into `AGENTS.md`.
+- [x] Design direction written down — copy of the live Webflow site. In `AGENTS.md`.
 - [ ] Figma: per-screen intent described — layout reasoning, responsive behaviour, states.
-- [x] Fonts available and licensed, in the weights the design uses. (Inter + Fraunces, OFL)
+- [x] Fonts available and licensed, in the weights the design uses. (Manrope, OFL)
 
 ### External — the client's side
 
 - [ ] Tech stack confirmed with the client, including cost implications.
-- [x] CMS content provided, or scoped with a deliverable and deadline. (copied from angleo.pl)
+- [x] CMS content provided, or scoped with a deliverable and deadline. (migrated from angleo.pl)
 - [ ] Cookies / tracking stance decided.
 
 ## Gate 2 — Client Hand-off

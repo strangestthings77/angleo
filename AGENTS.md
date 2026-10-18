@@ -10,8 +10,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Angleo
 
-Personal site of Nicole Kurek — English trainer (business English), Polish-language audience.
-Content migrated from the Webflow site at angleo.pl.
+Personal site + blog of Nicole Kurek — English trainer (business English), Polish-language
+audience. A Next.js rebuild of the Webflow site at angleo.pl: same design, same URLs, all posts
+migrated to MDX.
 
 ## Stack
 
@@ -19,7 +20,8 @@ Content migrated from the Webflow site at angleo.pl.
 - Tailwind 4 — `@import 'tailwindcss'` in `app/globals.css`; tokens in
   `app/styles/tokens.css`. **No `tailwind.config.*`.**
 - TypeScript (strict), ESLint + Prettier
-- Content: typed data in `content/site.ts` (single page — no MDX needed yet)
+- Content: MDX in repo (`@next/mdx`) — post bodies in `content/blog/*.mdx`, post metadata
+  in `content/blog/posts.ts`, site copy in `content/site.ts`
 - Hosting: Vercel
 
 ## Commands
@@ -47,20 +49,32 @@ run `pnpm check` and fix what it reports. Never commit with `--no-verify`.
 ## Project structure
 
 ```text
-app/           # Root layout (html/body/fonts) + page.tsx
-  styles/      # tokens.css, utilities/layout.css
+app/                         # Routes + root layout (html/body/fonts)
+  page.tsx                   # / — featured hero, category bar, post feed + sidebar
+  blog/[slug]/               # /blog/<slug> — post
+  blog-post-categories/[slug]/ # category listing (old Webflow URL kept)
+  o-mnie/ · umow-lekcje/     # about · contact & booking
+  styles/                    # tokens.css, utilities/layout.css
 components/
-  ui/          # Section, Container, ButtonLink
-  text/        # Text, Heading
-sections/home/ # Hero, About, Topics, Contact
-layouts/       # MainLayout, Header, Footer
-content/       # site.ts — all copy lives here
+  ui/                        # Section, Container, Button, Icon
+  text/                      # Text, Heading
+  blog/                      # PostListItem, FeaturedCard, PostMeta, Sidebar, PostFeed, CategoryBadge/Tags
+sections/                    # Route-specific blocks: home/, blog/, about/
+layouts/                     # MainLayout, Header, Footer
+content/
+  site.ts                    # Site-wide copy, contact details
+  about.mdx                  # /o-mnie body
+  blog/posts.ts              # Post metadata (newest first) + featured/popular picks
+  blog/categories.ts         # Categories (order = category bar)
+  blog/<slug>.mdx            # Post bodies
+mdx-components.tsx           # MDX element styles (Webflow rich-text) + <Figure>
 lib/
-  metadata.ts  # buildMetadata()
-  meta-audit/  # Meta & OG audit module
-scripts/       # check-meta.mts
-public/        # og.svg, images/
-.altalogy/     # Our working record
+  blog.ts                    # Post/category helpers, date format, seoTitle()
+  metadata.ts                # buildMetadata()
+  meta-audit/                # Meta & OG audit module
+scripts/                     # check-meta.mts
+public/images/               # Portrait + blog/ covers and inline images
+.altalogy/                   # Our working record
 ```
 
 Import via `@/`. Never `../` across top-level folders.
@@ -69,35 +83,53 @@ Import via `@/`. Never `../` across top-level folders.
 page → MainLayout → sections → Section → container → content
 ```
 
+## Adding a blog post
+
+1. Add the body as `content/blog/<slug>.mdx` (plain Markdown; images via
+   `<Figure src="/images/blog/…" width={…} height={…} alt="…" />`).
+2. Add an entry to `posts` in `content/blog/posts.ts` (keep newest first). `excerpt` is the
+   card copy; `description` must be 50–160 chars for the meta audit.
+3. Put the cover in `public/images/blog/<slug>.jpg` (≤1600px wide).
+
+Titles over 60 chars are trimmed for `<title>` by `seoTitle()`; the on-page title is untouched.
+
 ## Design direction
 
-> No Figma yet. Placeholder direction: warm, calm, personal — cream background, a tan/brown
-> accent taken from the portrait, serif display headings (Fraunces) over a clean sans
-> (Inter). Friendly and professional; deliberately _not_ a corporate language school.
+> A faithful copy of the existing Webflow site (built on the Writeology template): white,
+> airy, editorial blog layout; Manrope throughout; near-black headings over grey body copy;
+> a single cyan accent reserved for the CTA pill; grey category tags; image cards with a dark
+> gradient for featured posts. Deliberately _not_ redesigned — match angleo.pl when unsure.
 
-**Replace this block with the designer's direction once a Figma exists.**
+**This is the reference for any judgement call.** Compare against angleo.pl before guessing.
 
-- **Figma:** — (none yet)
+- **Figma:** — (none; the live Webflow site is the reference)
 
 ## Design system
 
-Tokens in `app/styles/tokens.css`. **Extend the tokens before reaching for an arbitrary
-value.**
+Tokens in `app/styles/tokens.css` (values measured from the Webflow CSS). **Extend the tokens
+before reaching for an arbitrary value.**
 
-| Token                 | Tailwind                    | Usage                   |
-| --------------------- | --------------------------- | ----------------------- |
-| `--background`        | `bg-background`             | Page background         |
-| `--foreground`        | `text-foreground`           | Primary text            |
-| `--foreground-muted`  | `text-foreground-muted`     | Secondary copy          |
-| `--surface`           | `bg-surface`                | Alternate section bands |
-| `--border`            | `border-border`             | Hairlines, card borders |
-| `--accent`            | `bg-accent` / `text-accent` | CTAs, eyebrows          |
-| `--accent-foreground` | `text-accent-foreground`    | Text on accent          |
+| Token                 | Tailwind                 | Usage                                   |
+| --------------------- | ------------------------ | --------------------------------------- |
+| `--background`        | `bg-background`          | Page background (#fff)                  |
+| `--foreground`        | `text-foreground`        | Headings, strong text (#131313)         |
+| `--foreground-muted`  | `text-foreground-muted`  | Body copy (#727272)                     |
+| `--surface`           | `bg-surface`             | Post hero band, tags (#f0f0f0)          |
+| `--border`            | `border-border`          | Dividers                                |
+| `--accent`            | `bg-accent`              | CTA pill only (#02d1ff)                 |
+| `--accent-foreground` | `text-accent-foreground` | Text on accent                          |
+| `--text-display-1`    | `text-display-1`         | Post / page h1 (48/63)                  |
+| `--text-display-4`    | `text-display-4`         | Card titles, rich-text h2 (28/40)       |
+| `--text-heading`      | `text-heading`           | h3 (24/34)                              |
+| `--text-subheading`   | `text-subheading`        | Rich-text h3 (22/32)                    |
+| `--text-logo`         | `text-logo`              | Header wordmark (36px)                  |
+| `--tracking-label`    | `tracking-label`         | Nav, buttons, uppercase labels (0.08em) |
 
-- **Typography:** `Text` and `Heading` from `components/text/`. One `h1` per page.
-  Headings use `font-display` (Fraunces), body `font-sans` (Inter).
-- **Spacing:** layout utilities (`px-container`, `py-section`, `max-w-content`), not raw
-  `p-4` / `text-lg`, unless no token exists.
+- **Typography:** Manrope via `next/font` (`font-sans`). `Text` and `Heading` from
+  `components/text/`. One `h1` per page (visually hidden on `/` and `/o-mnie`, as on Webflow).
+- **Spacing:** layout utilities (`px-container`, `py-section`, `max-w-content` = 1175px,
+  `max-w-prose-narrow` = 740px), not raw values, unless no token exists.
+- **Dates** use the English format the Webflow site shows ("July 27, 2025") — `formatDate()`.
 
 ## Conventions
 
@@ -149,9 +181,13 @@ new tokens, one-line gotchas. When a section outgrows this file, move it to
 
 ## Features
 
-| Route | Sections                     | Notes                                                                 |
-| ----- | ---------------------------- | --------------------------------------------------------------------- |
-| `/`   | Hero, About, Topics, Contact | Copy from `content/site.ts`; anchors `#o-mnie`, `#tematy`, `#kontakt` |
+| Route                          | Sections                                  | Notes                                             |
+| ------------------------------ | ----------------------------------------- | ------------------------------------------------- |
+| `/`                            | HomeHero, CategoryBar, PostFeed + Sidebar | Featured picks: `featuredSlugs` in `posts.ts`     |
+| `/blog/[slug]`                 | PostHero, MDX body, Sidebar (left)        | Unknown slug → `notFound()` (200 + noindex, PPR)  |
+| `/blog-post-categories/[slug]` | CategoryHero, PostFeed + Sidebar          | Old Webflow URL scheme kept, incl. `logistyka-2`  |
+| `/o-mnie`                      | Portrait, ContactDetails, `about.mdx`     |                                                   |
+| `/umow-lekcje`                 | Kontakt + Terminarz                       | Booking = Google Apps Script calendar (`site.ts`) |
 
 <!-- BEGIN:altalogy/mcp -->
 
