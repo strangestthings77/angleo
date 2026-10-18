@@ -35,6 +35,10 @@ licenses, search).
 - **Motion pass:** CSS-only entrances, scroll-driven reveals, route view transitions, press /
   hover / accordion / menu micro-interactions; all off under reduced motion. Notebook-ruled
   hero box tried and rejected.
+- **Student area (Supabase):** email + password auth, roles in `profiles` (student by default,
+  admin promoted via SQL), RLS on every table, words seeded from the blog. Public sign-up for
+  now — switch to invite-only later (needs a server-side service key) if Nicole wants control
+  over who gets an account.
 - **Dates switched to Polish** ("27 lipca 2025").
 - **Posts migrated to MDX** (`@next/mdx`, no frontmatter plugin): bodies in `.mdx`, metadata
   in a typed `posts.ts`. Converted from the Webflow rich text by a one-off script; Webflow

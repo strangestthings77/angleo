@@ -29,11 +29,22 @@ pnpm dev
 
 ## Commands
 
-`pnpm dev` · `pnpm build` · `pnpm check` · `pnpm check:meta`
+`pnpm dev` · `pnpm build` · `pnpm check` · `pnpm check:meta` · `pnpm db:link` · `pnpm db:push`
 
 ## Deployment
 
 Vercel builds `main`; PRs get a preview. Build: `pnpm build`. Output: `.next`.
+
+## Database
+
+Schema lives in `supabase/migrations/`. One-time setup per machine:
+
+```bash
+pnpm exec supabase login
+pnpm db:link
+```
+
+Then apply migrations with `pnpm db:push`.
 
 ## Content
 

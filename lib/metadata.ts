@@ -7,11 +7,14 @@ export function buildMetadata({
   description,
   path = '/',
   image = '/og.svg',
+  noindex = false,
 }: {
   title: string;
   description: string;
   path?: string;
   image?: string;
+  /** Private pages (student area, auth) — kept out of search and the sitemap. */
+  noindex?: boolean;
 }): Metadata {
   const url = new URL(path, SITE_URL).toString();
   const imageUrl = new URL(image, SITE_URL).toString();
@@ -19,6 +22,7 @@ export function buildMetadata({
   return {
     title,
     description,
+    ...(noindex ? { robots: { index: false, follow: false } } : {}),
     alternates: { canonical: url },
     openGraph: { type: 'website', locale: 'pl_PL', title, description, url, images: [imageUrl] },
     twitter: {

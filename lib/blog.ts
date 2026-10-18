@@ -58,10 +58,15 @@ export function formatDate(iso: string): string {
   });
 }
 
-/** Polish plural: plural(3, ['artykuł', 'artykuły', 'artykułów']) → "3 artykuły". */
-export function plural(n: number, [one, few, many]: [string, string, string]): string {
+/** Polish plural form: pluralForm(3, ['artykuł', 'artykuły', 'artykułów']) → "artykuły". */
+export function pluralForm(n: number, [one, few, many]: [string, string, string]): string {
   const isFew = n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14);
-  return `${n} ${n === 1 ? one : isFew ? few : many}`;
+  return n === 1 ? one : isFew ? few : many;
+}
+
+/** plural(3, ['artykuł', 'artykuły', 'artykułów']) → "3 artykuły". */
+export function plural(n: number, forms: [string, string, string]): string {
+  return `${n} ${pluralForm(n, forms)}`;
 }
 
 export const articles = (n: number) => plural(n, ['artykuł', 'artykuły', 'artykułów']);

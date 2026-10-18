@@ -22,6 +22,7 @@ and URLs migrated from the Webflow site at angleo.pl; redesigned as a premium ed
 - Content: MDX in repo (`@next/mdx`) — post bodies in `content/blog/*.mdx`, post metadata
   in `content/blog/posts.ts`, site copy in `content/site.ts`
 - Booking: custom UI on Cal.com API v2 (`lib/cal.ts`, server only) — see "Booking" below
+- Auth + DB: Supabase (`@supabase/ssr`), student area under `/panel`, admin under `/admin`
 - Hosting: Vercel
 
 ## Commands
@@ -122,6 +123,33 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
 - **Time zones:** the widget uses the visitor's browser time zone; Cal returns slots grouped
   by local date in that zone. Date math in `components/booking/dates.ts` is UTC-only.
 - `getLessonInfo()` (duration, online) is `'use cache'` with `cacheLife('hours')`.
+
+## Auth & student area (Supabase)
+
+```text
+proxy.ts → lib/supabase/proxy.ts   refreshes the session cookie; /panel, /admin → /logowanie if signed out
+lib/supabase/server.ts             server client (Server Components, Actions, Route Handlers)
+lib/auth.ts                        DAL: getCurrentUser, requireUser, requireAdmin, getMyWords, getStudents
+lib/auth-actions.ts                Server Actions: signIn, signUp, signOut
+app/auth/callback/route.ts         email-link landing (PKCE code or token_hash) → session
+supabase/migrations/               schema as code — profiles (role), is_admin(), words + RLS
+```
+
+- **Routes:** `/logowanie`, `/rejestracja`, `/panel` (student: exercises placeholder + words),
+  `/admin` (admin: all students). All `noindex` and excluded from the sitemap.
+- **Roles:** every sign-up gets a `profiles` row with `role = 'student'` (trigger). Promote an
+  admin in the Supabase SQL editor:
+  `update public.profiles set role = 'admin' where email = '…';`
+  There are no update policies, so users can never change their own role.
+- **RLS is the security boundary.** The publishable key is public; every table has RLS on.
+  Admin reads go through `public.is_admin()` (security definer — avoids recursive policies).
+- **Cache Components:** anything reading the session lives inside `<Suspense>` (see
+  `app/panel/page.tsx`); never call `getCurrentUser()` at a layout's top level.
+- **Schema changes:** add a migration in `supabase/migrations/`, then `pnpm db:push`
+  (needs `pnpm exec supabase login` + `pnpm db:link` once per machine).
+- **Env:** `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+- **Email:** Supabase's built-in mailer is rate-limited (testing only). Set custom SMTP in
+  Supabase → Auth → SMTP before real students sign up.
 
 ## Design direction
 

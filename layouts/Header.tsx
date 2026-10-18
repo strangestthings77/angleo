@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
+import { UserIcon } from '@/components/ui/Icon';
 import { site } from '@/content/site';
 import { MobileMenu } from '@/layouts/MobileMenu';
 
@@ -14,8 +15,8 @@ export function Header() {
             Business English
           </span>
         </Link>
-        <nav aria-label="Główna nawigacja" className="hidden items-center gap-8 md:flex">
-          <ul className="flex items-center gap-8 text-sm">
+        <nav aria-label="Główna nawigacja" className="hidden items-center gap-6 md:flex lg:gap-8">
+          <ul className="flex items-center gap-6 text-sm lg:gap-8">
             {site.nav.map((item) => (
               <li key={item.href}>
                 <Link
@@ -27,11 +28,18 @@ export function Header() {
               </li>
             ))}
           </ul>
+          <Link
+            href={site.account.href}
+            className="inline-flex items-center gap-2 text-sm text-foreground-muted transition-colors duration-200 hover:text-foreground"
+          >
+            <UserIcon />
+            <span className="sr-only lg:not-sr-only">{site.account.label}</span>
+          </Link>
           <Button href={site.cta.href} className="h-10 px-5">
             {site.cta.label}
           </Button>
         </nav>
-        <MobileMenu items={site.nav} cta={site.cta} />
+        <MobileMenu items={[...site.nav, site.account]} cta={site.cta} />
       </Container>
     </header>
   );

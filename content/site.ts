@@ -17,6 +17,7 @@ export const site = {
     { label: 'FAQ', href: '/#faq' },
   ],
   cta: { label: 'Umów lekcję', href: '/umow-lekcje' },
+  account: { label: 'Strefa ucznia', href: '/panel' },
 
   portrait: {
     src: '/images/nicole-kurek.jpg',
