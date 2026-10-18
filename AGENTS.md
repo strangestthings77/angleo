@@ -10,9 +10,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Angleo
 
-Personal site + blog of Nicole Kurek — English trainer (business English), Polish-language
-audience. A Next.js rebuild of the Webflow site at angleo.pl: same design, same URLs, all posts
-migrated to MDX.
+Website + blog of Nicole Kurek — business English trainer, Polish-language audience. Content
+and URLs migrated from the Webflow site at angleo.pl; redesigned as a premium editorial site.
 
 ## Stack
 
@@ -49,32 +48,33 @@ run `pnpm check` and fix what it reports. Never commit with `--no-verify`.
 ## Project structure
 
 ```text
-app/                         # Routes + root layout (html/body/fonts)
-  page.tsx                   # / — featured hero, category bar, post feed + sidebar
-  blog/[slug]/               # /blog/<slug> — post
+app/                           # Routes + root layout (html/body/fonts)
+  page.tsx                     # / — landing: hero, credentials, offer, topics, blog, quote, CTA
+  blog/page.tsx                # /blog — featured + all posts, category chips
+  blog/[slug]/                 # /blog/<slug> — article
   blog-post-categories/[slug]/ # category listing (old Webflow URL kept)
-  o-mnie/ · umow-lekcje/     # about · contact & booking
-  styles/                    # tokens.css, utilities/layout.css
+  o-mnie/ · umow-lekcje/       # about · contact & booking
+  styles/                      # tokens.css, utilities/layout.css
 components/
-  ui/                        # Section, Container, Button, Icon
-  text/                      # Text, Heading
-  blog/                      # PostListItem, FeaturedCard, PostMeta, Sidebar, PostFeed, CategoryBadge/Tags
-sections/                    # Route-specific blocks: home/, blog/, about/
-layouts/                     # MainLayout, Header, Footer
+  ui/                          # Section, Container, Button, Icon
+  text/                        # Heading, Text, Eyebrow, Accent (*word* → italic accent)
+  blog/                        # PostCard/PostGrid, FeaturedPost, PostMeta, CategoryChips
+  marketing/                   # SectionHeader, BookingCta, ContactList
+sections/                      # Route-specific blocks: home/, blog/, about/, contact/
+layouts/                       # MainLayout, Header, MobileMenu ('use client'), Footer
 content/
-  site.ts                    # Site-wide copy, contact details
-  about.mdx                  # /o-mnie body
-  blog/posts.ts              # Post metadata (newest first) + featured/popular picks
-  blog/categories.ts         # Categories (order = category bar)
-  blog/<slug>.mdx            # Post bodies
-mdx-components.tsx           # MDX element styles (Webflow rich-text) + <Figure>
+  site.ts                      # All page copy, contact details
+  blog/posts.ts                # Post metadata (newest first) + featuredSlug
+  blog/categories.ts           # Categories (order = chips, topics, footer)
+  blog/<slug>.mdx              # Post bodies
+mdx-components.tsx             # Article typography + <Figure>
 lib/
-  blog.ts                    # Post/category helpers, date format, seoTitle()
-  metadata.ts                # buildMetadata()
-  meta-audit/                # Meta & OG audit module
-scripts/                     # check-meta.mts
-public/images/               # Portrait + blog/ covers and inline images
-.altalogy/                   # Our working record
+  blog.ts                      # Post/category helpers, formatDate (pl-PL), plural(), seoTitle()
+  metadata.ts                  # buildMetadata()
+  meta-audit/                  # Meta & OG audit module
+scripts/                       # check-meta.mts
+public/images/                 # Portrait + blog/ covers and inline images
+.altalogy/                     # Our working record
 ```
 
 Import via `@/`. Never `../` across top-level folders.
@@ -95,41 +95,50 @@ Titles over 60 chars are trimmed for `<title>` by `seoTitle()`; the on-page titl
 
 ## Design direction
 
-> A faithful copy of the existing Webflow site (built on the Writeology template): white,
-> airy, editorial blog layout; Manrope throughout; near-black headings over grey body copy;
-> a single cyan accent reserved for the CTA pill; grey category tags; image cards with a dark
-> gradient for featured posts. Deliberately _not_ redesigned — match angleo.pl when unsure.
+> Premium, editorial business-English brand. Warm ivory paper, deep ink-navy type, one brass
+> accent used sparingly (eyebrows, italic accent words, numerals, list markers). Large
+> Instrument Serif display headlines with an italic accent word; Geist for everything else.
+> Generous whitespace, hairline borders, soft rounded imagery, an ink CTA band closing each
+> page. Motion is limited to hover feedback — no scroll animations, no carousels.
+> Deliberately _not_ a playful language-school look, not corporate-blue, not loud gradients.
 
-**This is the reference for any judgement call.** Compare against angleo.pl before guessing.
+**This is the reference for any judgement call.** Check against it before guessing.
 
-- **Figma:** — (none; the live Webflow site is the reference)
+- **Figma:** — (none; designed in code. Previous Webflow look is in git history, `6dbf2f3`.)
 
 ## Design system
 
-Tokens in `app/styles/tokens.css` (values measured from the Webflow CSS). **Extend the tokens
-before reaching for an arbitrary value.**
+Tokens in `app/styles/tokens.css`. **Extend the tokens before reaching for an arbitrary
+value.**
 
-| Token                 | Tailwind                 | Usage                                   |
-| --------------------- | ------------------------ | --------------------------------------- |
-| `--background`        | `bg-background`          | Page background (#fff)                  |
-| `--foreground`        | `text-foreground`        | Headings, strong text (#131313)         |
-| `--foreground-muted`  | `text-foreground-muted`  | Body copy (#727272)                     |
-| `--surface`           | `bg-surface`             | Post hero band, tags (#f0f0f0)          |
-| `--border`            | `border-border`          | Dividers                                |
-| `--accent`            | `bg-accent`              | CTA pill only (#02d1ff)                 |
-| `--accent-foreground` | `text-accent-foreground` | Text on accent                          |
-| `--text-display-1`    | `text-display-1`         | Post / page h1 (48/63)                  |
-| `--text-display-4`    | `text-display-4`         | Card titles, rich-text h2 (28/40)       |
-| `--text-heading`      | `text-heading`           | h3 (24/34)                              |
-| `--text-subheading`   | `text-subheading`        | Rich-text h3 (22/32)                    |
-| `--text-logo`         | `text-logo`              | Header wordmark (36px)                  |
-| `--tracking-label`    | `tracking-label`         | Nav, buttons, uppercase labels (0.08em) |
+| Token                  | Tailwind                            | Usage                                      |
+| ---------------------- | ----------------------------------- | ------------------------------------------ |
+| `--background`         | `bg-background`                     | Ivory page (#f7f4ee); text on ink          |
+| `--surface`            | `bg-surface`                        | White cards                                |
+| `--surface-muted`      | `bg-surface-muted`                  | Alternate bands, author box                |
+| `--foreground`         | `text-foreground` / `bg-foreground` | Ink navy (#0e1726): type, CTA band, footer |
+| `--foreground-muted`   | `text-foreground-muted`             | Secondary copy                             |
+| `--border`             | `border-border`                     | Hairlines                                  |
+| `--accent`             | `text-accent`                       | Brass on ivory (#8c6a35, AA)               |
+| `--accent-light`       | `text-accent-light`                 | Brass on ink                               |
+| `--inverse-muted`      | `text-inverse-muted`                | Secondary text on ink                      |
+| `--text-display-*`     | `text-display-xl/lg/md/sm`          | Serif headlines (80/60/44/34px)            |
+| `--text-title`         | `text-title`                        | Card titles (26px serif)                   |
+| `--text-lead`/`-prose` | `text-lead` / `text-prose`          | Intro copy (19px) / article body (18px)    |
+| `--tracking-display`   | `tracking-display`                  | Serif headlines (-0.02em)                  |
+| `--tracking-eyebrow`   | `tracking-eyebrow`                  | Uppercase labels (0.16em)                  |
+| `--radius-arch`        | `rounded-t-arch`                    | Arched portrait top                        |
+| `--shadow-card`        | `shadow-card`                       | Featured card, floating badge              |
+| `--ease-out-soft`      | `ease-out-soft`                     | Hover transforms                           |
 
-- **Typography:** Manrope via `next/font` (`font-sans`). `Text` and `Heading` from
-  `components/text/`. One `h1` per page (visually hidden on `/` and `/o-mnie`, as on Webflow).
-- **Spacing:** layout utilities (`px-container`, `py-section`, `max-w-content` = 1175px,
-  `max-w-prose-narrow` = 740px), not raw values, unless no token exists.
-- **Dates** use the English format the Webflow site shows ("July 27, 2025") — `formatDate()`.
+- **Typography:** `Heading` (serif; `size` xl/lg/md/sm; `<em>` → brass italic),
+  `Text` (lead/body), `Eyebrow`. Copy strings in `content/site.ts` mark the accent word
+  with `*asterisks*`, rendered by `<Accent text=… />`. One `h1` per page.
+- **Spacing:** `px-container`, `py-section` / `pt-section` / `pb-section`, `max-w-content`
+  (1232px), `max-w-reading` (680px article column).
+- **Buttons:** `Button` variants `primary` (ink), `secondary` (outline), `light` (on ink);
+  `arrow` adds the animated arrow. Height 48px (44px+ tap target).
+- **Dates:** Polish long format via `formatDate()` ("27 lipca 2025"); counts via `articles()`.
 
 ## Conventions
 
@@ -181,13 +190,14 @@ new tokens, one-line gotchas. When a section outgrows this file, move it to
 
 ## Features
 
-| Route                          | Sections                                  | Notes                                             |
-| ------------------------------ | ----------------------------------------- | ------------------------------------------------- |
-| `/`                            | HomeHero, CategoryBar, PostFeed + Sidebar | Featured picks: `featuredSlugs` in `posts.ts`     |
-| `/blog/[slug]`                 | PostHero, MDX body, Sidebar (left)        | Unknown slug → `notFound()` (200 + noindex, PPR)  |
-| `/blog-post-categories/[slug]` | CategoryHero, PostFeed + Sidebar          | Old Webflow URL scheme kept, incl. `logistyka-2`  |
-| `/o-mnie`                      | Portrait, ContactDetails, `about.mdx`     |                                                   |
-| `/umow-lekcje`                 | Kontakt + Terminarz                       | Booking = Google Apps Script calendar (`site.ts`) |
+| Route                          | Sections                                                         | Notes                                            |
+| ------------------------------ | ---------------------------------------------------------------- | ------------------------------------------------ |
+| `/`                            | Hero, Credentials, Offer, Topics, LatestPosts, Quote, BookingCta | `#tematy` anchor; featured = `featuredSlug`      |
+| `/blog`                        | BlogHeader + CategoryChips, FeaturedPost, PostGrid               |                                                  |
+| `/blog/[slug]`                 | ArticleHeader, MDX body, AuthorBox, RelatedPosts, BookingCta     | Unknown slug → `notFound()` (200 + noindex, PPR) |
+| `/blog-post-categories/[slug]` | BlogHeader (active chip), PostGrid                               | Old Webflow URL scheme kept, incl. `logistyka-2` |
+| `/o-mnie`                      | AboutHero, AboutDetails, Quote, BookingCta                       |                                                  |
+| `/umow-lekcje`                 | Header, ContactCards                                             | Booking = Google Apps Script calendar            |
 
 <!-- BEGIN:altalogy/mcp -->
 

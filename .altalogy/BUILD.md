@@ -7,7 +7,8 @@ decisions, and the trade-offs we accepted.
 
 URLs match the Webflow site so existing links and search results keep working.
 
-- `/` — featured post card + 3 headlines, category bar, all posts + sidebar
+- `/` — landing: hero, credentials, offer, topics, latest posts, quote, booking CTA
+- `/blog` — new: featured post + all posts with category chips
 - `/blog/<slug>` — 14 posts (some slugs are Webflow template leftovers; kept on purpose)
 - `/blog-post-categories/<slug>` — 8 categories
 - `/o-mnie` — about
@@ -18,8 +19,14 @@ licenses, search).
 
 ## Decisions
 
-- **Design copied 1:1 from angleo.pl** (Writeology Webflow template): Manrope, colour values
-  and type scale measured from the live CSS, same layouts. No redesign.
+- **Redesign (2026-10-18):** first copied 1:1 from angleo.pl (commit `6dbf2f3`), then
+  restyled as a premium editorial brand — ivory / ink / brass, Instrument Serif + Geist.
+  Removes any dependency on the Writeology template's look.
+- **New copy for the redesign — client to review:** hero headline/lead, section headings
+  (offer, topics, blog, booking), short footer blurb, author bio. Facts (education, contact,
+  company) and the about text are unchanged from angleo.pl. No testimonials, prices or
+  stats were invented.
+- **Dates switched to Polish** ("27 lipca 2025").
 - **Posts migrated to MDX** (`@next/mdx`, no frontmatter plugin): bodies in `.mdx`, metadata
   in a typed `posts.ts`. Converted from the Webflow rich text by a one-off script; Webflow
   empty paragraphs and the stray "Zapytaj ChatGPT" suffix on two excerpts were dropped.

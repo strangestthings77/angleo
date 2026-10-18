@@ -214,18 +214,5 @@ export const posts: Post[] = [
   },
 ];
 
-/** Big card + headline list at the top of the home page (as on angleo.pl). */
-export const featuredSlugs = [
-  'nie-daj-sie-zmylic-slowa-ktore-brzmia-podobnie-ale-znacza-co-innego',
-  'negocjacje-po-angielsku',
-  'jakie-sa-twoje-mocne-strony---10-przykladowych-odpowiedzi',
-  '3-tips-to-avoid-internet-distractions-at-work',
-];
-
-/** Sidebar "popular" block: the first renders as a large card. */
-export const popularSlugs = [
-  'angielski-onboarding-krok-po-kroku',
-  'how-to-choose-the-best-management-software',
-  'a-complete-guide-to-learn-project-management',
-  'how-time-tracking-can-improve-team-management',
-];
+/** Shown as the large "Polecany" card on the home page and blog index. */
+export const featuredSlug = 'nie-daj-sie-zmylic-slowa-ktore-brzmia-podobnie-ale-znacza-co-innego';

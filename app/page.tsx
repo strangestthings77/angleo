@@ -1,10 +1,13 @@
-import { PostFeed } from '@/components/blog/PostFeed';
+import { BookingCta } from '@/components/marketing/BookingCta';
 import { site } from '@/content/site';
 import { MainLayout } from '@/layouts/MainLayout';
-import { getPosts } from '@/lib/blog';
 import { buildMetadata } from '@/lib/metadata';
-import { CategoryBar } from '@/sections/home/CategoryBar';
-import { HomeHero } from '@/sections/home/HomeHero';
+import { Credentials } from '@/sections/home/Credentials';
+import { Hero } from '@/sections/home/Hero';
+import { LatestPosts } from '@/sections/home/LatestPosts';
+import { Offer } from '@/sections/home/Offer';
+import { Quote } from '@/sections/home/Quote';
+import { Topics } from '@/sections/home/Topics';
 
 export const metadata = buildMetadata({
   title: site.title,
@@ -15,10 +18,13 @@ export const metadata = buildMetadata({
 export default function HomePage() {
   return (
     <MainLayout>
-      <h1 className="sr-only">{site.title}</h1>
-      <HomeHero />
-      <CategoryBar />
-      <PostFeed posts={getPosts()} />
+      <Hero />
+      <Credentials />
+      <Offer />
+      <Topics />
+      <LatestPosts />
+      <Quote />
+      <BookingCta />
     </MainLayout>
   );
 }

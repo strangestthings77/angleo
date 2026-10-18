@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
-import { Manrope } from 'next/font/google';
+import { Geist, Instrument_Serif } from 'next/font/google';
 import './globals.css';
 
-const manrope = Manrope({
-  variable: '--font-manrope',
+const geist = Geist({ variable: '--font-geist', subsets: ['latin', 'latin-ext'] });
+const instrumentSerif = Instrument_Serif({
+  variable: '--font-instrument-serif',
   subsets: ['latin', 'latin-ext'],
-  weight: ['300', '400', '500', '600', '700'],
+  weight: '400',
+  style: ['normal', 'italic'],
 });
 
 export const metadata: Metadata = {
@@ -14,8 +16,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="pl" className={`${manrope.variable} antialiased`}>
-      <body className="bg-background font-sans text-base/7 text-foreground-muted">{children}</body>
+    <html lang="pl" className={`${geist.variable} ${instrumentSerif.variable} antialiased`}>
+      <body className="bg-background font-sans text-base/7 text-foreground">{children}</body>
     </html>
   );
 }

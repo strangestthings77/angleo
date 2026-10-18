@@ -1,22 +1,33 @@
-type Level = 1 | 2 | 3 | 4;
-const sizes: Record<Level, string> = {
-  1: 'text-4xl/tight sm:text-display-1',
-  2: 'text-display-4',
-  3: 'text-heading',
-  4: 'text-subheading',
+type Size = 'xl' | 'lg' | 'md' | 'sm';
+const sizes: Record<Size, string> = {
+  xl: 'text-display-md sm:text-display-lg lg:text-display-xl',
+  lg: 'text-display-sm sm:text-display-md lg:text-display-lg',
+  md: 'text-display-sm sm:text-display-md',
+  sm: 'text-title sm:text-display-sm',
 };
 
+/** Serif display heading. `<em>` inside renders as the brass italic accent. */
 export function Heading({
-  level = 2,
+  as: Tag = 'h2',
+  size = 'md',
+  inverse = false,
   className,
   children,
 }: {
-  level?: Level;
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'p';
+  size?: Size;
+  inverse?: boolean;
   className?: string;
   children: React.ReactNode;
 }) {
-  const Tag = `h${level}` as const;
+  const tone = inverse
+    ? 'text-background [&_em]:text-accent-light'
+    : 'text-foreground [&_em]:text-accent';
   return (
-    <Tag className={`font-bold text-foreground ${sizes[level]} ${className ?? ''}`}>{children}</Tag>
+    <Tag
+      className={`font-serif font-normal tracking-display [&_em]:italic ${tone} ${sizes[size]} ${className ?? ''}`}
+    >
+      {children}
+    </Tag>
   );
 }

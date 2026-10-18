@@ -6,16 +6,20 @@
 html {
   overscroll-behavior: none; /* no rubber-band / scroll chaining past the page */
   scrollbar-gutter: stable; /* reserve the track so a scrollbar never shifts layout */
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
 }
 
 img {
   -webkit-user-drag: none; /* images don't lift off as drag ghosts */
   user-select: none;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+::selection {
+  background-color: var(--accent-light);
+  color: var(--foreground);
 }

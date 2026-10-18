@@ -1,12 +1,9 @@
-import Image from 'next/image';
-import { Button } from '@/components/ui/Button';
-import { Container } from '@/components/ui/Container';
-import { Section } from '@/components/ui/Section';
-import About from '@/content/about.mdx';
-import { site } from '@/content/site';
+import { BookingCta } from '@/components/marketing/BookingCta';
 import { MainLayout } from '@/layouts/MainLayout';
 import { buildMetadata } from '@/lib/metadata';
-import { ContactDetails } from '@/sections/about/ContactDetails';
+import { AboutDetails } from '@/sections/about/AboutDetails';
+import { AboutHero } from '@/sections/about/AboutHero';
+import { Quote } from '@/sections/home/Quote';
 
 export const metadata = buildMetadata({
   title: 'O mnie – Nicole Kurek | Angleo',
@@ -18,28 +15,12 @@ export const metadata = buildMetadata({
 export default function AboutPage() {
   return (
     <MainLayout>
-      <h1 className="sr-only">O mnie</h1>
-      <Section>
-        <Container className="flex flex-col gap-10">
-          <Image
-            src={site.portrait.src}
-            alt={site.portrait.alt}
-            width={site.portrait.width}
-            height={site.portrait.height}
-            priority
-            sizes="(min-width: 1175px) 1127px, 100vw"
-            draggable={false}
-            className="w-full"
-          />
-          <ContactDetails />
-          <div className="[&>h2]:mt-0">
-            <About />
-          </div>
-          <div>
-            <Button href={site.contact.calendarUrl}>Otwórz kalendarz</Button>
-          </div>
-        </Container>
-      </Section>
+      <AboutHero />
+      <AboutDetails />
+      <div className="pt-section">
+        <Quote />
+      </div>
+      <BookingCta />
     </MainLayout>
   );
 }

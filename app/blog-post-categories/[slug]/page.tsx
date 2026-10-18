@@ -1,9 +1,11 @@
 import { notFound } from 'next/navigation';
-import { PostFeed } from '@/components/blog/PostFeed';
+import { PostGrid } from '@/components/blog/PostCard';
+import { BookingCta } from '@/components/marketing/BookingCta';
+import { Container } from '@/components/ui/Container';
 import { MainLayout } from '@/layouts/MainLayout';
-import { getCategories, getCategory, getPostsByCategory, seoTitle } from '@/lib/blog';
+import { articles, getCategories, getCategory, getPostsByCategory, seoTitle } from '@/lib/blog';
 import { buildMetadata } from '@/lib/metadata';
-import { CategoryHero } from '@/sections/blog/CategoryHero';
+import { BlogHeader } from '@/sections/blog/BlogHeader';
 
 export function generateStaticParams() {
   return getCategories().map((category) => ({ slug: category.slug }));
@@ -28,8 +30,18 @@ export default async function CategoryPage({ params }: PageProps<'/blog-post-cat
 
   return (
     <MainLayout>
-      <CategoryHero category={category} count={posts.length} />
-      <PostFeed posts={posts} activeCategory={category.slug} />
+      <BlogHeader
+        eyebrow={`Kategoria · ${articles(posts.length)}`}
+        heading={`*${category.label}*`}
+        lead={`Angielskie frazy i wskazówki z kategorii ${category.label} — gotowe do użycia w pracy.`}
+        activeCategory={category.slug}
+      />
+      <section className="pb-section">
+        <Container>
+          <PostGrid posts={posts} />
+        </Container>
+      </section>
+      <BookingCta />
     </MainLayout>
   );
 }

@@ -1,19 +1,39 @@
 @utility px-container {
-  padding-inline: 1.5rem;
+  padding-inline: 1.25rem;
+
+  @media (width >= 48rem) {
+    padding-inline: 2rem;
+  }
 }
 
 @utility py-section {
-  padding-block: 3.5rem;
+  padding-block: 5rem;
 
   @media (width >= 48rem) {
-    padding-block: 6.25rem;
+    padding-block: 7.5rem;
   }
 }
 
 @utility max-w-content {
-  max-width: 73.4375rem; /* 1175px */
+  max-width: 77rem; /* 1232px incl. padding */
 }
 
-@utility max-w-prose-narrow {
-  max-width: 46.25rem; /* 740px — Webflow inner-container */
+@utility max-w-reading {
+  max-width: 42.5rem; /* ~70ch article column */
+}
+
+@utility pt-section {
+  padding-top: 5rem;
+
+  @media (width >= 48rem) {
+    padding-top: 7.5rem;
+  }
+}
+
+@utility pb-section {
+  padding-bottom: 5rem;
+
+  @media (width >= 48rem) {
+    padding-bottom: 7.5rem;
+  }
 }

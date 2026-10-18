@@ -5,9 +5,9 @@
 - [x] Base tech stack chosen — framework, CMS, hosting. Recorded in `stack.md`.
 - [ ] Figma: first views are dev-ready — final enough to build, not still moving.
 - [ ] Figma: design system defined — type scale, colour tokens, spacing as reusable styles.
-- [x] Design direction written down — copy of the live Webflow site. In `AGENTS.md`.
+- [x] Design direction written down — premium editorial redesign. In `AGENTS.md`.
 - [ ] Figma: per-screen intent described — layout reasoning, responsive behaviour, states.
-- [x] Fonts available and licensed, in the weights the design uses. (Manrope, OFL)
+- [x] Fonts available and licensed, in the weights the design uses. (Instrument Serif + Geist, OFL)
 
 ### External — the client's side
 

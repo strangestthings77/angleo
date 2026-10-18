@@ -1,11 +1,12 @@
 import { notFound } from 'next/navigation';
-import { Sidebar } from '@/components/blog/Sidebar';
+import { BookingCta } from '@/components/marketing/BookingCta';
 import { Container } from '@/components/ui/Container';
-import { Section } from '@/components/ui/Section';
 import { MainLayout } from '@/layouts/MainLayout';
 import { getPost, getPosts, loadPostBody, seoTitle } from '@/lib/blog';
 import { buildMetadata } from '@/lib/metadata';
-import { PostHero } from '@/sections/blog/PostHero';
+import { ArticleHeader } from '@/sections/blog/ArticleHeader';
+import { AuthorBox } from '@/sections/blog/AuthorBox';
+import { RelatedPosts } from '@/sections/blog/RelatedPosts';
 
 export function generateStaticParams() {
   return getPosts().map((post) => ({ slug: post.slug }));
@@ -31,17 +32,21 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
 
   return (
     <MainLayout>
-      <PostHero post={post} />
-      <Section>
-        <Container className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
-          <article className="lg:order-2">
+      <article>
+        <ArticleHeader post={post} />
+        <Container className="py-section">
+          <div className="mx-auto max-w-reading">
             <Body />
-          </article>
-          <div className="lg:order-1">
-            <Sidebar activeCategory={post.category ?? undefined} />
+            <div className="mt-16">
+              <AuthorBox />
+            </div>
           </div>
         </Container>
-      </Section>
+      </article>
+      <RelatedPosts post={post} />
+      <div className="pt-section">
+        <BookingCta />
+      </div>
     </MainLayout>
   );
 }

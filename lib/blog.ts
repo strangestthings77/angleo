@@ -1,6 +1,6 @@
 import type { MDXContent } from 'mdx/types';
 import { categories } from '@/content/blog/categories';
-import { featuredSlugs, popularSlugs, posts } from '@/content/blog/posts';
+import { featuredSlug, posts } from '@/content/blog/posts';
 
 export type Category = { slug: string; label: string };
 
@@ -39,15 +39,8 @@ export function getPostsByCategory(slug: string): Post[] {
   return posts.filter((post) => post.category === slug);
 }
 
-const pick = (slugs: string[]) =>
-  slugs.map((slug) => getPost(slug)).filter((post): post is Post => Boolean(post));
-
-export function getFeaturedPosts(): Post[] {
-  return pick(featuredSlugs);
-}
-
-export function getPopularPosts(): Post[] {
-  return pick(popularSlugs);
+export function getFeaturedPost(): Post | undefined {
+  return getPost(featuredSlug);
 }
 
 export async function loadPostBody(slug: string): Promise<MDXContent> {
@@ -55,14 +48,29 @@ export async function loadPostBody(slug: string): Promise<MDXContent> {
   return mod.default;
 }
 
-/** Matches the Webflow date format ("July 27, 2025"). */
+/** Polish long date, e.g. "27 lipca 2025". */
 export function formatDate(iso: string): string {
-  return new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', {
-    month: 'long',
+  return new Date(`${iso}T00:00:00Z`).toLocaleDateString('pl-PL', {
     day: 'numeric',
+    month: 'long',
     year: 'numeric',
     timeZone: 'UTC',
   });
+}
+
+/** Polish plural: plural(3, ['artykuł', 'artykuły', 'artykułów']) → "3 artykuły". */
+export function plural(n: number, [one, few, many]: [string, string, string]): string {
+  const isFew = n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14);
+  return `${n} ${n === 1 ? one : isFew ? few : many}`;
+}
+
+export const articles = (n: number) => plural(n, ['artykuł', 'artykuły', 'artykułów']);
+
+/** Same category first, then the newest others. */
+export function getRelatedPosts(post: Post, count = 3): Post[] {
+  const others = posts.filter((p) => p.slug !== post.slug);
+  const same = others.filter((p) => post.category && p.category === post.category);
+  return [...same, ...others.filter((p) => !same.includes(p))].slice(0, count);
 }
 
 /** Keeps `<title>` within the 60-char meta-audit limit. */

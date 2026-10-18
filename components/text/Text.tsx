@@ -1,18 +1,20 @@
-type Variant = 'body' | 'small' | 'label';
+type Variant = 'lead' | 'body';
 const variants: Record<Variant, string> = {
-  body: 'text-base/7 text-foreground-muted',
-  small: 'text-sm/6 text-foreground-muted',
-  label: 'text-sm font-bold tracking-label text-foreground-muted uppercase',
+  lead: 'text-lead',
+  body: 'text-base/7',
 };
 
 export function Text({
   variant = 'body',
+  inverse = false,
   className,
   children,
 }: {
   variant?: Variant;
+  inverse?: boolean;
   className?: string;
   children: React.ReactNode;
 }) {
-  return <p className={`${variants[variant]} ${className ?? ''}`}>{children}</p>;
+  const tone = inverse ? 'text-inverse-muted' : 'text-foreground-muted';
+  return <p className={`${variants[variant]} ${tone} ${className ?? ''}`}>{children}</p>;
 }
