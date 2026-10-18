@@ -1,7 +1,7 @@
 'use client';
 
 import { formatDay, formatTime } from '@/components/booking/dates';
-import type { BookingConfirmation } from '@/lib/booking';
+import { dateKeyIn, type BookingConfirmation } from '@/lib/booking';
 
 export function BookingSuccess({
   booking,
@@ -12,7 +12,7 @@ export function BookingSuccess({
   timeZone: string;
   onReset: () => void;
 }) {
-  const dateKey = new Intl.DateTimeFormat('en-CA', { timeZone }).format(new Date(booking.start));
+  const dateKey = dateKeyIn(timeZone, new Date(booking.start));
   const isLink = booking.location?.startsWith('http');
 
   return (

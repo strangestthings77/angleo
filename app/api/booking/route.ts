@@ -1,5 +1,11 @@
 import { NextResponse } from 'next/server';
-import { bookingRequestSchema, type BookingResponse } from '@/lib/booking';
+import {
+  BOOKING_WINDOW_DAYS,
+  bookingRequestSchema,
+  bookingWindow,
+  dateKeyIn,
+  type BookingResponse,
+} from '@/lib/booking';
 import { CalError, createBooking } from '@/lib/cal';
 import { clientIp, rateLimit } from '@/lib/rate-limit';
 
@@ -24,6 +30,15 @@ export async function POST(request: Request) {
   }
   if (Date.parse(input.start) < Date.now()) {
     return json({ error: 'Ten termin już minął — wybierz inny.', code: 'unavailable' }, 409);
+  }
+  if (dateKeyIn(input.timeZone, new Date(input.start)) > bookingWindow(input.timeZone).last) {
+    return json(
+      {
+        error: `Rezerwacja jest możliwa najwyżej ${BOOKING_WINDOW_DAYS} dni do przodu.`,
+        code: 'unavailable',
+      },
+      409,
+    );
   }
 
   try {

@@ -110,6 +110,10 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
 ```
 
 - **Env:** `CAL_API_KEY` (server only — never `NEXT_PUBLIC_`), `CAL_EVENT_TYPE_ID`.
+- **Booking window:** today + 13 days (`BOOKING_WINDOW_DAYS = 14` in `lib/booking.ts`). The
+  widget fetches the whole window once; the slots route clamps any range to it and the booking
+  route rejects starts beyond it. Mirror it in Cal.com (event type → Limits → limit future
+  bookings) so reschedule links from Cal emails respect it too.
 - **API versions:** slots `2024-09-04`, bookings `2026-02-25`, event types `2024-06-14`
   (`cal-api-version` header; wrong value silently falls back to an older contract).
 - **Plan:** hosted API v2 needs a paid Cal.com plan (Teams+); the free plan has no API access.

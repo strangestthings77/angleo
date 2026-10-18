@@ -3,27 +3,22 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { BookingForm } from '@/components/booking/BookingForm';
 import { BookingSuccess } from '@/components/booking/BookingSuccess';
-import {
-  addMonths,
-  compareMonths,
-  daysInMonth,
-  monthOf,
-  todayKey,
-  toKey,
-} from '@/components/booking/dates';
+import { addMonths, compareMonths, formatDayMonth, monthOf } from '@/components/booking/dates';
 import { MonthCalendar } from '@/components/booking/MonthCalendar';
 import { TimeSlots } from '@/components/booking/TimeSlots';
-import type { BookingConfirmation, SlotsByDate, SlotsResponse } from '@/lib/booking';
-
-/** How far ahead people can book. */
-const MONTHS_AHEAD = 3;
+import {
+  BOOKING_WINDOW_DAYS,
+  bookingWindow,
+  type BookingConfirmation,
+  type SlotsByDate,
+  type SlotsResponse,
+} from '@/lib/booking';
 
 type Step =
   | { name: 'pick' }
   | { name: 'form'; date: string; start: string }
   | { name: 'done'; booking: BookingConfirmation };
 
-/** Custom booking flow on top of Cal.com: month → day → time → details → confirmation. */
 const noop = () => () => {};
 /** The visitor's time zone — only known in the browser (`null` during SSR). */
 const useTimeZone = () =>
@@ -35,10 +30,13 @@ const useTimeZone = () =>
 
 type SlotsResult = { key: string; slots: SlotsByDate; error: string | null };
 
+/** Custom booking flow on top of Cal.com: day → time → details → confirmation, two weeks ahead. */
 export function BookingWidget() {
   const timeZone = useTimeZone();
-  const today = timeZone ? todayKey(timeZone) : '';
-  const minMonth = today ? monthOf(today) : null;
+  const range = timeZone ? bookingWindow(timeZone) : null;
+  const today = range?.first ?? '';
+  const minMonth = range ? monthOf(range.first) : null;
+  const maxMonth = range ? monthOf(range.last) : null;
   const [monthOffset, setMonthOffset] = useState(0);
   const month = minMonth ? addMonths(minMonth, monthOffset) : null;
 
@@ -48,13 +46,9 @@ export function BookingWidget() {
   const [notice, setNotice] = useState<string | null>(null);
   const [reload, setReload] = useState(0);
 
-  const first =
-    month && minMonth
-      ? compareMonths(month, minMonth) === 0
-        ? today
-        : toKey(month.year, month.month, 1)
-      : '';
-  const last = month ? toKey(month.year, month.month, daysInMonth(month)) : '';
+  // The whole window is at most two weeks, so it's fetched once, not per month.
+  const first = range?.first ?? '';
+  const last = range?.last ?? '';
   const requestKey = timeZone && first ? `${first}|${last}|${timeZone}|${reload}` : '';
 
   useEffect(() => {
@@ -82,9 +76,11 @@ export function BookingWidget() {
   const slots = loading ? {} : result.slots;
   const error = notice ?? (loading ? null : result.error);
   const available = new Set(Object.keys(slots).filter((key) => slots[key].length > 0));
+  const monthPrefix = month ? `${month.year}-${String(month.month + 1).padStart(2, '0')}` : '';
+  const availableThisMonth = [...available].filter((key) => key.startsWith(monthPrefix)).sort();
 
-  // Fall back to the first available day so the times column is never empty.
-  const selected = picked && available.has(picked) ? picked : ([...available].sort()[0] ?? null);
+  // Fall back to the first available day in view so the times column is never empty.
+  const selected = picked && available.has(picked) ? picked : (availableThisMonth[0] ?? null);
 
   const changeMonth = (delta: 1 | -1) => {
     setPicked(null);
@@ -97,7 +93,7 @@ export function BookingWidget() {
     setReload((n) => n + 1);
   };
 
-  if (!timeZone || !month || !minMonth) return <WidgetSkeleton />;
+  if (!timeZone || !month || !minMonth || !maxMonth) return <WidgetSkeleton />;
 
   if (step.name === 'done') {
     return (
@@ -129,7 +125,8 @@ export function BookingWidget() {
     );
   }
 
-  const noSlotsThisMonth = !loading && !error && available.size === 0;
+  const noSlots = !loading && !error && availableThisMonth.length === 0;
+  const laterMonth = compareMonths(month, maxMonth) < 0 && available.size > 0;
 
   return (
     <div className="flex flex-col gap-6">
@@ -152,7 +149,7 @@ export function BookingWidget() {
         <MonthCalendar
           month={month}
           minMonth={minMonth}
-          maxMonth={addMonths(minMonth, MONTHS_AHEAD)}
+          maxMonth={maxMonth}
           today={today}
           available={available}
           selected={selected}
@@ -164,9 +161,11 @@ export function BookingWidget() {
           }}
         />
         <div className="lg:border-l lg:border-border lg:pl-12">
-          {noSlotsThisMonth ? (
+          {noSlots ? (
             <p className="flex h-full min-h-40 items-center justify-center rounded-2xl border border-dashed border-border p-6 text-center text-sm text-foreground-muted">
-              Brak wolnych terminów w tym miesiącu — sprawdź następny.
+              {laterMonth
+                ? 'W tym miesiącu brak wolnych terminów — sprawdź następny.'
+                : `Brak wolnych terminów w najbliższych ${BOOKING_WINDOW_DAYS} dniach. Napisz lub zadzwoń — znajdziemy termin.`}
             </p>
           ) : (
             <TimeSlots
@@ -178,8 +177,8 @@ export function BookingWidget() {
           )}
         </div>
       </div>
-      <p className="text-xs text-foreground-muted">
-        Godziny w strefie czasowej:{' '}
+      <p className="text-xs/5 text-foreground-muted">
+        Terminy na 2 tygodnie do przodu — do {formatDayMonth(last)}. Godziny w strefie czasowej:{' '}
         <span className="font-medium">{timeZone.replace('_', ' ')}</span>
       </p>
     </div>

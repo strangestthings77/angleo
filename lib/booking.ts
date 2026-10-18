@@ -1,6 +1,25 @@
 import { z } from 'zod';
 
-/** Shared between the booking route handlers and the client widget (types only on the client). */
+/** Shared between the booking route handlers and the client widget. */
+
+/** Bookable range: today plus the next 13 days (two weeks). Enforced in the UI and both routes. */
+export const BOOKING_WINDOW_DAYS = 14;
+
+/** `YYYY-MM-DD` of `date` in `timeZone`. */
+export function dateKeyIn(timeZone: string, date: Date = new Date()): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone }).format(date);
+}
+
+export function addDays(key: string, days: number): string {
+  const [y, m, d] = key.split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10);
+}
+
+/** First and last bookable date keys for a visitor in `timeZone`. */
+export function bookingWindow(timeZone: string): { first: string; last: string } {
+  const first = dateKeyIn(timeZone);
+  return { first, last: addDays(first, BOOKING_WINDOW_DAYS - 1) };
+}
 
 const isTimeZone = (tz: string) => {
   try {

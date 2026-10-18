@@ -5,11 +5,6 @@ export type Month = { year: number; month: number }; // month: 0–11
 export const toKey = (y: number, m: number, d: number) =>
   `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 
-/** Today's date key in `timeZone`. */
-export function todayKey(timeZone: string): string {
-  return new Intl.DateTimeFormat('en-CA', { timeZone }).format(new Date());
-}
-
 export function monthOf(key: string): Month {
   const [y, m] = key.split('-').map(Number);
   return { year: y, month: m - 1 };
@@ -55,6 +50,16 @@ export function formatDay(key: string, withYear = false): string {
       timeZone: 'UTC',
     }),
   );
+}
+
+/** "31 października" — genitive month, reads correctly after "do". */
+export function formatDayMonth(key: string): string {
+  const [y, m, d] = key.split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString('pl-PL', {
+    day: 'numeric',
+    month: 'long',
+    timeZone: 'UTC',
+  });
 }
 
 export function formatTime(iso: string, timeZone: string): string {
