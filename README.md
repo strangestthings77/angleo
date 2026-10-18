@@ -44,7 +44,8 @@ pnpm exec supabase login
 pnpm db:link
 ```
 
-Then apply migrations with `pnpm db:push`.
+Then apply migrations with `pnpm db:push`. Load the English→Polish dictionary (once, or to
+refresh it) with `pnpm dict:import` — data from Polish Wiktionary, CC BY-SA 4.0.
 
 ## Content
 

@@ -15,7 +15,8 @@
     "check:meta": "tsx scripts/check-meta.mts --url http://localhost:3000",
     "db:push": "supabase db push",
     "db:link": "supabase link --project-ref jeootpnfwdydeurqfohv",
-    "test": "vitest run"
+    "test": "vitest run",
+    "dict:import": "tsx scripts/import-dictionary.mts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

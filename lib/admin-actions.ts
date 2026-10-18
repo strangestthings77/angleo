@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { requireAdmin } from '@/lib/auth';
 import { MAX_LESSONS } from '@/lib/progress';
+import { lookupTerm, posLabel } from '@/lib/dictionary';
 import { createClient } from '@/lib/supabase/server';
 
 const lessonsSchema = z.object({
@@ -67,4 +68,16 @@ export async function deleteWord(wordId: number, studentId: string): Promise<voi
   const supabase = await createClient();
   await supabase.from('words').delete().eq('id', wordId).eq('student_id', studentId);
   revalidatePath(`/admin/uczniowie/${studentId}`);
+}
+
+export type Suggestion = { pos: string | null; options: string[] };
+
+/** Dictionary meanings for the admin's "Podpowiedz" button. */
+export async function suggestTranslations(term: string): Promise<Suggestion[]> {
+  await requireAdmin();
+  const clean = String(term ?? '').slice(0, 120);
+  const senses = await lookupTerm(clean);
+  return senses
+    .filter((s) => s.options.length > 0)
+    .map((s) => ({ pos: posLabel(s.pos), options: s.options }));
 }

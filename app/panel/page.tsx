@@ -11,6 +11,8 @@ import { Container } from '@/components/ui/Container';
 import { BookIcon } from '@/components/ui/Icon';
 import { MainLayout } from '@/layouts/MainLayout';
 import { getMyWords, requireUser } from '@/lib/auth';
+import { alternativesFor } from '@/lib/dictionary';
+import { normaliseTerm } from '@/lib/dictionary-terms';
 import { buildMetadata } from '@/lib/metadata';
 
 export const metadata = buildMetadata({
@@ -45,6 +47,12 @@ export default function StudentPanelPage() {
 async function StudentDashboard() {
   const user = await requireUser('/panel');
   const words = await getMyWords();
+  // Dictionary meanings let the test recognise "a real meaning, just not the lesson's one".
+  const alternatives = await alternativesFor(words.map((w) => w.term)).catch(() => new Map());
+  const quizWords = words.map((w) => ({
+    ...w,
+    alternatives: alternatives.get(normaliseTerm(w.term)) ?? [],
+  }));
 
   return (
     <>
@@ -112,7 +120,7 @@ async function StudentDashboard() {
             {
               id: 'test',
               label: 'Test słówek',
-              content: <WordQuiz words={words} />,
+              content: <WordQuiz words={quizWords} />,
             },
           ]}
         />

@@ -34,3 +34,21 @@ describe('checkAnswer', () => {
     expect(checkAnswer(typed, translation).result).toBe(result);
   });
 });
+
+describe('checkAnswer with dictionary alternatives', () => {
+  const makeOut = ['zrozumieć', 'zorientować się w czymś', 'pieścić się', 'całować', 'obejmować'];
+
+  it('reports another real meaning as "other"', () => {
+    const verdict = checkAnswer('zrozumiec', 'całować się', makeOut);
+    expect(verdict.result).toBe('other');
+    expect(verdict.result === 'other' && verdict.matched).toBe('zrozumieć');
+  });
+
+  it('prefers the lesson meaning over alternatives', () => {
+    expect(checkAnswer('całować się', 'całować się', makeOut).result).toBe('correct');
+  });
+
+  it('still rejects unrelated answers', () => {
+    expect(checkAnswer('spotkanie', 'całować się', makeOut).result).toBe('wrong');
+  });
+});

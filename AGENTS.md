@@ -32,6 +32,7 @@ pnpm dev            # dev server
 pnpm build          # production build — run before claiming things compile
 pnpm check          # format:check + lint + typecheck — the gate
 pnpm test           # vitest (lib/*.test.ts)
+pnpm dict:import    # (re)load the EN→PL dictionary into Supabase
 pnpm check:meta     # meta & OG audit (needs a build + running server)
 ```
 
@@ -163,6 +164,12 @@ supabase/migrations/               schema as code — profiles (role), is_admin(
   punctuation and Polish diacritics are ignored; `a / b` = alternatives; `(…)` = optional part;
   small typos → "Prawie dobrze" (none for ≤4 letters). On a miss the student can overrule
   ("Miałem(-am) rację") — self-study, so honesty-based. Results aren't stored yet.
+- **Dictionary (EN→PL):** `public.dictionary` — 122k senses from Polish Wiktionary via kaikki.org
+  (CC BY-SA 4.0, credit via `DICTIONARY_CREDIT`). Refresh with `pnpm dict:import` (streams the
+  ~130 MB dump, ~2 min, replaces the table). Lookup key = `normaliseTerm()` ("to loop someone in"
+  → "loop in"). Used for the admin's **Podpowiedz** chips (`suggestTranslations`) and for the
+  test's "other" verdict: a real meaning of the word that isn't the lesson's one still counts.
+  Readable by signed-in users only (RLS).
 - **Session checks:** proxy and `getCurrentUser()` both use `auth.getClaims()` so they agree.
   A failed profile read throws (→ `app/panel/error.tsx`), it never redirects.
 - **One browser = one account.** The session is one cookie per site; to test admin and student

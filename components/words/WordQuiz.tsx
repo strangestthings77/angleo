@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { checkAnswer, type Verdict } from '@/lib/answer-check';
 import type { Word } from '@/lib/auth';
+import { DICTIONARY_CREDIT, DICTIONARY_CREDIT_URL } from '@/lib/dictionary-terms';
 
 type Phase =
   | { name: 'start' }
@@ -50,7 +51,7 @@ export function WordQuiz({ words }: { words: Word[] }) {
     if (phase.name !== 'ask') return;
     const typed = String(new FormData(e.currentTarget).get('answer') ?? '');
     const word = phase.queue[phase.index];
-    const verdict = checkAnswer(typed, word.translation);
+    const verdict = checkAnswer(typed, word.translation, word.alternatives);
     setScore((s) => ({ ...s, [word.id]: verdict.result !== 'wrong' }));
     setPhase({ ...phase, name: 'feedback', typed, verdict });
   }
@@ -182,11 +183,28 @@ export function WordQuiz({ words }: { words: Word[] }) {
           >
             {feedback.verdict.result === 'correct' && <strong>Dobrze! </strong>}
             {feedback.verdict.result === 'almost' && <strong>Prawie dobrze — liczymy to. </strong>}
+            {feedback.verdict.result === 'other' && (
+              <strong>
+                „{feedback.verdict.matched}” to też znaczenie „{word.term}” — liczymy to, ale na
+                lekcji chodziło o inne.{' '}
+              </strong>
+            )}
             {feedback.verdict.result === 'wrong' && (
               <strong>{feedback.typed.trim() ? 'Nie tym razem. ' : 'Bez odpowiedzi. '}</strong>
             )}
-            Poprawnie: <span className="font-medium">{feedback.verdict.expected}</span>
+            {feedback.verdict.result === 'other' ? 'Z lekcji: ' : 'Poprawnie: '}
+            <span className="font-medium">{feedback.verdict.expected}</span>
           </p>
+          {feedback.verdict.result === 'other' && (
+            <a
+              href={DICTIONARY_CREDIT_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="-mt-2 text-xs text-foreground-muted hover:text-foreground"
+            >
+              {DICTIONARY_CREDIT}
+            </a>
+          )}
           <div className="flex flex-wrap gap-3">
             <button type="button" className={primary} onClick={next} autoFocus>
               {phase.index + 1 < phase.queue.length ? 'Dalej' : 'Zobacz wynik'}

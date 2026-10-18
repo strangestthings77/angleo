@@ -12,6 +12,8 @@
 export type Verdict =
   | { result: 'correct'; expected: string }
   | { result: 'almost'; expected: string }
+  /** Matches another dictionary meaning of the word, not the one from the lesson. */
+  | { result: 'other'; expected: string; matched: string }
   | { result: 'wrong'; expected: string };
 
 const DIACRITICS: Record<string, string> = {
@@ -80,14 +82,30 @@ function tolerance(length: number): number {
   return 2;
 }
 
-export function checkAnswer(typed: string, translation: string): Verdict {
+const matches = (answer: string, candidate: string) =>
+  editDistance(answer, candidate) <= tolerance(candidate.length);
+
+/**
+ * `alternatives` = other Polish meanings of the English word from the dictionary. A hit there
+ * is reported as "other" — a real meaning, just not the one taught in the lesson.
+ */
+export function checkAnswer(
+  typed: string,
+  translation: string,
+  alternatives: readonly string[] = [],
+): Verdict {
   const expected = translation.trim();
   const answer = normalise(typed);
   if (!answer) return { result: 'wrong', expected };
 
   const accepted = acceptedAnswers(translation);
   if (accepted.includes(answer)) return { result: 'correct', expected };
+  if (accepted.some((a) => matches(answer, a))) return { result: 'almost', expected };
 
-  const close = accepted.some((a) => editDistance(answer, a) <= tolerance(a.length));
-  return { result: close ? 'almost' : 'wrong', expected };
+  for (const alternative of alternatives) {
+    if (acceptedAnswers(alternative).some((a) => matches(answer, a))) {
+      return { result: 'other', expected, matched: alternative };
+    }
+  }
+  return { result: 'wrong', expected };
 }

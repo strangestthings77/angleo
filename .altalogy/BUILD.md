@@ -39,6 +39,9 @@ licenses, search).
   admin promoted via SQL), RLS on every table, words seeded from the blog. Public sign-up for
   now — switch to invite-only later (needs a server-side service key) if Nicole wants control
   over who gets an account.
+- **Dictionary:** Polish Wiktionary (kaikki.org extract) chosen over PONS/DeepL — free, no
+  key or quota, multiple senses per word (fits idioms). Suggests translations to the admin and
+  flags "other real meaning" in the test; never replaces the lesson's translation.
 - **Dates switched to Polish** ("27 lipca 2025").
 - **Posts migrated to MDX** (`@next/mdx`, no frontmatter plugin): bodies in `.mdx`, metadata
   in a typed `posts.ts`. Converted from the Webflow rich text by a one-off script; Webflow

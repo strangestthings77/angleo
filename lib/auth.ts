@@ -65,6 +65,8 @@ export type Word = {
   example: string | null;
   /** true = added for this student, false = shared starter word. */
   personal: boolean;
+  /** Other Polish meanings from the dictionary (word test only). */
+  alternatives?: string[];
 };
 
 const WORD_COLUMNS = 'id, term, translation, example, student_id';
