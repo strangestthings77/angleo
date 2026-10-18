@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 import { PanelBar } from '@/components/auth/PanelBar';
 import { PanelSkeleton } from '@/components/auth/PanelSkeleton';
 import { NextLessonCard } from '@/components/progress/NextLessonCard';
-import { ProgressCard } from '@/components/progress/ProgressCard';
 import { Tabs } from '@/components/ui/Tabs';
 import { WordCard } from '@/components/words/WordCard';
 import { WordQuiz } from '@/components/words/WordQuiz';
@@ -56,13 +55,12 @@ async function StudentDashboard() {
 
   return (
     <>
-      <PanelBar user={user} area="student" />
+      <PanelBar user={user} area="student" showProgress />
 
-      <Container className="flex flex-col gap-16 py-section">
+      <Container className="flex flex-col gap-12 pt-10 pb-section md:pt-14">
         <Suspense fallback={null}>
           <NextLessonCard email={user.email} />
         </Suspense>
-        <ProgressCard lessons={user.lessons} />
 
         <Tabs
           label="Strefa ucznia"

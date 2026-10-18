@@ -152,7 +152,7 @@ supabase/migrations/               schema as code — profiles (role), is_admin(
   — or run the same `update` in the Supabase SQL editor. Current admin: Nicole Kurek.
   There are no update policies, so users can never change their own role.
 - **Lessons & levels:** `profiles.lessons_completed` (0–1000). Level = ⌊lessons / 10⌋ + 1 —
-  the rule lives only in `lib/progress.ts`. Students see `ProgressCard` on `/panel`; admins edit
+  the rule lives only in `lib/progress.ts`. Students see `ProgressInline` under their name on `/panel` (admins see `ProgressCard` per student); admins edit
   per student on `/admin` (`LessonsEditor` → `setStudentLessons` action → DB function
   `set_student_lessons()`, which re-checks `is_admin()` and touches only that column).
 - **Words:** added by the admin per student (`words.student_id`); the starter set was removed

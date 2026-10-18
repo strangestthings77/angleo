@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ProgressInline } from '@/components/progress/ProgressInline';
 import { Eyebrow } from '@/components/text/Eyebrow';
 import { Heading } from '@/components/text/Heading';
 import { Container } from '@/components/ui/Container';
@@ -6,7 +7,16 @@ import type { CurrentUser } from '@/lib/auth';
 import { signOut } from '@/lib/auth-actions';
 
 /** Greeting + account actions at the top of the student/admin area. */
-export function PanelBar({ user, area }: { user: CurrentUser; area: 'student' | 'admin' }) {
+export function PanelBar({
+  user,
+  area,
+  showProgress = false,
+}: {
+  user: CurrentUser;
+  area: 'student' | 'admin';
+  /** Level + bar under the greeting (student view). */
+  showProgress?: boolean;
+}) {
   const firstName = user.name?.split(' ')[0];
   const link =
     'inline-flex h-10 items-center rounded-full border border-border px-4 text-sm text-foreground transition-colors duration-200 hover:border-foreground/50';
@@ -32,6 +42,11 @@ export function PanelBar({ user, area }: { user: CurrentUser; area: 'student' | 
               {user.role === 'admin' ? 'Administrator' : 'Uczeń'}
             </span>
           </p>
+          {showProgress && (
+            <div className="mt-2">
+              <ProgressInline lessons={user.lessons} />
+            </div>
+          )}
         </div>
         <div className="flex animate-rise flex-wrap gap-2 rise-step-2">
           {user.role === 'admin' && (
