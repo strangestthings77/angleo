@@ -3,20 +3,11 @@ import { getCategories } from '@/lib/blog';
 
 const chip =
   'inline-flex h-10 items-center rounded-full border px-4 text-sm transition-colors duration-200';
-const tones = {
-  light: {
-    idle: 'border-border text-foreground-muted hover:border-foreground/40 hover:text-foreground',
-    current: 'border-foreground bg-foreground text-background',
-  },
-  inverse: {
-    idle: 'border-background/20 text-inverse-muted hover:border-background/60 hover:text-background',
-    current: 'border-background bg-background text-foreground',
-  },
-};
+const idle = 'border-border text-foreground-muted hover:border-foreground/40 hover:text-foreground';
+const current = 'border-foreground bg-foreground text-background';
 
 /** Filter row: "Wszystkie" + every category. `active` = category slug, or undefined for all. */
-export function CategoryChips({ active, inverse = false }: { active?: string; inverse?: boolean }) {
-  const { idle, current } = tones[inverse ? 'inverse' : 'light'];
+export function CategoryChips({ active }: { active?: string }) {
   return (
     <nav aria-label="Kategorie">
       <ul className="flex flex-wrap gap-2">

@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { ContactList } from '@/components/marketing/ContactList';
-import { InkPanel } from '@/components/marketing/InkPanel';
 import { Accent } from '@/components/text/Accent';
 import { Eyebrow } from '@/components/text/Eyebrow';
 import { Heading } from '@/components/text/Heading';
@@ -13,24 +12,26 @@ export function AboutHero() {
   const { about, portrait } = site;
 
   return (
-    <section className="pt-4 md:pt-6">
-      <Container>
-        <InkPanel className="grid items-center gap-12 p-6 sm:p-12 lg:grid-cols-2 lg:gap-16 lg:p-16">
-          <div className="flex flex-col gap-8 py-6 lg:order-1">
-            <Eyebrow inverse>O mnie</Eyebrow>
-            <Heading as="h1" size="xl" inverse>
-              <Accent text={about.heading} />
-            </Heading>
-            <Text variant="lead" inverse>
-              {about.lead}
-            </Text>
-            <ContactList inverse />
-            <div>
-              <Button href={site.booking.href} variant="light" arrow>
-                Zarezerwuj termin
-              </Button>
-            </div>
+    <section className="border-b border-border">
+      <Container className="grid items-center gap-14 pt-12 pb-20 md:pt-20 lg:grid-cols-2 lg:gap-20 lg:pb-28">
+        <div className="flex flex-col gap-8">
+          <Eyebrow>O mnie</Eyebrow>
+          <Heading as="h1" size="xl">
+            <Accent text={about.heading} />
+          </Heading>
+          <Text variant="lead">{about.lead}</Text>
+          <ContactList />
+          <div>
+            <Button href={site.booking.href} arrow>
+              Zarezerwuj termin
+            </Button>
           </div>
+        </div>
+        <div className="relative isolate">
+          <div
+            aria-hidden
+            className="absolute inset-0 translate-x-3 -translate-y-3 rounded-3xl border border-accent/40"
+          />
           <Image
             src={portrait.src}
             alt={portrait.alt}
@@ -39,9 +40,9 @@ export function AboutHero() {
             priority
             draggable={false}
             sizes="(min-width: 1024px) 560px, 100vw"
-            className="aspect-4/5 w-full rounded-3xl object-cover lg:order-2"
+            className="relative aspect-4/5 w-full rounded-3xl object-cover shadow-card"
           />
-        </InkPanel>
+        </div>
       </Container>
     </section>
   );

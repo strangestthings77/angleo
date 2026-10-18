@@ -26,11 +26,12 @@ licenses, search).
   (offer, topics, blog, booking), short footer blurb, author bio. Facts (education, contact,
   company) and the about text are unchanged from angleo.pl. No testimonials, prices or
   stats were invented.
-- **"Ultra pro" pass (2026-10-18):** ink hero panels with grain on every page; home became a
+- **"Ultra pro" pass (2026-10-18):** home became a
   full service page — specialties, audiences ("Dla kogo"), bento offer, 3-step process, about
   teaser, blog, FAQ. New copy to review: specialties list, audiences, process steps, FAQ. FAQ
   answers only state facts (Google Meet, length from Cal.com, 2-week window, reschedule link).
-  "lekcja 1:1" assumes individual lessons — confirm with Nicole.
+  "lekcja 1:1" assumes individual lessons — confirm with Nicole. Dark ink heroes were tried
+  and rejected by the client; heroes stay light, ink is for the offer card and CTA band only.
 - **Dates switched to Polish** ("27 lipca 2025").
 - **Posts migrated to MDX** (`@next/mdx`, no frontmatter plugin): bodies in `.mdx`, metadata
   in a typed `posts.ts`. Converted from the Webflow rich text by a one-off script; Webflow

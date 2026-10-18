@@ -1,4 +1,3 @@
-import { InkPanel } from '@/components/marketing/InkPanel';
 import { Accent } from '@/components/text/Accent';
 import { Eyebrow } from '@/components/text/Eyebrow';
 import { Heading } from '@/components/text/Heading';
@@ -6,7 +5,7 @@ import { Text } from '@/components/text/Text';
 import { Container } from '@/components/ui/Container';
 
 /**
- * Ink header panel for inner pages. `children` renders under the lead (chips, meta…).
+ * Light header for inner pages. `children` renders under the lead (chips, meta…).
  * `compact` keeps task pages (booking) above the fold.
  */
 export function PageHero({
@@ -23,24 +22,22 @@ export function PageHero({
   children?: React.ReactNode;
 }) {
   return (
-    <section className="pt-4 md:pt-6">
-      <Container>
-        <InkPanel
-          className={`px-6 sm:px-12 lg:px-20 ${compact ? 'py-12 md:py-14' : 'py-16 md:py-24'}`}
-        >
-          <div className="flex max-w-3xl flex-col gap-6">
-            <Eyebrow inverse>{eyebrow}</Eyebrow>
-            <Heading as="h1" size={compact ? 'lg' : 'xl'} inverse>
-              <Accent text={heading} />
-            </Heading>
-            {lead && (
-              <Text variant="lead" inverse className="max-w-2xl">
-                {lead}
-              </Text>
-            )}
-            {children && <div className="pt-4">{children}</div>}
-          </div>
-        </InkPanel>
+    <section className="border-b border-border">
+      <Container
+        className={compact ? 'pt-12 pb-10 md:pt-16 md:pb-12' : 'pt-16 pb-14 md:pt-24 md:pb-20'}
+      >
+        <div className="flex max-w-3xl flex-col gap-6">
+          <Eyebrow>{eyebrow}</Eyebrow>
+          <Heading as="h1" size={compact ? 'lg' : 'xl'}>
+            <Accent text={heading} />
+          </Heading>
+          {lead && (
+            <Text variant="lead" className="max-w-2xl">
+              {lead}
+            </Text>
+          )}
+          {children && <div className="pt-4">{children}</div>}
+        </div>
       </Container>
     </section>
   );

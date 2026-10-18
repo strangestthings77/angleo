@@ -128,9 +128,10 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
 > Premium, editorial business-English brand. Warm ivory paper, deep ink-navy type, one brass
 > accent used sparingly (eyebrows, italic accent words, numerals, list markers). Large
 > Instrument Serif display headlines with an italic accent word; Geist for everything else.
-> Every page opens on an inset ink panel with film grain (`InkPanel` / `PageHero`); content
-> sits on ivory with hairline borders, bento cards and soft rounded imagery; an ink CTA band
-> closes each page. Motion is limited to hover feedback — no scroll animations, no carousels.
+> Heroes are light (ivory, hairline bottom border, brass-outlined portrait) — a dark hero was
+> tried and rejected. Ink with film grain (`InkPanel`) is reserved for accents: the offer
+> lead card and the CTA band that closes each page. Content sits on ivory with hairline
+> borders, bento cards and soft rounded imagery. Motion is limited to hover feedback — no scroll animations, no carousels.
 > Deliberately _not_ a playful language-school look, not corporate-blue, not loud gradients.
 
 **This is the reference for any judgement call.** Check against it before guessing.
@@ -161,7 +162,7 @@ value.**
 | `--radius-arch`        | `rounded-t-arch`                    | Arched portrait top                        |
 | `--shadow-card`        | `shadow-card`                       | Featured card, floating badge              |
 | `--ease-out-soft`      | `ease-out-soft`                     | Hover transforms                           |
-| `bg-grain` (utility)   | `bg-grain`                          | Inline SVG noise on ink panels             |
+| `bg-grain` (utility)   | `bg-grain`                          | Inline SVG noise on ink panels (InkPanel)  |
 
 - **Typography:** `Heading` (serif; `size` xl/lg/md/sm; `<em>` → brass italic),
   `Text` (lead/body), `Eyebrow`. Copy strings in `content/site.ts` mark the accent word

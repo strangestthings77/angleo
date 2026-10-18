@@ -1,12 +1,11 @@
 import Link from 'next/link';
 import { ArrowRightIcon } from '@/components/ui/Icon';
 
-type Variant = 'primary' | 'secondary' | 'light' | 'ghost-light';
+type Variant = 'primary' | 'secondary' | 'light';
 const variants: Record<Variant, string> = {
   primary: 'bg-foreground text-background hover:bg-foreground/85',
   secondary: 'border border-foreground/20 text-foreground hover:border-foreground/60',
   light: 'bg-background text-foreground hover:bg-surface',
-  'ghost-light': 'border border-background/25 text-background hover:border-background/70',
 };
 
 /** Pill button. Internal hrefs use `next/link`; external open in a new tab. */

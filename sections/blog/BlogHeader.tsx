@@ -15,7 +15,7 @@ export function BlogHeader({
 }) {
   return (
     <PageHero eyebrow={eyebrow} heading={heading} lead={lead}>
-      <CategoryChips active={activeCategory} inverse />
+      <CategoryChips active={activeCategory} />
     </PageHero>
   );
 }
