@@ -31,6 +31,8 @@ const fromRow = (r: AttemptRow): LiveAttempt => ({
 
 /** Typing within this window shows as "pisze teraz…". */
 const TYPING_MS = 4000;
+/** Fallback refresh while Realtime is disconnected. */
+const POLL_MS = 2000;
 
 function ago(iso: string, now: number): string {
   const s = Math.max(0, Math.round((now - Date.parse(iso)) / 1000));
@@ -60,24 +62,55 @@ export function LiveExerciseView({
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    const channel = supabase
-      .channel(`attempt-${exerciseId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'exercise_attempts',
-          filter: `exercise_id=eq.${exerciseId}`,
-        },
-        (payload) => {
-          if (payload.eventType === 'DELETE') setAttempt(null);
-          else setAttempt(fromRow(payload.new as AttemptRow));
-        },
-      )
-      .subscribe((status) => setConnected(status === 'SUBSCRIBED'));
+    let cancelled = false;
+    let poll: ReturnType<typeof setInterval> | undefined;
+    let channel: ReturnType<typeof supabase.channel> | undefined;
+
+    async function refresh() {
+      const { data } = await supabase
+        .from('exercise_attempts')
+        .select('answers, submitted_at, score, total, updated_at')
+        .eq('exercise_id', exerciseId)
+        .maybeSingle<AttemptRow>();
+      if (!cancelled) setAttempt(data ? fromRow(data) : null);
+    }
+
+    async function connect() {
+      // Load the session first, so the channel joins as the admin — joined anonymously it
+      // still reports SUBSCRIBED, but RLS filters out every event.
+      await supabase.auth.getSession();
+      await supabase.realtime.setAuth();
+      if (cancelled) return;
+      channel = supabase
+        .channel(`attempt-${exerciseId}`)
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'exercise_attempts',
+            filter: `exercise_id=eq.${exerciseId}`,
+          },
+          (payload) => {
+            if (payload.eventType === 'DELETE') setAttempt(null);
+            else setAttempt(fromRow(payload.new as AttemptRow));
+          },
+        )
+        .subscribe((status) => {
+          const live = status === 'SUBSCRIBED';
+          setConnected(live);
+          clearInterval(poll);
+          // Catch up on anything typed before the channel opened; poll while it's down.
+          void refresh();
+          if (!live) poll = setInterval(() => void refresh(), POLL_MS);
+        });
+    }
+
+    void connect();
     return () => {
-      void supabase.removeChannel(channel);
+      cancelled = true;
+      clearInterval(poll);
+      if (channel) void supabase.removeChannel(channel);
     };
   }, [supabase, exerciseId]);
 

@@ -69,7 +69,6 @@ async function StudentExercise({ params }: { params: Params }) {
       </div>
       <ExercisePlayer
         exerciseId={exercise.id}
-        studentId={exercise.studentId}
         hints={exercise.hints}
         template={exercise.template}
         initialAnswers={attempt?.answers ?? {}}

@@ -177,9 +177,11 @@ supabase/migrations/               schema as code — profiles (role), is_admin(
   `[[enquiry|q]]` reveals a letter, `[[attend|3]]` the 3rd letter, `[[enquiry/inquiry]]`
   accepts several answers (`lib/exercise.ts`, tested). Stored as `exercises` (template + hints
   public, `answers` column **not granted** to students) and `exercise_attempts` (one row per
-  exercise). The student's typing autosaves (400 ms debounce, browser client); the admin's
+  exercise). The student's typing autosaves through `save_exercise_answers()` (throttled to one save per
+  200 ms; no direct table writes — a silent 0-row update once hid all typing); the admin's
   **Podgląd na żywo** subscribes to that row via Supabase Realtime (`postgres_changes`, RLS
-  applies) and shows each gap as it's typed, coloured right/wrong. **Sprawdź odpowiedzi** →
+  applies — the channel must join with the admin's token, see `LiveExerciseView`; polls every 2 s
+  while disconnected) and shows each gap as it's typed, coloured right/wrong. **Sprawdź odpowiedzi** →
   `submit_exercise()` grades in the DB (`normalise_gap()`: case, spaces, edge punctuation; no
   typo tolerance — spelling is the point), stores the score and locks the attempt;
   `exercise_answers()` reveals answers only to the admin or after submitting.

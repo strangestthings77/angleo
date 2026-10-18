@@ -7,20 +7,22 @@ import { createClient } from '@/lib/supabase/client';
 
 type Result = { score: number; total: number; results: boolean[]; answers: string[][] };
 
+/** Save at most this often while typing — short enough that the admin sees letters appear. */
+const SAVE_EVERY_MS = 200;
+
 /**
- * Student fills the gaps. Answers autosave (debounced) to exercise_attempts — the admin sees them
- * live. "Sprawdź" grades in the database (submit_exercise), which also reveals the answers.
+ * Student fills the gaps. Answers autosave (throttled, via save_exercise_answers) to
+ * exercise_attempts — the admin's live view gets each save over Realtime. "Sprawdź" grades in
+ * the database (submit_exercise), which also reveals the answers.
  */
 export function ExercisePlayer({
   exerciseId,
-  studentId,
   hints,
   template,
   initialAnswers,
   initialResult,
 }: {
   exerciseId: string;
-  studentId: string;
   hints: GapHint[];
   template: string;
   initialAnswers: Answers;
@@ -32,41 +34,45 @@ export function ExercisePlayer({
   const [saving, setSaving] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [submitting, setSubmitting] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSave = useRef(0);
   const latest = useRef(answers);
   const locked = result !== null;
 
-  // Make sure the attempt row exists so autosave can just update it.
+  // Opening the exercise creates the attempt, so the admin sees "otworzył(a)" right away.
   useEffect(() => {
-    if (locked) return;
-    void supabase
-      .from('exercise_attempts')
-      .upsert(
-        { exercise_id: exerciseId, student_id: studentId, answers: {} },
-        { onConflict: 'exercise_id', ignoreDuplicates: true },
-      );
-  }, [supabase, exerciseId, studentId, locked]);
+    if (!locked) void save(latest.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on open
+  }, []);
 
   async function save(next: Answers) {
+    lastSave.current = Date.now();
     setSaving('saving');
-    const { error } = await supabase
-      .from('exercise_attempts')
-      .update({ answers: next, updated_at: new Date().toISOString() })
-      .eq('exercise_id', exerciseId);
-    setSaving(error ? 'error' : 'saved');
+    const { error } = await supabase.rpc('save_exercise_answers', {
+      p_exercise: exerciseId,
+      p_answers: next,
+    });
+    // A newer save may be queued; only report the state of the latest one.
+    if (next === latest.current) setSaving(error ? 'error' : 'saved');
+    return !error;
   }
 
+  /** Throttle: save now if the last save was a while ago, otherwise once the window ends. */
   function change(index: number, value: string) {
     const next = { ...latest.current, [index]: value };
     latest.current = next;
     setAnswers(next);
     if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => void save(next), 400);
+    const wait = Math.max(0, lastSave.current + SAVE_EVERY_MS - Date.now());
+    timer.current = setTimeout(() => void save(latest.current), wait);
   }
 
   async function submit() {
     if (timer.current) clearTimeout(timer.current);
     setSubmitting(true);
-    await save(latest.current);
+    if (!(await save(latest.current))) {
+      setSubmitting(false);
+      return;
+    }
     const { data, error } = await supabase.rpc('submit_exercise', { p_exercise: exerciseId });
     setSubmitting(false);
     if (error || !data) {
