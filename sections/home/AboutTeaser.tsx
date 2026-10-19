@@ -19,7 +19,7 @@ export function AboutTeaser() {
           alt={portrait.alt}
           width={portrait.width}
           height={portrait.height}
-          quality={90}
+          quality={100}
           draggable={false}
           sizes="(min-width: 1024px) 460px, 100vw"
           className="aspect-4/5 w-full reveal rounded-3xl object-cover"
