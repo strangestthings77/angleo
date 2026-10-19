@@ -22,8 +22,8 @@ export const site = {
   portrait: {
     src: '/images/nicole-kurek-professional.png',
     alt: 'Nicole Kurek, trenerka języka angielskiego',
-    width: 1536,
-    height: 1152,
+    width: 1448,
+    height: 1086,
   },
 
   hero: {

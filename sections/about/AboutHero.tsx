@@ -42,6 +42,7 @@ export function AboutHero() {
             width={portrait.width}
             height={portrait.height}
             priority
+            quality={90}
             draggable={false}
             sizes="(min-width: 1024px) 560px, 100vw"
             className="relative aspect-4/5 w-full rounded-3xl object-cover shadow-card"
