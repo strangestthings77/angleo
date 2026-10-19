@@ -186,8 +186,7 @@ export function BookingWidget({ viewer = null }: { viewer?: BookingViewer | null
         </div>
       </div>
       <p className="text-xs/5 text-foreground-muted">
-        Terminy na 2 tygodnie do przodu — do {formatDayMonth(last)}. Godziny w strefie czasowej:{' '}
-        <span className="font-medium">{timeZone.replace('_', ' ')}</span>
+        Terminy na 2 tygodnie do przodu — do {formatDayMonth(last)}.
       </p>
     </div>
   );
