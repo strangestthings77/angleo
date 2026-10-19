@@ -45,7 +45,7 @@ export function AboutHero() {
             quality={100}
             draggable={false}
             sizes="(min-width: 1024px) 560px, 100vw"
-            className="relative aspect-4/5 w-full rounded-3xl object-cover shadow-card"
+            className="relative aspect-4/5 w-full rounded-3xl object-cover object-center shadow-card"
           />
         </div>
       </Container>

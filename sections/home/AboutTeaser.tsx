@@ -22,7 +22,7 @@ export function AboutTeaser() {
           quality={100}
           draggable={false}
           sizes="(min-width: 1024px) 460px, 100vw"
-          className="aspect-4/5 w-full reveal rounded-3xl object-cover"
+          className="aspect-4/5 w-full reveal rounded-3xl object-cover object-center"
         />
         <div className="flex reveal flex-col gap-8">
           <Eyebrow>O mnie</Eyebrow>

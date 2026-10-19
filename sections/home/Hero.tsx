@@ -69,7 +69,7 @@ export async function Hero() {
             quality={100}
             draggable={false}
             sizes="(min-width: 1024px) 460px, 90vw"
-            className="relative aspect-4/5 w-full rounded-t-arch rounded-b-3xl object-cover shadow-card"
+            className="relative aspect-4/5 w-full rounded-t-arch rounded-b-3xl object-cover object-center shadow-card"
           />
           {hero.phrases.map((phrase, i) => (
             <figure
