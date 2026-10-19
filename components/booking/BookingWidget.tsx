@@ -3,7 +3,7 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { BookingForm } from '@/components/booking/BookingForm';
 import { BookingSuccess } from '@/components/booking/BookingSuccess';
-import { addMonths, compareMonths, formatDayMonth, monthOf } from '@/components/booking/dates';
+import { addMonths, compareMonths, monthOf } from '@/components/booking/dates';
 import { MonthCalendar } from '@/components/booking/MonthCalendar';
 import { TimeSlots } from '@/components/booking/TimeSlots';
 import {
@@ -185,9 +185,6 @@ export function BookingWidget({ viewer = null }: { viewer?: BookingViewer | null
           )}
         </div>
       </div>
-      <p className="text-xs/5 text-foreground-muted">
-        Terminy na 2 tygodnie do przodu — do {formatDayMonth(last)}.
-      </p>
     </div>
   );
 }

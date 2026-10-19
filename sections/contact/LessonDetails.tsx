@@ -1,5 +1,5 @@
-import { ContactList } from '@/components/marketing/ContactList';
 import { Eyebrow } from '@/components/text/Eyebrow';
+import { MailIcon, PhoneIcon } from '@/components/ui/Icon';
 import { site } from '@/content/site';
 import { getLessonInfo } from '@/lib/cal';
 
@@ -45,8 +45,30 @@ export async function LessonDetails() {
       </ol>
 
       <div className="flex flex-col gap-3 border-t border-border pt-8">
-        <p className="text-sm text-foreground-muted">Wolisz najpierw porozmawiać?</p>
-        <ContactList />
+        <p className="font-serif text-title tracking-display text-foreground">Ustalmy szczegóły</p>
+        <p className="text-sm/6 text-foreground-muted">
+          Masz pytania lub chcesz porozmawiać o terminach? Napisz lub zadzwoń — chętnie pomogę.
+        </p>
+        <ul className="flex flex-col text-base">
+          <li>
+            <a
+              href={`mailto:${site.contact.email}?subject=${encodeURIComponent('Pytanie o lekcje angielskiego – Angleo')}`}
+              className="inline-flex min-h-11 items-center gap-3 text-foreground transition-colors duration-200 hover:text-accent"
+            >
+              <MailIcon size={18} className="text-accent" />
+              Napisz do mnie
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.contact.phoneHref}
+              className="inline-flex min-h-11 items-center gap-3 text-foreground transition-colors duration-200 hover:text-accent"
+            >
+              <PhoneIcon size={18} className="text-accent" />
+              Zadzwoń
+            </a>
+          </li>
+        </ul>
       </div>
 
       <address className="flex flex-col text-xs/5 text-foreground-muted not-italic">
