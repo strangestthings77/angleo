@@ -30,6 +30,7 @@ export async function LessonDetails() {
           <li className="rounded-full border border-border px-3 py-1.5">
             {lesson?.online === false ? 'Spotkanie' : 'Online · Google Meet'}
           </li>
+          <li className="rounded-full border border-border px-3 py-1.5">100 zł</li>
         </ul>
       </div>
 
