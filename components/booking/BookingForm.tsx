@@ -14,6 +14,18 @@ const field =
   'h-12 w-full rounded-xl border border-border bg-background px-4 text-base text-foreground placeholder:text-foreground-muted/60 transition-colors duration-200 focus:border-foreground focus:outline-none';
 const label = 'text-sm font-medium text-foreground';
 
+function buildBookingNotes(form: FormData) {
+  const lines = [
+    ['Jak Ci idzie mówienie po angielsku?', String(form.get('speakingConfidence') ?? '')],
+    ['Do czego najbardziej przyda Ci się angielski?', String(form.get('learningGoal') ?? '')],
+    ['W jakiej branży pracujesz?', String(form.get('industry') ?? '')],
+    ['Doprecyzowanie branży', String(form.get('industryOther') ?? '')],
+    ['Dodatkowe informacje', String(form.get('additionalNotes') ?? '')],
+  ].filter(([, value]) => value.trim());
+
+  return lines.map(([question, answer]) => `${question}: ${answer}`).join('\n');
+}
+
 export function BookingForm({
   start,
   date,
@@ -34,6 +46,8 @@ export function BookingForm({
   const [renderedAt] = useState(() => Date.now());
   const [status, setStatus] = useState<'idle' | 'sending'>('idle');
   const [error, setError] = useState<string | null>(null);
+  const [industry, setIndustry] = useState('');
+  const [showAdditionalNotes, setShowAdditionalNotes] = useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -45,7 +59,7 @@ export function BookingForm({
       ...(viewer
         ? {}
         : { name: String(form.get('name') ?? ''), email: String(form.get('email') ?? '') }),
-      notes: String(form.get('notes') ?? ''),
+      notes: buildBookingNotes(form),
       website: String(form.get('website') ?? ''),
       renderedAt,
     };
@@ -127,19 +141,92 @@ export function BookingForm({
             </label>
           </>
         )}
-        <label className="flex flex-col gap-2 sm:col-span-2">
-          <span className={label}>
-            Czego chcesz się nauczyć?{' '}
-            <span className="font-normal text-foreground-muted">(opcjonalnie)</span>
-          </span>
-          <textarea
-            name="notes"
-            rows={4}
-            maxLength={1000}
-            placeholder="Np. prezentacje dla klientów, rozmowa o pracę, negocjacje…"
-            className={`${field} h-auto resize-y py-3`}
-          />
-        </label>
+        <fieldset className="flex flex-col gap-5 rounded-2xl bg-surface-muted p-5 sm:col-span-2">
+          <div className="flex flex-col gap-1">
+            <legend className="font-serif text-title tracking-display text-foreground">
+              Poznajmy się trochę lepiej
+            </legend>
+            <p className="text-sm/6 text-foreground-muted">
+              Te informacje pomogą mi przygotować pierwszą lekcję specjalnie dla Ciebie. Wszystkie
+              pytania są opcjonalne.
+            </p>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <label className="flex flex-col gap-2">
+              <span className={label}>Jak Ci idzie mówienie po angielsku?</span>
+              <select name="speakingConfidence" defaultValue="" className={field}>
+                <option value="">Wybierz odpowiedź</option>
+                <option>Dopiero zaczynam</option>
+                <option>Rozumiem sporo, ale trudno mi mówić</option>
+                <option>Dogaduję się, ale brakuje mi swobody</option>
+                <option>Mówię swobodnie, ale chcę mówić jeszcze lepiej</option>
+                <option>Trudno mi to ocenić</option>
+              </select>
+            </label>
+
+            <label className="flex flex-col gap-2">
+              <span className={label}>Do czego najbardziej przyda Ci się angielski?</span>
+              <select name="learningGoal" defaultValue="" className={field}>
+                <option value="">Wybierz odpowiedź</option>
+                <option>Spotkania i rozmowy z zespołem</option>
+                <option>Rozmowy z klientami i partnerami</option>
+                <option>Prezentacje i wystąpienia</option>
+                <option>Wiadomości na czacie (np. Teams, Slack)</option>
+                <option>Rozmowy rekrutacyjne</option>
+                <option>Chcę po prostu swobodniej mówić</option>
+                <option>Mam kilka różnych celów</option>
+                <option>Jeszcze nie wiem</option>
+              </select>
+            </label>
+
+            <label className="flex flex-col gap-2 sm:col-span-2">
+              <span className={label}>W jakiej branży pracujesz?</span>
+              <select
+                name="industry"
+                value={industry}
+                onChange={(event) => setIndustry(event.target.value)}
+                className={field}
+              >
+                <option value="">Wybierz odpowiedź</option>
+                <option>IT i technologie</option>
+                <option>Finanse, bankowość i księgowość</option>
+                <option>Sprzedaż i marketing</option>
+                <option>Logistyka i produkcja</option>
+                <option>Zarządzanie i HR</option>
+                <option>Inna branża</option>
+                <option>Nie dotyczy</option>
+              </select>
+            </label>
+
+            {industry === 'Inna branża' && (
+              <label className="flex flex-col gap-2 sm:col-span-2">
+                <span className={label}>Doprecyzuj branżę (opcjonalnie)</span>
+                <input name="industryOther" maxLength={120} className={field} />
+              </label>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <button
+              type="button"
+              onClick={() => setShowAdditionalNotes((shown) => !shown)}
+              className="self-start text-sm font-medium text-foreground underline underline-offset-4 hover:text-accent"
+              aria-expanded={showAdditionalNotes}
+            >
+              Chcesz dodać coś od siebie?
+            </button>
+            {showAdditionalNotes && (
+              <textarea
+                name="additionalNotes"
+                rows={3}
+                maxLength={500}
+                placeholder="Np. Za miesiąc prowadzę prezentację dla zagranicznego klienta."
+                className={`${field} h-auto resize-y py-3`}
+              />
+            )}
+          </div>
+        </fieldset>
         {/* Honeypot: hidden from people and assistive tech, tempting to bots. */}
         <div aria-hidden className="sr-only">
           <label>

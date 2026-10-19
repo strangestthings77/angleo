@@ -5,7 +5,7 @@ import { getLessonInfo } from '@/lib/cal';
 
 const STEPS = [
   'Wybierz dzień i godzinę',
-  'Podaj imię, e-mail i cel lekcji',
+  'Podaj imię i e-mail',
   'Potwierdzenie i link do spotkania przyjdą e-mailem',
 ];
 
