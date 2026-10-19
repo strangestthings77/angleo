@@ -17,7 +17,6 @@ const label = 'text-sm font-medium text-foreground';
 function buildBookingNotes(form: FormData) {
   const lines = [
     ['Jak Ci idzie mówienie po angielsku?', String(form.get('speakingConfidence') ?? '')],
-    ['Do czego najbardziej przyda Ci się angielski?', String(form.get('learningGoal') ?? '')],
     ['W jakiej branży pracujesz?', String(form.get('industry') ?? '')],
     ['Doprecyzowanie branży', String(form.get('industryOther') ?? '')],
     ['Dodatkowe informacje', String(form.get('additionalNotes') ?? '')],
@@ -162,21 +161,6 @@ export function BookingForm({
                 <option>Dogaduję się, ale brakuje mi swobody</option>
                 <option>Mówię swobodnie, ale chcę mówić jeszcze lepiej</option>
                 <option>Trudno mi to ocenić</option>
-              </select>
-            </label>
-
-            <label className="flex flex-col gap-2">
-              <span className={label}>Do czego najbardziej przyda Ci się angielski?</span>
-              <select name="learningGoal" defaultValue="" className={field}>
-                <option value="">Wybierz odpowiedź</option>
-                <option>Spotkania i rozmowy z zespołem</option>
-                <option>Rozmowy z klientami i partnerami</option>
-                <option>Prezentacje i wystąpienia</option>
-                <option>Wiadomości na czacie (np. Teams, Slack)</option>
-                <option>Rozmowy rekrutacyjne</option>
-                <option>Chcę po prostu swobodniej mówić</option>
-                <option>Mam kilka różnych celów</option>
-                <option>Jeszcze nie wiem</option>
               </select>
             </label>
 
