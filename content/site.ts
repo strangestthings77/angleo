@@ -20,10 +20,10 @@ export const site = {
   account: { label: 'Strefa ucznia', href: '/panel' },
 
   portrait: {
-    src: '/images/nicole-kurek-blue-shirt-v2.png',
+    src: '/images/nicole-kurek-blue-shirt-hair.png',
     alt: 'Nicole Kurek, trenerka języka angielskiego',
-    width: 1122,
-    height: 1402,
+    width: 1448,
+    height: 1086,
   },
 
   hero: {
