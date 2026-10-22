@@ -109,10 +109,6 @@ export const site = {
         a: 'Wybierz dzień i godzinę w kalendarzu na stronie „Umów lekcję”. Terminy są dostępne na dwa tygodnie do przodu, a potwierdzenie przychodzi od razu na e-mail.',
       },
       {
-        q: 'Czy mogę zmienić termin lub odwołać lekcję?',
-        a: 'Tak — w e-mailu z potwierdzeniem znajdziesz link do zmiany terminu lub odwołania lekcji.',
-      },
-      {
         q: 'Czego będziemy się uczyć?',
         a: 'Angielskiego, którego używasz w pracy: e-maili, prezentacji, spotkań, negocjacji i rozmów o pracę. Przy rezerwacji możesz opisać, na czym chcesz się skupić.',
       },
