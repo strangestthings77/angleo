@@ -16,7 +16,6 @@ export function BookingSuccess({
   onReset: () => void;
 }) {
   const dateKey = dateKeyIn(timeZone, new Date(booking.start));
-  const isLink = booking.location?.startsWith('http');
 
   return (
     <div role="status" className="flex flex-col items-center gap-6 py-10 text-center">
@@ -45,16 +44,6 @@ export function BookingSuccess({
       <p className="max-w-md text-sm/6 text-foreground-muted">
         Potwierdzenie rezerwacji wysłaliśmy na Twój e-mail.
       </p>
-      {isLink && (
-        <a
-          href={booking.location!}
-          target="_blank"
-          rel="noreferrer"
-          className="text-sm font-medium text-foreground underline decoration-accent underline-offset-4 hover:text-accent"
-        >
-          Link do spotkania
-        </a>
-      )}
       {signedIn && (
         <Link
           href="/panel"
