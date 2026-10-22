@@ -5,6 +5,7 @@ professionals. Migrated from the Webflow site angleo.pl (same content and URLs) 
 redesigned; built with Next.js, Tailwind CSS 4, TypeScript and MDX blog posts.
 
 - **Production:** {url} · **Preview:** {url} · **Figma:** — · **CMS:** —
+- **Test branch:** `test-env` — for trying out deploys before they reach `main`
 
 ## Requirements
 
