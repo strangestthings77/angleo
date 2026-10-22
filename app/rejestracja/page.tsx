@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { AuthShell } from '@/components/auth/AuthShell';
 import { SignUpForm } from '@/components/auth/SignUpForm';
+import { StudentAreaComingSoon } from '@/components/auth/StudentAreaComingSoon';
 import { MainLayout } from '@/layouts/MainLayout';
 import { buildMetadata } from '@/lib/metadata';
+import { STUDENT_AREA_ENABLED } from '@/lib/student-area';
 
 export const metadata = buildMetadata({
   title: 'Załóż konto – strefa ucznia | Angleo',
@@ -12,6 +14,14 @@ export const metadata = buildMetadata({
 });
 
 export default function SignUpPage() {
+  if (!STUDENT_AREA_ENABLED) {
+    return (
+      <MainLayout>
+        <StudentAreaComingSoon />
+      </MainLayout>
+    );
+  }
+
   return (
     <MainLayout>
       <AuthShell
