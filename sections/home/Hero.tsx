@@ -5,12 +5,11 @@ import { Heading } from '@/components/text/Heading';
 import { Text } from '@/components/text/Text';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
-import { GraduationCapIcon } from '@/components/ui/Icon';
 import { site } from '@/content/site';
 import { getLessonInfo } from '@/lib/cal';
 
 export async function Hero() {
-  const { hero, portrait, booking, credentials } = site;
+  const { hero, portrait, booking } = site;
   const lesson = await getLessonInfo();
 
   const facts = [
@@ -75,27 +74,20 @@ export async function Hero() {
             <figure
               key={phrase.en}
               aria-hidden
-              className={`absolute flex max-w-56 animate-pop flex-col gap-1 rounded-2xl bg-surface px-4 py-3 shadow-card ${i === 0 ? 'rise-step-8' : 'rise-step-10'} ${
+              className={`absolute flex max-w-56 animate-pop flex-col gap-1 rounded-2xl bg-surface px-4 py-3 shadow-card ${
+                i === 0 ? 'rise-step-8' : i === 1 ? 'rise-step-10' : 'rise-step-6'
+              } ${
                 i === 0
                   ? '-top-8 -left-1 rounded-bl-md sm:top-10 sm:-left-12'
-                  : 'top-1/2 -right-3 hidden rounded-br-md sm:-right-10 sm:flex'
+                  : i === 1
+                    ? 'top-1/2 -right-3 rounded-br-md sm:-right-10'
+                    : '-bottom-8 -left-1 rounded-tl-md sm:-left-12'
               }`}
             >
               <span className="font-serif text-lg/6 text-foreground italic">{phrase.en}</span>
               <span className="text-xs text-foreground-muted">{phrase.pl}</span>
             </figure>
           ))}
-          <div className="absolute right-4 -bottom-6 left-4 flex animate-pop items-center gap-4 rounded-2xl bg-surface px-5 py-4 shadow-card rise-step-6 sm:right-auto sm:-left-8">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-muted text-accent">
-              <GraduationCapIcon size={20} />
-            </span>
-            <div>
-              <p className="text-sm font-medium text-foreground">{credentials[0].title}</p>
-              <p className="text-xs text-foreground-muted">
-                {credentials[1].title} · {hero.badge.detail}
-              </p>
-            </div>
-          </div>
         </div>
       </Container>
     </section>

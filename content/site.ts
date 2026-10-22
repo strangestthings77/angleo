@@ -31,11 +31,11 @@ export const site = {
     /** `*word*` renders as the italic brass accent. */
     heading: 'Angielski w pracy i biznesie — *z łatwością.*',
     lead: 'Pomagam profesjonalistom mówić i pisać po angielsku z pewnością siebie: od e-maili i prezentacji, przez spotkania, po negocjacje. Konkretnie, praktycznie i bez korpo-spiny.',
-    badge: { title: 'Filologia Angielska', detail: 'Uniwersytet Śląski' },
     /** Speech bubbles around the portrait — phrases from the blog posts. */
     phrases: [
       { en: 'Let’s break this down.', pl: 'Bo w całości wygląda groźnie.' },
-      { en: 'Let’s take this offline.', pl: 'Omówmy to osobno.' },
+      { en: 'Let’s cut to the chase.', pl: 'Przejdźmy do rzeczy.' },
+      { en: 'Let’s get the ball rolling.', pl: 'No to zaczynamy!' },
     ],
   },
 

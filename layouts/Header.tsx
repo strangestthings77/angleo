@@ -4,10 +4,10 @@ import { Container } from '@/components/ui/Container';
 import { UserIcon } from '@/components/ui/Icon';
 import { site } from '@/content/site';
 import { MobileMenu } from '@/layouts/MobileMenu';
-import { STUDENT_AREA_ENABLED } from '@/lib/student-area';
 
 export function Header() {
-  const menuItems = STUDENT_AREA_ENABLED ? [...site.nav, site.account] : site.nav;
+  const studentNavItem = { ...site.account, href: '/logowanie' };
+  const menuItems = [...site.nav, studentNavItem];
 
   return (
     <header className="sticky top-0 z-20 header-scrolled border-b border-border/70 bg-background/85 backdrop-blur-md vt-header">
@@ -31,15 +31,13 @@ export function Header() {
               </li>
             ))}
           </ul>
-          {STUDENT_AREA_ENABLED && (
-            <Link
-              href={site.account.href}
-              className="inline-flex items-center gap-2 text-sm text-foreground-muted transition-colors duration-200 hover:text-foreground"
-            >
-              <UserIcon />
-              <span className="sr-only lg:not-sr-only">{site.account.label}</span>
-            </Link>
-          )}
+          <Link
+            href={studentNavItem.href}
+            className="inline-flex items-center gap-2 text-sm text-foreground-muted transition-colors duration-200 hover:text-foreground"
+          >
+            <UserIcon />
+            <span className="sr-only lg:not-sr-only">{studentNavItem.label}</span>
+          </Link>
           <Button href={site.cta.href} className="h-10 px-5">
             {site.cta.label}
           </Button>
