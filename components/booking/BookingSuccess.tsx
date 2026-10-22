@@ -43,8 +43,7 @@ export function BookingSuccess({
         </p>
       </div>
       <p className="max-w-md text-sm/6 text-foreground-muted">
-        Potwierdzenie rezerwacji wysłaliśmy na Twój e-mail. Znajdziesz w nim też opcję zmiany
-        terminu lub odwołania lekcji.
+        Potwierdzenie rezerwacji wysłaliśmy na Twój e-mail.
       </p>
       {isLink && (
         <a
