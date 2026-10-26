@@ -13,6 +13,7 @@ export const site = {
   nav: [
     { label: 'Jak to działa', href: '/#jak-to-dziala' },
     { label: 'Blog', href: '/blog' },
+    { label: 'Ćwiczenia', href: '/cwiczenia' },
     { label: 'O mnie', href: '/o-mnie' },
     { label: 'FAQ', href: '/#faq' },
   ],

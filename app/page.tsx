@@ -5,6 +5,7 @@ import { buildMetadata } from '@/lib/metadata';
 import { AboutTeaser } from '@/sections/home/AboutTeaser';
 import { Audiences } from '@/sections/home/Audiences';
 import { Faq } from '@/sections/home/Faq';
+import { ExercisesPreview } from '@/sections/home/ExercisesPreview';
 import { Hero } from '@/sections/home/Hero';
 import { LatestPosts } from '@/sections/home/LatestPosts';
 import { Offer } from '@/sections/home/Offer';
@@ -27,6 +28,7 @@ export default function HomePage() {
       <Process />
       <AboutTeaser />
       <LatestPosts />
+      <ExercisesPreview />
       <Faq />
       <BookingCta />
     </MainLayout>
