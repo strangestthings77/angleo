@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { SectionHeader } from '@/components/marketing/SectionHeader';
 import { Container } from '@/components/ui/Container';
-import { publicExercises } from '@/lib/public-exercises';
+import { PUBLIC_EXERCISES_ENABLED, publicExercises } from '@/lib/public-exercises';
 import { MainLayout } from '@/layouts/MainLayout';
 import { buildMetadata } from '@/lib/metadata';
 
@@ -13,6 +13,8 @@ export const metadata = buildMetadata({
 });
 
 export default function ExercisesPage() {
+  if (!PUBLIC_EXERCISES_ENABLED) return null;
+
   return (
     <MainLayout>
       <section className="pt-14 pb-section md:pt-20">

@@ -4,10 +4,14 @@ import { Container } from '@/components/ui/Container';
 import { UserIcon } from '@/components/ui/Icon';
 import { site } from '@/content/site';
 import { MobileMenu } from '@/layouts/MobileMenu';
+import { PUBLIC_EXERCISES_ENABLED } from '@/lib/public-exercises';
 
 export function Header() {
   const studentNavItem = { ...site.account, href: '/logowanie' };
-  const menuItems = [...site.nav, studentNavItem];
+  const visibleNavItems = site.nav.filter(
+    (item) => PUBLIC_EXERCISES_ENABLED || item.href !== '/cwiczenia',
+  );
+  const menuItems = [...visibleNavItems, studentNavItem];
 
   return (
     <header className="sticky top-0 z-20 header-scrolled border-b border-border/70 bg-background/85 backdrop-blur-md vt-header">
@@ -20,7 +24,7 @@ export function Header() {
         </Link>
         <nav aria-label="Główna nawigacja" className="hidden items-center gap-6 md:flex lg:gap-8">
           <ul className="flex items-center gap-6 text-sm lg:gap-8">
-            {site.nav.map((item) => (
+            {visibleNavItems.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}

@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { SectionHeader } from '@/components/marketing/SectionHeader';
 import { Container } from '@/components/ui/Container';
-import { publicExercises } from '@/lib/public-exercises';
+import { PUBLIC_EXERCISES_ENABLED, publicExercises } from '@/lib/public-exercises';
 
 export function ExercisesPreview() {
+  if (!PUBLIC_EXERCISES_ENABLED) return null;
+
   return (
     <section className="py-section">
       <Container className="flex flex-col gap-10">

@@ -13,6 +13,9 @@ export type PublicExercise = {
   questions: PublicQuestion[];
 };
 
+/** Keep the public exercises in the local development environment until launch. */
+export const PUBLIC_EXERCISES_ENABLED = process.env.NODE_ENV !== 'production';
+
 const q = (
   prompt: string,
   options: string[],

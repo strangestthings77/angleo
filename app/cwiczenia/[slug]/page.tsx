@@ -2,7 +2,11 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PublicExercisePlayer } from '@/components/exercises/PublicExercisePlayer';
 import { Container } from '@/components/ui/Container';
-import { getPublicExercise, publicExercises } from '@/lib/public-exercises';
+import {
+  getPublicExercise,
+  PUBLIC_EXERCISES_ENABLED,
+  publicExercises,
+} from '@/lib/public-exercises';
 import { MainLayout } from '@/layouts/MainLayout';
 import { buildMetadata } from '@/lib/metadata';
 
@@ -19,6 +23,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function ExercisePage({ params }: { params: Promise<{ slug: string }> }) {
+  if (!PUBLIC_EXERCISES_ENABLED) notFound();
+
   const exercise = getPublicExercise((await params).slug);
   if (!exercise) notFound();
   return (
