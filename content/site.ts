@@ -27,6 +27,14 @@ export const site = {
     height: 1402,
   },
 
+  /** Home hero only — landscape photo, cropped to the 4:5 arch around the face. */
+  heroPortrait: {
+    src: '/images/nicole-kurek-microphone.webp',
+    alt: 'Nicole Kurek przy mikrofonie, trenerka języka angielskiego',
+    width: 1448,
+    height: 1086,
+  },
+
   hero: {
     eyebrow: 'Business English · Nicole Kurek',
     /** `*word*` renders as the italic brass accent. */

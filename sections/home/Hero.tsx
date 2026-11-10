@@ -9,7 +9,7 @@ import { site } from '@/content/site';
 import { getLessonInfo } from '@/lib/cal';
 
 export async function Hero() {
-  const { hero, portrait, booking } = site;
+  const { hero, heroPortrait: portrait, booking } = site;
   const lesson = await getLessonInfo();
 
   const facts = [
@@ -20,7 +20,7 @@ export async function Hero() {
 
   return (
     <section className="overflow-hidden border-b border-border">
-      <Container className="grid items-center gap-16 pt-14 pb-20 md:pt-20 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-20 lg:pb-28">
+      <Container className="grid items-center gap-16 pt-14 pb-20 md:pt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16 lg:pb-28">
         <div className="flex flex-col gap-8">
           <Eyebrow className="animate-rise">{hero.eyebrow}</Eyebrow>
           <Heading as="h1" size="xl" className="animate-rise rise-step-1">
@@ -49,15 +49,15 @@ export async function Hero() {
           </dl>
         </div>
 
-        <div className="relative isolate mx-auto w-full max-w-md animate-portrait rise-step-2 lg:mx-0 lg:max-w-none">
-          {/* Soft arch block + brass outline behind the portrait. */}
+        <div className="relative isolate mx-auto w-full max-w-xl animate-portrait rise-step-2 lg:mx-0 lg:max-w-none">
+          {/* The photo is landscape and shown uncropped; the arch lives in the block behind it. */}
           <div
             aria-hidden
-            className="absolute -inset-x-6 -top-6 bottom-12 -z-10 rounded-t-arch rounded-b-3xl bg-surface-muted sm:-inset-x-10"
+            className="absolute -inset-x-4 -top-12 bottom-10 -z-10 rounded-t-arch rounded-b-3xl bg-surface-muted sm:-inset-x-8 sm:-top-20"
           />
           <div
             aria-hidden
-            className="absolute inset-0 translate-x-3 -translate-y-3 rounded-t-arch rounded-b-3xl border border-accent/40"
+            className="absolute inset-0 translate-x-3 -translate-y-3 rounded-3xl border border-accent/40"
           />
           <Image
             src={portrait.src}
@@ -67,8 +67,8 @@ export async function Hero() {
             priority
             quality={100}
             draggable={false}
-            sizes="(min-width: 1024px) 460px, 90vw"
-            className="relative aspect-4/5 w-full rounded-t-arch rounded-b-3xl object-cover object-center shadow-card"
+            sizes="(min-width: 1024px) 600px, 90vw"
+            className="relative h-auto w-full rounded-3xl shadow-card"
           />
           {hero.phrases.map((phrase, i) => (
             <figure
@@ -77,11 +77,12 @@ export async function Hero() {
               className={`absolute flex max-w-56 animate-pop flex-col gap-1 rounded-2xl bg-surface px-4 py-3 shadow-card ${
                 i === 0 ? 'rise-step-8' : i === 1 ? 'rise-step-10' : 'rise-step-6'
               } ${
+                // Kept to the photo's edges and corners, clear of the face.
                 i === 0
-                  ? '-top-8 -left-1 rounded-bl-md sm:top-10 sm:-left-12'
+                  ? '-top-10 -left-2 rounded-bl-md sm:-left-10'
                   : i === 1
-                    ? 'top-1/2 -right-3 rounded-br-md sm:-right-10'
-                    : '-bottom-8 -left-1 rounded-tl-md sm:-left-12'
+                    ? 'top-2/3 -right-3 rounded-br-md max-sm:hidden sm:-right-8'
+                    : '-right-2 -bottom-10 rounded-tr-md sm:right-auto sm:-left-10'
               }`}
             >
               <span className="font-serif text-lg/6 text-foreground italic">{phrase.en}</span>
