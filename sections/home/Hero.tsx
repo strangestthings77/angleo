@@ -21,8 +21,8 @@ export async function Hero() {
 
   return (
     <section className="overflow-hidden border-b border-border">
-      <Container className="grid items-center gap-24 pt-12 pb-24 sm:gap-16 sm:pb-20 md:pt-16 lg:grid-cols-[minmax(0,13fr)_minmax(0,11fr)] lg:gap-14 lg:pb-24">
-        <div className="flex flex-col gap-7">
+      <Container className="grid items-center gap-24 pt-12 pb-24 sm:pb-20 md:pt-16 lg:grid-cols-[minmax(0,13fr)_minmax(0,11fr)] lg:gap-14 lg:pb-24">
+        <div className="relative z-10 flex flex-col gap-7">
           <Eyebrow className="animate-rise">{hero.eyebrow}</Eyebrow>
           <Heading as="h1" size="xl" className="animate-rise text-balance rise-step-1">
             <Accent text={hero.heading} />
@@ -54,7 +54,7 @@ export async function Hero() {
           {/* The photo is landscape and shown uncropped; the arch lives in the block behind it. */}
           <div
             aria-hidden
-            className="absolute -inset-x-4 -top-12 bottom-10 -z-10 rounded-t-arch rounded-b-3xl bg-surface-muted sm:-inset-x-8 sm:-top-20"
+            className="absolute -inset-x-4 -top-12 bottom-10 -z-10 rounded-t-arch rounded-b-3xl bg-surface-muted sm:-inset-x-8 sm:-top-16"
           />
           <div
             aria-hidden
