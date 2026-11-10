@@ -27,7 +27,7 @@ export const site = {
     height: 1402,
   },
 
-  /** Home hero only — landscape photo, cropped to the 4:5 arch around the face. */
+  /** Home hero only — landscape photo, shown uncropped. */
   heroPortrait: {
     src: '/images/nicole-kurek-microphone.webp',
     alt: 'Nicole Kurek przy mikrofonie, trenerka języka angielskiego',

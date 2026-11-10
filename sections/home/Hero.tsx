@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { site } from '@/content/site';
 import { getLessonInfo } from '@/lib/cal';
+import { bindShortWords } from '@/lib/typography';
 
 export async function Hero() {
   const { hero, heroPortrait: portrait, booking } = site;
@@ -20,14 +21,14 @@ export async function Hero() {
 
   return (
     <section className="overflow-hidden border-b border-border">
-      <Container className="grid items-center gap-16 pt-14 pb-20 md:pt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16 lg:pb-28">
-        <div className="flex flex-col gap-8">
+      <Container className="grid items-center gap-16 pt-12 pb-20 md:pt-16 lg:grid-cols-[minmax(0,13fr)_minmax(0,11fr)] lg:gap-14 lg:pb-24">
+        <div className="flex flex-col gap-7">
           <Eyebrow className="animate-rise">{hero.eyebrow}</Eyebrow>
-          <Heading as="h1" size="xl" className="animate-rise rise-step-1">
+          <Heading as="h1" size="xl" className="animate-rise text-balance rise-step-1">
             <Accent text={hero.heading} />
           </Heading>
           <Text variant="lead" className="max-w-xl animate-rise rise-step-2">
-            {hero.lead}
+            {bindShortWords(hero.lead)}
           </Text>
           <div className="flex animate-rise flex-wrap gap-3 rise-step-3">
             <Button href={booking.href} arrow>
@@ -37,7 +38,7 @@ export async function Hero() {
               Jak to działa
             </Button>
           </div>
-          <dl className="mt-4 flex animate-rise flex-wrap gap-x-10 gap-y-6 border-t border-border pt-8 rise-step-4">
+          <dl className="mt-1 flex animate-rise flex-wrap gap-x-10 gap-y-6 border-t border-border pt-7 rise-step-4">
             {facts.map((fact) => (
               <div key={fact.value} className="flex flex-col gap-1">
                 <dt className="font-serif text-title tracking-display text-foreground">
