@@ -40,7 +40,7 @@ export const site = {
     eyebrow: 'Angielski biznesowy online · Nicole Kurek',
     /** `*word*` renders as the italic brass accent. */
     heading: 'Angielski w pracy i biznesie — *z łatwością.*',
-    lead: 'Prowadzę lekcje angielskiego biznesowego online 1:1. Pomagam profesjonalistom mówić i pisać po angielsku z pewnością siebie: od e-maili i prezentacji, przez spotkania, po negocjacje. Konkretnie i bez korpo-spiny.',
+    lead: 'Pomagam profesjonalistom mówić i pisać po angielsku z pewnością siebie: od e-maili i prezentacji, przez spotkania, po negocjacje. Konkretnie, praktycznie i bez korpo-spiny.',
     /** Speech bubbles around the portrait — phrases from the blog posts. */
     phrases: [
       { en: 'Let’s break this down.', pl: 'Bo w całości wygląda groźnie.' },

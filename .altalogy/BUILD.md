@@ -61,7 +61,7 @@ licenses, search).
   score can't be faked. Strict spelling (only case/spaces/punctuation forgiven), unlike the
   word test. First exercise: "Zadanie 3 — mail o szkoleniu" for Kuba.
 - **SEO pass (2026-11-10):** canonicals, sitemap and robots pointed at angleo.vercel.app (env
-  vars) — now hard-wired to www.angleo.pl. Home title/description and hero copy lead with
+  vars) — now hard-wired to www.angleo.pl. Home title/description and the hero eyebrow lead with
   "lekcje angielskiego biznesowego online" / "angielski biznesowy"; new FAQ "Dla kogo są lekcje
   angielskiego biznesowego?" (from the audiences section). Copy changes for Nicole to review.
   Added schema.org data (organisation, person, FAQ, articles), a real OG image, a 404 for the
