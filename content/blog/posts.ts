@@ -2,7 +2,8 @@ import type { Post } from '@/lib/blog';
 
 /**
  * Blog post metadata, newest first. Each post's body lives in `content/blog/<slug>.mdx`.
- * Slugs match the old Webflow URLs (some are template leftovers) so existing links keep working.
+ * Slugs match the old Webflow URLs, except the English template leftovers that were renamed —
+ * those old URLs 308 to the new ones (`renamedPosts` in `next.config.ts`).
  */
 export const posts: Post[] = [
   {
@@ -66,7 +67,7 @@ export const posts: Post[] = [
     },
   },
   {
-    slug: '10-productivity-tools-that-are-worth-checking-out',
+    slug: 'small-talk-po-angielsku',
     title: 'Small Talk w biznesie – jak przetrwać i nie umrzeć z niezręczności',
     category: 'spotkanie-biznesowe',
     date: '2025-07-27',
@@ -75,7 +76,7 @@ export const posts: Post[] = [
     description:
       'Po jakie słowa i frazy sięgnąć by nawiązać luźną rozmowę? W tym poście znajdziesz tego czego ci brakuje!',
     cover: {
-      src: '/images/blog/10-productivity-tools-that-are-worth-checking-out.jpg',
+      src: '/images/blog/small-talk-po-angielsku.jpg',
       width: 1600,
       height: 1067,
     },
@@ -107,7 +108,7 @@ export const posts: Post[] = [
     cover: { src: '/images/blog/negocjacje-po-angielsku.jpg', width: 1600, height: 2400 },
   },
   {
-    slug: '3-tips-to-avoid-internet-distractions-at-work',
+    slug: 'marketing-po-angielsku',
     title:
       'Marketing po angielsku – czyli jak brzmieć profesjonalnie, nie będąc buzzwordowym zombie',
     category: 'marketing',
@@ -117,7 +118,7 @@ export const posts: Post[] = [
     description:
       'Znajdziesz tu listę najważniejszych angielskich słów i wyrażeń, które musisz znać, aby skutecznie komunikować się w świecie marketingu.',
     cover: {
-      src: '/images/blog/3-tips-to-avoid-internet-distractions-at-work.jpg',
+      src: '/images/blog/marketing-po-angielsku.jpg',
       width: 1600,
       height: 1067,
     },
@@ -138,7 +139,7 @@ export const posts: Post[] = [
     },
   },
   {
-    slug: 'how-to-choose-the-best-management-software',
+    slug: 'przeprosiny-za-opoznienie-w-logistyce',
     title: 'Jak przeprosić za opóźnienie w logistyce (i nie stracić klienta ani głowy)?',
     category: 'logistyka-2',
     date: '2025-07-27',
@@ -147,13 +148,13 @@ export const posts: Post[] = [
     description:
       'Jak przeprosić za opóźnienie w logistyce (i nie stracić klienta ani głowy)? Opóźnienia w logistyce są jak zimna kawa – nikt ich nie lubi, ale prędzej czy…',
     cover: {
-      src: '/images/blog/how-to-choose-the-best-management-software.jpg',
+      src: '/images/blog/przeprosiny-za-opoznienie-w-logistyce.jpg',
       width: 1600,
       height: 1067,
     },
   },
   {
-    slug: 'how-time-tracking-can-improve-team-management',
+    slug: 'delegacja-po-angielsku',
     title: 'Delegacja bez stresu (i bez słownika): angielski, który działa',
     category: 'podroz-sluzbowa',
     date: '2025-07-27',
@@ -162,13 +163,13 @@ export const posts: Post[] = [
     description:
       'Masz przed sobą podróż służbową, a Twój angielski... no cóż, mógłby być bardziej „Netflixowy”, a mniej „test z matury”? Spokojnie! Przygotowałem ekspresowy…',
     cover: {
-      src: '/images/blog/how-time-tracking-can-improve-team-management.jpg',
+      src: '/images/blog/delegacja-po-angielsku.jpg',
       width: 1600,
       height: 1066,
     },
   },
   {
-    slug: 'a-complete-guide-to-learn-project-management',
+    slug: 'angielski-dla-bankowcow-prezentacje',
     title: 'Angielski dla bankowców: Sekrety skutecznych prezentacji.',
     category: 'finanse',
     date: '2025-07-27',
@@ -177,13 +178,13 @@ export const posts: Post[] = [
     description:
       'Angielski dla Bankowców: Sekrety Skutecznych Prezentacji W dynamicznym świecie bankowości, gdzie każda prezentacja może mieć kluczowe znaczenie dla sukcesu…',
     cover: {
-      src: '/images/blog/a-complete-guide-to-learn-project-management.jpg',
+      src: '/images/blog/angielski-dla-bankowcow-prezentacje.jpg',
       width: 1600,
       height: 1067,
     },
   },
   {
-    slug: '7-great-productivity-apps-for-your-new-ipad',
+    slug: 'angielski-dla-project-managera',
     title: 'Angielski dla Project Managera, który ogarnia (albo przynajmniej dobrze udaje)',
     category: 'project-management',
     date: '2025-07-27',
@@ -192,13 +193,13 @@ export const posts: Post[] = [
     description:
       'Zarządzanie projektami po angielsku? Brzmi groźnie, ale spokojnie – przygotowałam zestaw najważniejszych fraz, które pozwolą Ci mówić jak profesjonalista…',
     cover: {
-      src: '/images/blog/7-great-productivity-apps-for-your-new-ipad.jpg',
+      src: '/images/blog/angielski-dla-project-managera.jpg',
       width: 1600,
       height: 2400,
     },
   },
   {
-    slug: 'how-to-create-an-organized-productivity-plan-for-the-year',
+    slug: 'slownictwo-korporacyjne-po-angielsku',
     title: 'Od Briefu do Brainstormu, czyli o słowach przydatnych w korporacji.',
     category: 'spotkanie-biznesowe',
     date: '2025-07-14',
@@ -207,7 +208,7 @@ export const posts: Post[] = [
     description:
       'Te specyficzne wyrażenia to trochę jak tajny kod – jak go znasz, to jesteś jednym z nas.',
     cover: {
-      src: '/images/blog/how-to-create-an-organized-productivity-plan-for-the-year.jpg',
+      src: '/images/blog/slownictwo-korporacyjne-po-angielsku.jpg',
       width: 1600,
       height: 1067,
     },

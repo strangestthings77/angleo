@@ -147,6 +147,9 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
   breadcrumbs on posts. Facts only — no prices, ratings or reviews.
 - **Share image:** `public/og.jpg` 1200×630 (re-render from a temporary page with headless Chrome
   if the hero changes). SVG previews don't work on Facebook / LinkedIn.
+- **Renamed slugs:** posts with English Webflow-template slugs were given Polish ones (2026-11);
+  `renamedPosts` in `next.config.ts` 308s the old post URLs and cover paths. Renaming a post
+  again → add the old slug there, never just drop it.
 - **Polish line breaks:** `bindShortWords()` keeps one-letter words off line ends (`Accent`).
 - **Unlaunched pages** must 404 (not render empty) and stay out of the sitemap — see `/cwiczenia`.
 
