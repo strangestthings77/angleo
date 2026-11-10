@@ -1,10 +1,12 @@
 import { ContactList } from '@/components/marketing/ContactList';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { SectionHeader } from '@/components/marketing/SectionHeader';
 import { Container } from '@/components/ui/Container';
 import { PlusIcon } from '@/components/ui/Icon';
 import { Section } from '@/components/ui/Section';
 import { site } from '@/content/site';
 import { getLessonInfo } from '@/lib/cal';
+import { faqGraph } from '@/lib/structured-data';
 
 /** Native <details> accordion — works without JS. */
 export async function Faq() {
@@ -22,6 +24,7 @@ export async function Faq() {
 
   return (
     <Section id="faq">
+      <JsonLd data={faqGraph(items)} />
       <Container className="grid gap-14 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-20">
         <div className="flex flex-col gap-8">
           <SectionHeader eyebrow={faq.eyebrow} heading={faq.heading} lead={faq.lead} />

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { site } from '@/content/site';
 import { getCategories } from '@/lib/blog';
+import { isNavItemVisible } from '@/lib/public-exercises';
 
 // Cached so the year is fixed at build time — `cacheComponents` rejects a bare `new Date()`.
 async function currentYear() {
@@ -31,7 +32,7 @@ export async function Footer() {
         <div>
           <p className={heading}>Strona</p>
           <ul className="flex flex-col gap-3 text-sm">
-            {[...site.nav, site.cta].map((item) => (
+            {[...site.nav.filter(isNavItemVisible), site.cta].map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className={link}>
                   {item.label}

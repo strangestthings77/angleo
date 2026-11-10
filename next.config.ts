@@ -8,6 +8,17 @@ const nextConfig: NextConfig = {
     qualities: [75, 90, 100],
   },
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  // The Vercel alias serves the same site; send it (and its ranking signals) to the real domain.
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'angleo.vercel.app' }],
+        destination: 'https://www.angleo.pl/:path*',
+        permanent: true,
+      },
+    ];
+  },
   turbopack: {
     rules: {
       '*.css': {

@@ -9,9 +9,9 @@ import { buildMetadata } from '@/lib/metadata';
 import { LessonDetails } from '@/sections/contact/LessonDetails';
 
 export const metadata = buildMetadata({
-  title: 'Umów lekcję – rezerwacja online | Angleo',
+  title: 'Umów lekcję angielskiego online – rezerwacja | Angleo',
   description:
-    'Zarezerwuj lekcję angielskiego biznesowego z Nicole Kurek. Wybierz dzień i godzinę w kalendarzu – potwierdzenie i link do spotkania dostaniesz e-mailem.',
+    'Zarezerwuj lekcję angielskiego biznesowego online z Nicole Kurek. Wybierz dzień i godzinę – potwierdzenie i link do spotkania dostaniesz e-mailem.',
   path: '/umow-lekcje',
 });
 

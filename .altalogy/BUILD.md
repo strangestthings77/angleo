@@ -60,3 +60,10 @@ licenses, search).
   submitting (column privileges + security-definer RPCs); grading happens in the database so a
   score can't be faked. Strict spelling (only case/spaces/punctuation forgiven), unlike the
   word test. First exercise: "Zadanie 3 — mail o szkoleniu" for Kuba.
+- **SEO pass (2026-11-10):** canonicals, sitemap and robots pointed at angleo.vercel.app (env
+  vars) — now hard-wired to www.angleo.pl. Home title/description and hero copy lead with
+  "lekcje angielskiego biznesowego online" / "angielski biznesowy"; new FAQ "Dla kogo są lekcje
+  angielskiego biznesowego?" (from the audiences section). Copy changes for Nicole to review.
+  Added schema.org data (organisation, person, FAQ, articles), a real OG image, a 404 for the
+  unlaunched /cwiczenia. Old English blog slugs kept (existing links); renaming them to Polish
+  with redirects is a possible next step.

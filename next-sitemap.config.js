@@ -1,10 +1,31 @@
+// Keep in sync with lib/site-url.ts — production is always the real (www) domain.
+const siteUrl =
+  process.env.VERCEL_ENV === 'preview' && process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : 'https://www.angleo.pl';
+const isPreview = process.env.VERCEL_ENV === 'preview';
+
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: process.env.SITE_URL || 'https://angleo.pl',
+  siteUrl,
   generateRobotsTxt: true,
-  // Student area + auth: private, noindex.
-  exclude: ['/panel', '/panel/*', '/admin', '/admin/*', '/logowanie', '/rejestracja', '/auth/*'],
+  exclude: [
+    // Student area + auth: private, noindex.
+    '/panel',
+    '/panel/*',
+    '/admin',
+    '/admin/*',
+    '/logowanie',
+    '/rejestracja',
+    '/auth/*',
+    // Public exercises are local-only until launch (lib/public-exercises.ts) — 404 in production.
+    '/cwiczenia',
+    '/cwiczenia/*',
+  ],
   robotsTxtOptions: {
-    policies: [{ userAgent: '*', allow: '/', disallow: ['/panel', '/admin', '/auth'] }],
+    // Previews must never be indexed; production hides only the private areas.
+    policies: isPreview
+      ? [{ userAgent: '*', disallow: '/' }]
+      : [{ userAgent: '*', allow: '/', disallow: ['/panel', '/admin', '/auth'] }],
   },
 };

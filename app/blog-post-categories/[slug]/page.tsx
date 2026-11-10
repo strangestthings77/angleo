@@ -15,9 +15,11 @@ export async function generateMetadata({ params }: PageProps<'/blog-post-categor
   const { slug } = await params;
   const category = getCategory(slug);
   if (!category) return {};
+  const full = `${category.label} po angielsku – angielski biznesowy`;
+  // Long labels drop the tail rather than get cut off with "…".
   return buildMetadata({
-    title: seoTitle(`${category.label} – angielski w pracy`),
-    description: `Artykuły z kategorii ${category.label}: praktyczne frazy i wskazówki, jak używać angielskiego w pracy i biznesie.`,
+    title: seoTitle(full.length <= 51 ? full : `${category.label} po angielsku`),
+    description: `${category.label} po angielsku: praktyczne frazy, słownictwo i wskazówki z angielskiego biznesowego. Artykuły Nicole Kurek z kategorii ${category.label}.`,
     path: `/blog-post-categories/${category.slug}`,
   });
 }

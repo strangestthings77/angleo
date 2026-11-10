@@ -17,6 +17,10 @@ export type PublicExercise = {
 export const PUBLIC_EXERCISES_ENABLED =
   process.env.NODE_ENV === 'development' && process.env.VERCEL_ENV !== 'production';
 
+/** Hide the exercises link until launch, so no page links to an empty one. */
+export const isNavItemVisible = (item: { href: string }) =>
+  PUBLIC_EXERCISES_ENABLED || item.href !== '/cwiczenia';
+
 const q = (
   prompt: string,
   options: string[],

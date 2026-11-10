@@ -4,13 +4,11 @@ import { Container } from '@/components/ui/Container';
 import { UserIcon } from '@/components/ui/Icon';
 import { site } from '@/content/site';
 import { MobileMenu } from '@/layouts/MobileMenu';
-import { PUBLIC_EXERCISES_ENABLED } from '@/lib/public-exercises';
+import { isNavItemVisible } from '@/lib/public-exercises';
 
 export function Header() {
   const studentNavItem = { ...site.account, href: '/logowanie' };
-  const visibleNavItems = site.nav.filter(
-    (item) => PUBLIC_EXERCISES_ENABLED || item.href !== '/cwiczenia',
-  );
+  const visibleNavItems = site.nav.filter(isNavItemVisible);
   const menuItems = [...visibleNavItems, studentNavItem];
 
   return (

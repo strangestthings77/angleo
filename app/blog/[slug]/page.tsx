@@ -7,6 +7,8 @@ import { buildMetadata } from '@/lib/metadata';
 import { ArticleHeader } from '@/sections/blog/ArticleHeader';
 import { AuthorBox } from '@/sections/blog/AuthorBox';
 import { RelatedPosts } from '@/sections/blog/RelatedPosts';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { postGraph } from '@/lib/structured-data';
 
 export function generateStaticParams() {
   return getPosts().map((post) => ({ slug: post.slug }));
@@ -32,6 +34,7 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
 
   return (
     <MainLayout>
+      <JsonLd data={postGraph(post)} />
       <article>
         <ArticleHeader post={post} />
         <Container className="py-section">

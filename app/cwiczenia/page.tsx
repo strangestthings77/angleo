@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { SectionHeader } from '@/components/marketing/SectionHeader';
 import { Container } from '@/components/ui/Container';
 import { PUBLIC_EXERCISES_ENABLED, publicExercises } from '@/lib/public-exercises';
@@ -13,7 +14,8 @@ export const metadata = buildMetadata({
 });
 
 export default function ExercisesPage() {
-  if (!PUBLIC_EXERCISES_ENABLED) return null;
+  // A real 404 until launch — an empty 200 page is a "soft 404" to Google.
+  if (!PUBLIC_EXERCISES_ENABLED) notFound();
 
   return (
     <MainLayout>

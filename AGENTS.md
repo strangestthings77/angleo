@@ -132,6 +132,24 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
   by local date in that zone. Date math in `components/booking/dates.ts` is UTC-only.
 - `getLessonInfo()` (duration, online) is `'use cache'` with `cacheLife('hours')`.
 
+## SEO
+
+- **Domain:** `https://www.angleo.pl` (apex redirects to www). `lib/site-url.ts` hard-wires it for
+  production — never trust `NEXT_PUBLIC_SITE_URL` / `SITE_URL` (they once pointed at
+  angleo.vercel.app, so canonicals and the sitemap sent Google there). `next-sitemap.config.js`
+  mirrors it; `angleo.vercel.app` 308-redirects to www (`next.config.ts`).
+- **Target phrases:** "lekcje angielskiego (biznesowego) online", "angielski biznesowy". Home
+  `<title>`/description live in `site.title` / `site.description`; titles ≤ 60, descriptions
+  50–160 chars (`pnpm check:meta` against a running build).
+- **Structured data** (`lib/structured-data.ts`, rendered by `components/seo/JsonLd.tsx`):
+  organisation + Nicole + website on every page (root layout), `FAQPage` built from the FAQ
+  exactly as rendered (`sections/home/Faq.tsx`), `ProfilePage` on `/o-mnie`, `BlogPosting` +
+  breadcrumbs on posts. Facts only — no prices, ratings or reviews.
+- **Share image:** `public/og.jpg` 1200×630 (re-render from a temporary page with headless Chrome
+  if the hero changes). SVG previews don't work on Facebook / LinkedIn.
+- **Polish line breaks:** `bindShortWords()` keeps one-letter words off line ends (`Accent`).
+- **Unlaunched pages** must 404 (not render empty) and stay out of the sitemap — see `/cwiczenia`.
+
 ## Auth & student area (Supabase)
 
 ```text

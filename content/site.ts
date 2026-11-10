@@ -6,9 +6,10 @@ export const site = {
   name: 'Angleo',
   owner: 'Nicole Kurek',
   role: 'Trener języka angielskiego',
-  title: 'Angleo – Nicole Kurek, Twój trener angielskiego',
+  /** Home <title> and description — lead with what people type into Google. */
+  title: 'Lekcje angielskiego biznesowego online 1:1 | Angleo',
   description:
-    'Angielski w pracy i biznesie z Nicole Kurek. Lekcje, praktyczne frazy i wskazówki: e-maile, prezentacje, spotkania i negocjacje po angielsku.',
+    'Angielski biznesowy online z Nicole Kurek: lekcje angielskiego 1:1 przez Google Meet – e-maile, prezentacje, spotkania, negocjacje i rozmowy o pracę.',
 
   nav: [
     { label: 'Jak to działa', href: '/#jak-to-dziala' },
@@ -36,10 +37,10 @@ export const site = {
   },
 
   hero: {
-    eyebrow: 'Business English · Nicole Kurek',
+    eyebrow: 'Angielski biznesowy online · Nicole Kurek',
     /** `*word*` renders as the italic brass accent. */
     heading: 'Angielski w pracy i biznesie — *z łatwością.*',
-    lead: 'Pomagam profesjonalistom mówić i pisać po angielsku z pewnością siebie: od e-maili i prezentacji, przez spotkania, po negocjacje. Konkretnie, praktycznie i bez korpo-spiny.',
+    lead: 'Prowadzę lekcje angielskiego biznesowego online 1:1. Pomagam profesjonalistom mówić i pisać po angielsku z pewnością siebie: od e-maili i prezentacji, przez spotkania, po negocjacje. Konkretnie i bez korpo-spiny.',
     /** Speech bubbles around the portrait — phrases from the blog posts. */
     phrases: [
       { en: 'Let’s break this down.', pl: 'Bo w całości wygląda groźnie.' },
@@ -120,6 +121,10 @@ export const site = {
       {
         q: 'Czego będziemy się uczyć?',
         a: 'Angielskiego, którego używasz w pracy: e-maili, prezentacji, spotkań, negocjacji i rozmów o pracę. Przy rezerwacji możesz opisać, na czym chcesz się skupić.',
+      },
+      {
+        q: 'Dla kogo są lekcje angielskiego biznesowego?',
+        a: 'Dla osób, które używają angielskiego w pracy: specjalistów i managerów, osób przygotowujących się do rozmowy o pracę po angielsku oraz pracowników działów takich jak finanse, logistyka, marketing czy HR.',
       },
       {
         q: 'Nie ma pasującego terminu — co dalej?',

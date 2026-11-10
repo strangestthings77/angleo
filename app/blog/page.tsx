@@ -9,9 +9,9 @@ import { buildMetadata } from '@/lib/metadata';
 import { BlogHeader } from '@/sections/blog/BlogHeader';
 
 export const metadata = buildMetadata({
-  title: 'Blog – angielski w pracy i biznesie | Angleo',
+  title: 'Blog – angielski biznesowy w praktyce | Angleo',
   description:
-    'Praktyczne frazy, słownictwo i wskazówki: e-maile, spotkania, negocjacje, rozmowy o pracę i korpomowa po angielsku. Blog Nicole Kurek.',
+    'Angielski biznesowy w praktyce: frazy, słownictwo i wskazówki do e-maili, spotkań, negocjacji, rozmów o pracę i korpomowy. Blog Nicole Kurek.',
   path: '/blog',
 });
 

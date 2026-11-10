@@ -61,7 +61,7 @@ refresh it) with `pnpm dict:import` — data from Polish Wiktionary, CC BY-SA 4.
 - [ ] Connect Vercel and set `NEXT_PUBLIC_SITE_URL`, `SITE_URL`, `CAL_API_KEY`, `CAL_EVENT_TYPE_ID`; point angleo.pl at it
 - [ ] Move booking to Nicole's own Cal.com account + event type (currently a test event)
 - [ ] Client review of the new headline copy (listed in `.altalogy/BUILD.md`)
-- [ ] Designed OG image to replace `public/og.svg` (posts already use their cover)
+- [x] Designed OG image (`public/og.jpg`, 1200×630; posts use their cover)
 - [ ] Instagram / Facebook profile URLs (the Webflow site links to generic placeholders)
 - [ ] Unknown `/blog/<slug>` returns the 404 page with status 200 (PPR streaming) — add a
       proxy check if a hard 404 matters
