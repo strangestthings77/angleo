@@ -50,7 +50,7 @@ export async function Hero() {
           </dl>
         </div>
 
-        <div className="relative isolate mx-auto w-full max-w-xl animate-portrait rise-step-2 lg:mx-0 lg:max-w-none">
+        <div className="group relative isolate mx-auto w-full max-w-xl animate-portrait rise-step-2 lg:mx-0 lg:max-w-none">
           {/* The photo is landscape and shown uncropped; the arch lives in the block behind it. */}
           <div
             aria-hidden
@@ -58,19 +58,22 @@ export async function Hero() {
           />
           <div
             aria-hidden
-            className="absolute inset-0 translate-x-3 -translate-y-3 rounded-3xl border border-accent/40"
+            className="absolute inset-0 translate-x-3 -translate-y-3 rounded-3xl border border-accent/40 transition-transform duration-500 ease-out-soft group-hover:translate-x-4 group-hover:-translate-y-4 motion-reduce:transition-none"
           />
-          <Image
-            src={portrait.src}
-            alt={portrait.alt}
-            width={portrait.width}
-            height={portrait.height}
-            priority
-            quality={100}
-            draggable={false}
-            sizes="(min-width: 1024px) 600px, 90vw"
-            className="relative h-auto w-full rounded-3xl shadow-card"
-          />
+          {/* Hover: the photo eases in a touch inside its frame, the brass outline drifts out. */}
+          <div className="relative overflow-hidden rounded-3xl shadow-card">
+            <Image
+              src={portrait.src}
+              alt={portrait.alt}
+              width={portrait.width}
+              height={portrait.height}
+              priority
+              quality={100}
+              draggable={false}
+              sizes="(min-width: 1024px) 600px, 90vw"
+              className="block h-auto w-full transition-transform duration-700 ease-out-soft group-hover:scale-103 motion-reduce:transition-none"
+            />
+          </div>
           {hero.phrases.map((phrase, i) => (
             <figure
               key={phrase.en}
