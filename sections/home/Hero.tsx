@@ -21,7 +21,7 @@ export async function Hero() {
 
   return (
     <section className="overflow-hidden border-b border-border">
-      <Container className="grid items-center gap-16 pt-12 pb-20 md:pt-16 lg:grid-cols-[minmax(0,13fr)_minmax(0,11fr)] lg:gap-14 lg:pb-24">
+      <Container className="grid items-center gap-24 pt-12 pb-24 sm:gap-16 sm:pb-20 md:pt-16 lg:grid-cols-[minmax(0,13fr)_minmax(0,11fr)] lg:gap-14 lg:pb-24">
         <div className="flex flex-col gap-7">
           <Eyebrow className="animate-rise">{hero.eyebrow}</Eyebrow>
           <Heading as="h1" size="xl" className="animate-rise text-balance rise-step-1">
@@ -78,15 +78,17 @@ export async function Hero() {
             <figure
               key={phrase.en}
               aria-hidden
-              className={`absolute flex max-w-56 animate-pop flex-col gap-1 rounded-2xl bg-surface px-4 py-3 shadow-card ${
+              className={`absolute z-10 flex max-w-56 animate-pop flex-col gap-1 rounded-2xl bg-surface px-4 py-3 shadow-card ${
                 i === 0 ? 'rise-step-8' : i === 1 ? 'rise-step-10' : 'rise-step-6'
               } ${
-                // Kept to the photo's edges and corners, clear of the face.
+                // Kept to the photo's edges and corners, clear of the face; on phones they hang
+                // mostly outside the photo so it stays visible. z-10: always above the photo
+                // (its clipped, transformed frame can otherwise layer on top in Safari).
                 i === 0
-                  ? '-top-10 -left-2 rounded-bl-md sm:-left-10'
+                  ? '-top-16 -left-2 rounded-bl-md sm:-top-10 sm:-left-10'
                   : i === 1
                     ? 'top-2/3 -right-3 rounded-br-md max-sm:hidden sm:-right-8'
-                    : '-right-2 -bottom-10 rounded-tr-md sm:right-auto sm:-left-10'
+                    : '-right-2 -bottom-16 rounded-tr-md sm:right-auto sm:-bottom-10 sm:-left-10'
               }`}
             >
               <span className="font-serif text-lg/6 text-foreground italic">{phrase.en}</span>
