@@ -10,6 +10,8 @@ import {
 import { MainLayout } from '@/layouts/MainLayout';
 import { buildMetadata } from '@/lib/metadata';
 
+export const instant = false;
+
 export function generateStaticParams() {
   return publicExercises.map(({ slug }) => ({ slug }));
 }

@@ -13,11 +13,10 @@ export type PublicExercise = {
   questions: PublicQuestion[];
 };
 
-/** Keep the public exercises strictly local until launch. */
-export const PUBLIC_EXERCISES_ENABLED =
-  process.env.NODE_ENV === 'development' && process.env.VERCEL_ENV !== 'production';
+/** Public exercises are launched and available in every environment. */
+export const PUBLIC_EXERCISES_ENABLED = true;
 
-/** Hide the exercises link until launch, so no page links to an empty one. */
+/** Retained as the shared navigation filter for public sections. */
 export const isNavItemVisible = (item: { href: string }) =>
   PUBLIC_EXERCISES_ENABLED || item.href !== '/cwiczenia';
 

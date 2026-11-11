@@ -151,7 +151,7 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
   `renamedPosts` in `next.config.ts` 308s the old post URLs and cover paths. Renaming a post
   again → add the old slug there, never just drop it.
 - **Polish line breaks:** `bindShortWords()` keeps one-letter words off line ends (`Accent`).
-- **Unlaunched pages** must 404 (not render empty) and stay out of the sitemap — see `/cwiczenia`.
+- **Unlaunched pages** must 404 (not render empty) and stay out of the sitemap.
 
 ## Auth & student area (Supabase)
 
@@ -350,6 +350,8 @@ new tokens, one-line gotchas. When a section outgrows this file, move it to
 | `/blog-post-categories/[slug]`                        | BlogHeader (active chip), PostGrid                                 | Old Webflow URL scheme kept, incl. `logistyka-2` |
 | `/o-mnie`                                             | AboutHero, AboutDetails, Quote, BookingCta                         |                                                  |
 | `/umow-lekcje`                                        | Header, ContactCards                                               | Booking = Google Apps Script calendar            |
+| `/cwiczenia`                                          | ExercisesPreview, public exercise cards                            | Public in every environment                      |
+| `/cwiczenia/[slug]`                                   | PublicExercisePlayer                                               | No login required                                |
 | `/panel`                                              | Name + ProgressInline, NextLessonCard, Tabs (exercises/words/test) | Session read inside `<Suspense>`                 |
 | `/panel/cwiczenia/[id]`                               | ExercisePlayer                                                     | Autosave + submit; result view once submitted    |
 | `/admin/uczniowie/[id]`                               | ProgressCard, LessonsEditor, ExerciseForm, AddWordForm             | Exercise list: live view, edit, reopen, delete   |

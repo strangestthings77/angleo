@@ -18,9 +18,6 @@ module.exports = {
     '/logowanie',
     '/rejestracja',
     '/auth/*',
-    // Public exercises are local-only until launch (lib/public-exercises.ts) — 404 in production.
-    '/cwiczenia',
-    '/cwiczenia/*',
   ],
   robotsTxtOptions: {
     // Previews must never be indexed; production hides only the private areas.
