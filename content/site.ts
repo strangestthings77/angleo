@@ -110,9 +110,10 @@ export const site = {
       },
       {
         icon: 'chart',
-        title: 'Branże i działy',
-        body: 'Słownictwo, którego naprawdę używasz: finanse, logistyka, marketing, HR.',
-        categories: ['finanse', 'logistyka-2', 'marketing'],
+        title: 'Twoja branża',
+        body: 'Uniwersalne podejście — szybko odnajduję się w każdej branży i dopasowuję lekcje do słownictwa, którego naprawdę używasz w pracy.',
+        /** Plain labels (not blog links) — industries Nicole has taught, blog category or not. */
+        industries: ['Lotnictwo', 'IT', 'HR', 'Finanse', 'Logistyka', 'Marketing'],
       },
     ],
   },
@@ -160,7 +161,7 @@ export const site = {
       },
       {
         q: 'Dla kogo są lekcje angielskiego biznesowego?',
-        a: 'Dla osób, które używają angielskiego w pracy: specjalistów i managerów, osób przygotowujących się do rozmowy o pracę po angielsku oraz pracowników działów takich jak finanse, logistyka, marketing czy HR.',
+        a: 'Dla osób, które używają angielskiego w pracy: specjalistów i managerów, osób przygotowujących się do rozmowy o pracę po angielsku oraz pracowników różnych branż — od lotnictwa i IT po finanse, logistykę, marketing i HR.',
       },
       {
         q: 'Nie ma pasującego terminu — co dalej?',

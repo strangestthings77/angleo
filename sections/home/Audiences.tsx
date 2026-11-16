@@ -33,7 +33,16 @@ export function Audiences() {
                   <p className="text-sm/6 text-foreground-muted">{item.body}</p>
                 </div>
                 <ul className="mt-auto flex flex-wrap gap-2">
-                  {item.categories.map((slug) => {
+                  {'industries' in item &&
+                    item.industries.map((industry) => (
+                      <li
+                        key={industry}
+                        className="inline-flex h-8 items-center rounded-full border border-border px-3 text-xs text-foreground"
+                      >
+                        {industry}
+                      </li>
+                    ))}
+                  {('categories' in item ? item.categories : []).map((slug) => {
                     const category = getCategory(slug);
                     if (!category) return null;
                     return (
