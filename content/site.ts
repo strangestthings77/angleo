@@ -113,7 +113,7 @@ export const site = {
         title: 'Twoja branża',
         body: 'Uniwersalne podejście — szybko odnajduję się w każdej branży i dopasowuję lekcje do słownictwa, którego naprawdę używasz w pracy.',
         /** Plain labels (not blog links) — industries Nicole has taught, blog category or not. */
-        industries: ['Lotnictwo', 'IT', 'HR', 'Finanse', 'Logistyka', 'Marketing'],
+        industries: ['IT', 'Finanse', 'HR', 'Logistyka', 'Marketing', 'Lotnictwo'],
       },
     ],
   },
@@ -161,7 +161,7 @@ export const site = {
       },
       {
         q: 'Dla kogo są lekcje angielskiego biznesowego?',
-        a: 'Dla osób, które używają angielskiego w pracy: specjalistów i managerów, osób przygotowujących się do rozmowy o pracę po angielsku oraz pracowników różnych branż — od lotnictwa i IT po finanse, logistykę, marketing i HR.',
+        a: 'Dla osób, które używają angielskiego w pracy: specjalistów i managerów, osób przygotowujących się do rozmowy o pracę po angielsku oraz pracowników różnych branż — głównie IT, finansów, HR, logistyki i marketingu, a nawet lotnictwa.',
       },
       {
         q: 'Nie ma pasującego terminu — co dalej?',
