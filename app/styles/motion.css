@@ -31,10 +31,12 @@
   }
 }
 
+/* `transform`, not `translate`: the fill holds the animated property for good, and browsers won't
+   transition a property an animation holds — cards' `hover:-translate-y-1` lift would snap. */
 @keyframes reveal {
   from {
     opacity: 0;
-    translate: 0 28px;
+    transform: translateY(28px);
   }
 }
 
