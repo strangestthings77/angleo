@@ -14,6 +14,12 @@ const WEBSITE_ID = url('/#website');
 
 const sameAs = site.social.map((s) => s.href);
 
+/** Online lessons: the whole country, plus the cities people search with (FAQ names them too). */
+const areaServed = [
+  { '@type': 'Country', name: 'Polska' },
+  ...site.citiesServed.map((name) => ({ '@type': 'City', name })),
+];
+
 /** On every page: the business, Nicole, and the site itself. */
 export function siteGraph() {
   return {
@@ -36,7 +42,7 @@ export function siteGraph() {
           addressLocality: site.company.city.split(' ').slice(1).join(' '),
           addressCountry: 'PL',
         },
-        areaServed: { '@type': 'Country', name: 'Polska' },
+        areaServed,
         knowsLanguage: ['pl', 'en'],
         founder: { '@id': PERSON_ID },
         sameAs,
@@ -49,7 +55,7 @@ export function siteGraph() {
             description:
               'Indywidualne lekcje angielskiego biznesowego online przez Google Meet: e-maile, prezentacje, spotkania, negocjacje i rozmowy o pracę.',
             provider: { '@id': ORG_ID },
-            areaServed: { '@type': 'Country', name: 'Polska' },
+            areaServed,
             availableChannel: { '@type': 'ServiceChannel', serviceUrl: url('/umow-lekcje') },
           },
         },

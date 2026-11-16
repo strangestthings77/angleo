@@ -8,6 +8,7 @@ import { Container } from '@/components/ui/Container';
 import { site } from '@/content/site';
 import { getLessonInfo } from '@/lib/cal';
 import { bindShortWords } from '@/lib/typography';
+import { PhraseCycle } from '@/sections/home/PhraseCycle';
 
 export async function Hero() {
   const { hero, heroPortrait: portrait, booking } = site;
@@ -74,11 +75,11 @@ export async function Hero() {
               className="block h-auto w-full transition-transform duration-700 ease-out-soft group-hover:scale-103 motion-reduce:transition-none"
             />
           </div>
-          {hero.phrases.map((phrase, i) => (
+          {hero.bubbles.map((phrases, i) => (
             <figure
-              key={phrase.en}
+              key={phrases[0].en}
               aria-hidden
-              className={`absolute z-10 flex max-w-56 animate-pop flex-col gap-1 rounded-2xl bg-surface px-4 py-3 shadow-card ${
+              className={`absolute z-10 max-w-56 animate-pop rounded-2xl bg-surface px-4 py-3 shadow-card ${
                 i === 0 ? 'rise-step-8' : i === 1 ? 'rise-step-10' : 'rise-step-6'
               } ${
                 // Kept to the photo's edges and corners, clear of the face; on phones they hang
@@ -91,8 +92,8 @@ export async function Hero() {
                     : '-right-2 -bottom-16 rounded-tr-md sm:right-auto sm:-bottom-10 sm:-left-10'
               }`}
             >
-              <span className="font-serif text-lg/6 text-foreground italic">{phrase.en}</span>
-              <span className="text-xs text-foreground-muted">{phrase.pl}</span>
+              {/* Staggered so the three bubbles change as a calm wave, not all at once. */}
+              <PhraseCycle phrases={phrases} delay={i * 600} />
             </figure>
           ))}
         </div>

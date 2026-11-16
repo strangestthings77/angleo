@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CookieSettingsButton } from '@/components/analytics/CookieSettingsButton';
 import { Container } from '@/components/ui/Container';
 import { site } from '@/content/site';
 import { getCategories } from '@/lib/blog';
@@ -12,6 +13,8 @@ async function currentYear() {
 
 const heading = 'mb-5 text-xs font-medium tracking-eyebrow text-accent-light uppercase';
 const link = 'text-inverse-muted transition-colors duration-200 hover:text-background';
+const legalLink =
+  'underline-offset-4 transition-colors duration-200 hover:text-background hover:underline';
 
 export async function Footer() {
   const year = await currentYear();
@@ -25,8 +28,8 @@ export async function Footer() {
             {site.name}
           </Link>
           <p className="max-w-xs text-sm/6 text-inverse-muted">
-            Angielski w pracy i biznesie z {site.owner}. Praktyczne frazy, wskazówki i lekcje dla
-            profesjonalistów.
+            Angielski w pracy i biznesie z {site.owner}. Praktyczne frazy, wskazówki i lekcje
+            angielskiego online dla profesjonalistów z całej Polski.
           </p>
         </div>
         <div>
@@ -81,8 +84,14 @@ export async function Footer() {
           <address className="not-italic">
             {site.owner} – {site.role} · {company.street}, {company.city} · NIP: {company.nip}
           </address>
-          <p>
-            © {year} {site.owner}
+          <p className="flex flex-wrap gap-x-5">
+            <span>
+              © {year} {site.owner}
+            </span>
+            <Link href="/polityka-prywatnosci" className={legalLink}>
+              Polityka prywatności
+            </Link>
+            <CookieSettingsButton className={legalLink} />
           </p>
         </Container>
       </div>

@@ -150,6 +150,18 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
 - **Renamed slugs:** posts with English Webflow-template slugs were given Polish ones (2026-11);
   `renamedPosts` in `next.config.ts` 308s the old post URLs and cover paths. Renaming a post
   again → add the old slug there, never just drop it.
+- **City searches** ("Kraków lekcje angielskiego"): lessons are online-only, so no per-city
+  pages (doorway-page risk). The FAQ "dostępne w moim mieście?" answer names the cities and
+  `site.citiesServed` lists them as `areaServed` in the structured data — keep the two in step.
+- **Google Analytics (GA4 `G-KMVJQJ71Y8`, `lib/analytics.ts`):** `CookieConsent` (root layout)
+  shows a Polish banner; gtag.js loads **only after "Akceptuję"** and **only on www.angleo.pl**
+  (never localhost/previews). Choice in `localStorage` (`angleo-cookie-consent`); footer
+  "Ustawienia cookies" reopens it; revoking clears `_ga*` cookies. Route changes are counted by
+  GA4's enhanced measurement (history events) — no manual `page_view`.
+- **Privacy policy** `/polityka-prywatnosci` (text in `content/legal/polityka-prywatnosci.mdx`,
+  linked from the footer and the cookie banner). It lists every tool that touches personal data
+  (Cal.com, Google, Supabase, Vercel) — adding a tool or a new data field → update it and bump
+  `UPDATED` in the page.
 - **Polish line breaks:** `bindShortWords()` keeps one-letter words off line ends (`Accent`).
 - **Unlaunched pages** must 404 (not render empty) and stay out of the sitemap.
 

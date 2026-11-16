@@ -41,11 +41,42 @@ export const site = {
     /** `*word*` renders as the italic brass accent. */
     heading: 'Angielski w pracy i biznesie — *z łatwością.*',
     lead: 'Pomagam profesjonalistom mówić i pisać po angielsku z pewnością siebie: od e-maili i prezentacji, przez spotkania, po negocjacje. Konkretnie, praktycznie i bez korpo-spiny.',
-    /** Speech bubbles around the portrait — phrases from the blog posts. */
-    phrases: [
-      { en: 'Let’s break this down.', pl: 'Bo w całości wygląda groźnie.' },
-      { en: 'Let’s cut to the chase.', pl: 'Przejdźmy do rzeczy.' },
-      { en: 'Let’s get the ball rolling.', pl: 'No to zaczynamy!' },
+    /**
+     * Speech bubbles around the portrait (top-left, right, bottom). A bubble with more than one
+     * phrase cycles through them every 5 s; keep each phrase short — the bubble is sized to
+     * the longest one.
+     */
+    bubbles: [
+      [
+        { en: 'Let’s break this down.', pl: 'Bo w całości wygląda groźnie.' },
+        { en: 'Let’s touch base next week.', pl: 'Odezwijmy się w przyszłym tygodniu.' },
+        { en: 'I’ll keep you in the loop.', pl: 'Będę informować na bieżąco.' },
+        { en: 'Let’s take this offline.', pl: 'Pogadajmy o tym po spotkaniu.' },
+        { en: 'That’s a win-win.', pl: 'Wszyscy na tym zyskują.' },
+        { en: 'Let’s think outside the box.', pl: 'Pomyślmy nieszablonowo.' },
+        { en: 'Let’s call it a day.', pl: 'Na dziś wystarczy.' },
+        { en: 'I’m on it!', pl: 'Już się tym zajmuję!' },
+      ],
+      [
+        { en: 'Let’s cut to the chase.', pl: 'Przejdźmy do rzeczy.' },
+        { en: 'Can we circle back to this?', pl: 'Wrócimy do tego później?' },
+        { en: 'Are we on the same page?', pl: 'Czy dobrze się rozumiemy?' },
+        { en: 'Let’s park this for now.', pl: 'Odłóżmy to na razie.' },
+        { en: 'I’ll get back to you on that.', pl: 'Wrócę z odpowiedzią.' },
+        { en: 'Could you walk me through it?', pl: 'Wytłumaczysz mi to krok po kroku?' },
+        { en: 'That’s the bottom line.', pl: 'To jest sedno sprawy.' },
+        { en: 'Just to play devil’s advocate…', pl: 'Tak dla przekory…' },
+      ],
+      [
+        { en: 'Let’s get the ball rolling.', pl: 'No to zaczynamy!' },
+        { en: 'Let’s hit the ground running.', pl: 'Ruszamy od razu pełną parą.' },
+        { en: 'It’s a ballpark figure.', pl: 'To tylko liczba szacunkowa.' },
+        { en: 'We’re running out of time.', pl: 'Kończy nam się czas.' },
+        { en: 'Let’s wrap things up.', pl: 'Pora to podsumować.' },
+        { en: 'Let’s go the extra mile.', pl: 'Dajmy z siebie trochę więcej.' },
+        { en: 'Let’s sleep on it.', pl: 'Prześpijmy się z tym.' },
+        { en: 'Back to square one.', pl: 'Wracamy do punktu wyjścia.' },
+      ],
     ],
   },
 
@@ -115,6 +146,11 @@ export const site = {
         a: 'Lekcje odbywają się online przez Google Meet. Link do spotkania znajdziesz w e-mailu z potwierdzeniem rezerwacji.',
       },
       {
+        // People search "<city> lekcje angielskiego" — answer it honestly: online, from anywhere.
+        q: 'Czy lekcje angielskiego są dostępne w moim mieście?',
+        a: 'Tak — lekcje są online, więc możesz uczyć się z dowolnego miejsca: z Warszawy, Krakowa, Wrocławia, Poznania, Gdańska, Łodzi, Katowic, Szczecina, Lublina czy z mniejszej miejscowości, a nawet z zagranicy. Wystarczy komputer z kamerą i dostęp do internetu.',
+      },
+      {
         q: 'Jak umówić lekcję?',
         a: 'Wybierz dzień i godzinę w kalendarzu na stronie „Umów lekcję”. Terminy są dostępne na dwa tygodnie do przodu, a potwierdzenie przychodzi od razu na e-mail.',
       },
@@ -132,6 +168,22 @@ export const site = {
       },
     ],
   },
+
+  /**
+   * Lessons are online-only; these are the cities the FAQ names, listed for search engines as
+   * `areaServed` (structured data). Keep in step with the FAQ answer — no separate city pages.
+   */
+  citiesServed: [
+    'Warszawa',
+    'Kraków',
+    'Wrocław',
+    'Poznań',
+    'Gdańsk',
+    'Łódź',
+    'Katowice',
+    'Szczecin',
+    'Lublin',
+  ],
 
   credentials: [
     { title: 'Angielski w Biznesie', detail: 'Licencjat · Uniwersytet Śląski' },

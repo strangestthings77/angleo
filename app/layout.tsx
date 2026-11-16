@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { SITE_URL } from '@/lib/site-url';
 import { Geist, Instrument_Serif } from 'next/font/google';
 import './globals.css';
+import { CookieConsent } from '@/components/analytics/CookieConsent';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { siteGraph } from '@/lib/structured-data';
 
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       <body className="bg-background font-sans text-base/7 text-foreground">
         <JsonLd data={siteGraph()} />
         {children}
+        <CookieConsent />
       </body>
     </html>
   );
