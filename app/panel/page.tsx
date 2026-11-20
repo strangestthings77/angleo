@@ -3,6 +3,7 @@ import { PanelBar } from '@/components/auth/PanelBar';
 import { PanelSkeleton } from '@/components/auth/PanelSkeleton';
 import { NextLessonCard } from '@/components/progress/NextLessonCard';
 import { StudentExerciseList } from '@/components/exercises/StudentExerciseList';
+import { LessonList } from '@/components/lessons/LessonList';
 import { Tabs } from '@/components/ui/Tabs';
 import { NewWordToasts } from '@/components/words/NewWordToasts';
 import { WordCard } from '@/components/words/WordCard';
@@ -12,6 +13,7 @@ import { Container } from '@/components/ui/Container';
 import { MainLayout } from '@/layouts/MainLayout';
 import { getMyWords, requireUser } from '@/lib/auth';
 import { getMyExercises } from '@/lib/exercises';
+import { getMyLessons } from '@/lib/lessons';
 import { alternativesFor } from '@/lib/dictionary';
 import { normaliseTerm } from '@/lib/dictionary-terms';
 import { buildMetadata } from '@/lib/metadata';
@@ -47,7 +49,11 @@ export default function StudentPanelPage() {
 
 async function StudentDashboard() {
   const user = await requireUser('/panel');
-  const [words, exercises] = await Promise.all([getMyWords(), getMyExercises()]);
+  const [words, exercises, lessons] = await Promise.all([
+    getMyWords(),
+    getMyExercises(),
+    getMyLessons(),
+  ]);
   // Dictionary meanings let the test recognise "a real meaning, just not the lesson's one".
   const alternatives = await alternativesFor(words.map((w) => w.term)).catch(() => new Map());
   const quizWords = words.map((w) => ({
@@ -68,6 +74,21 @@ async function StudentDashboard() {
         <Tabs
           label="Strefa ucznia"
           tabs={[
+            {
+              id: 'lekcje',
+              label: 'Lekcje',
+              badge: lessons.length || undefined,
+              content: (
+                <LessonList
+                  lessons={lessons}
+                  href={(lesson) => `/panel/lekcje/${lesson.id}`}
+                  empty={{
+                    title: 'Tu pojawią się Twoje lekcje',
+                    body: 'Każda lekcja ma wspólne notatki — piszemy w nich razem, na żywo.',
+                  }}
+                />
+              ),
+            },
             {
               id: 'cwiczenia',
               label: 'Ćwiczenia',

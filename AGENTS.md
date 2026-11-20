@@ -204,7 +204,14 @@ supabase/migrations/               schema as code — profiles (role), is_admin(
   **Live toast:** `NewWordToasts` on `/panel` listens for `words` inserts for the student (Realtime,
   migration `20261120120000`; joins with the student's token like `LiveExerciseView`), shows
   "Nowe słówko" top-right for 10 s and `router.refresh()`es so the Słówka tab updates.
-- **Panel tabs:** Ćwiczenia (gap-fill list) · Słówka (flip cards) · Test słówek (`WordQuiz`).
+- **Lessons (notes):** `lessons` table — numbered per student (`create_lesson()` = max + 1, admin
+  only), optional topic, one shared Tiptap document (`content` jsonb, StarterKit minus link/code).
+  Not the same as `lessons_completed` (the level counter). `LessonEditor` is shared by
+  `/panel/lekcje/[id]` and `/admin/uczniowie/[id]/lekcje/[lessonId]`: autosave through
+  `save_lesson_content()` (throttled 400 ms, no direct table writes), the other side follows via
+  Realtime. Last write wins; a side with unsaved typing ignores incoming versions. Tiptap pinned
+  to 3.32.3; content styles in `app/styles/utilities/editor.css` (`.lesson-prose`).
+- **Panel tabs:** Lekcje (lesson cards) · Ćwiczenia (gap-fill list) · Słówka (flip cards) · Test słówek (`WordQuiz`).
   `components/ui/Tabs.tsx` is the accessible tabs primitive (arrow keys, `#hash` deep link).
 - **Word test answers** (`lib/answer-check.ts`, tested in `answer-check.test.ts`): case, spacing,
   punctuation and Polish diacritics are ignored; `a / b` = alternatives; `(…)` = optional part;
@@ -376,7 +383,9 @@ new tokens, one-line gotchas. When a section outgrows this file, move it to
 | `/cwiczenia/[slug]`                                   | PublicExercisePlayer                                               | No login required                                |
 | `/panel`                                              | Name + ProgressInline, NextLessonCard, Tabs (exercises/words/test) | Session read inside `<Suspense>`                 |
 | `/panel/cwiczenia/[id]`                               | ExercisePlayer                                                     | Autosave + submit; result view once submitted    |
-| `/admin/uczniowie/[id]`                               | Name + LessonsEditor (level), ExerciseForm, AddWordForm            | Exercise list: live view, edit, reopen, delete   |
+| `/panel/lekcje/[id]`                                  | LessonEditor                                                       | Shared notes, live with the admin                |
+| `/admin/uczniowie/[id]/lekcje/[lessonId]`             | LessonEditor, DeleteLessonButton                                   | Same document as the student's                   |
+| `/admin/uczniowie/[id]`                               | Name + LessonsEditor (level), lessons, ExerciseForm, AddWordForm   | Exercise list: live view, edit, reopen, delete   |
 | `/admin/uczniowie/[id]/cwiczenia/[exerciseId]`        | LiveExerciseView                                                   | Realtime on `exercise_attempts`                  |
 | `/admin/uczniowie/[id]/cwiczenia/[exerciseId]/edytuj` | ExerciseForm (edit mode)                                           | Warns if the student started / submitted         |
 

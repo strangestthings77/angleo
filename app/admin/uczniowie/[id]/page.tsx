@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { PanelSkeleton } from '@/components/auth/PanelSkeleton';
+import { LessonList } from '@/components/lessons/LessonList';
+import { NewLessonForm } from '@/components/lessons/NewLessonForm';
 import { LessonsEditor } from '@/components/progress/LessonsEditor';
 import { Eyebrow } from '@/components/text/Eyebrow';
 import { Heading } from '@/components/text/Heading';
@@ -13,6 +15,7 @@ import { MainLayout } from '@/layouts/MainLayout';
 import { deleteWord } from '@/lib/admin-actions';
 import { getStudent, getStudentWords } from '@/lib/auth';
 import { getStudentExercises } from '@/lib/exercises';
+import { getStudentLessons } from '@/lib/lessons';
 import { buildMetadata } from '@/lib/metadata';
 
 export const metadata = buildMetadata({
@@ -44,9 +47,10 @@ async function StudentDetail({ params }: { params: PageProps<'/admin/uczniowie/[
   // getStudent() runs requireAdmin() — non-admins are redirected before any data is read.
   const student = await getStudent(id);
   if (!student) notFound();
-  const [words, exercises] = await Promise.all([
+  const [words, exercises, lessons] = await Promise.all([
     getStudentWords(student.id),
     getStudentExercises(student.id),
+    getStudentLessons(student.id),
   ]);
 
   return (
@@ -77,6 +81,27 @@ async function StudentDetail({ params }: { params: PageProps<'/admin/uczniowie/[
       </section>
 
       <Container className="flex flex-col gap-16 py-section">
+        <section className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3">
+            <Eyebrow>Lekcje ucznia</Eyebrow>
+            <Heading size="sm">
+              Notatki z <em>lekcji</em>
+            </Heading>
+            <p className="text-sm text-foreground-muted">
+              Każda lekcja ma wspólne notatki — Ty i uczeń piszecie w nich na żywo.
+            </p>
+          </div>
+          <NewLessonForm studentId={student.id} next={(lessons[0]?.number ?? 0) + 1} />
+          <LessonList
+            lessons={lessons}
+            href={(lesson) => `/admin/uczniowie/${student.id}/lekcje/${lesson.id}`}
+            empty={{
+              title: 'Brak lekcji',
+              body: 'Utwórz pierwszą — uczeń zobaczy ją w zakładce „Lekcje”.',
+            }}
+          />
+        </section>
+
         <section className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
             <Eyebrow>Ćwiczenia ucznia</Eyebrow>

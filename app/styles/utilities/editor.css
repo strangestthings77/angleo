@@ -1,0 +1,65 @@
+/* Lesson notes (Tiptap / ProseMirror content in LessonEditor). */
+.lesson-prose {
+  color: var(--foreground);
+  font-size: var(--text-base);
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+
+  & > * + * {
+    margin-top: 0.75em;
+  }
+
+  & h2 {
+    margin-top: 1.25em;
+    font-family: var(--font-serif);
+    font-size: var(--text-title);
+    line-height: var(--text-title--line-height);
+    letter-spacing: var(--tracking-display);
+  }
+
+  & h3 {
+    margin-top: 1em;
+    font-weight: 600;
+  }
+
+  & > :first-child {
+    margin-top: 0;
+  }
+
+  & strong {
+    font-weight: 600;
+  }
+
+  & ul {
+    padding-left: 1.25em;
+    list-style: disc;
+  }
+
+  & ol {
+    padding-left: 1.5em;
+    list-style: decimal;
+  }
+
+  & li::marker {
+    color: var(--accent);
+  }
+
+  & li > p + * {
+    margin-top: 0.25em;
+  }
+
+  & blockquote {
+    border-left: 2px solid var(--accent);
+    padding-left: 1em;
+    color: var(--foreground-muted);
+  }
+
+  /* Placeholder on the empty first line (Tiptap's Placeholder extension). */
+  & p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    color: var(--foreground-muted);
+    pointer-events: none;
+  }
+}

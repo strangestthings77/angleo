@@ -11,7 +11,7 @@ import { buildMetadata } from '@/lib/metadata';
  * to review. When the site starts collecting something new (newsletter, payments, a new tool),
  * update the text and bump UPDATED.
  */
-const UPDATED = '2026-11-16';
+const UPDATED = '2026-11-20';
 
 export const metadata = buildMetadata({
   title: 'Polityka prywatności | Angleo',

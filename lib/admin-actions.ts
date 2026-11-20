@@ -174,3 +174,39 @@ export async function reopenExercise(exerciseId: string, studentId: string): Pro
   revalidatePath(`/admin/uczniowie/${studentId}`);
   revalidatePath(`/admin/uczniowie/${studentId}/cwiczenia/${exerciseId}`);
 }
+
+const newLessonSchema = z.object({
+  studentId: z.uuid(),
+  topic: z.string().trim().max(120, 'Temat może mieć najwyżej 120 znaków').optional(),
+});
+
+export type NewLessonState = { error?: string } | undefined;
+
+/** Admin starts the next numbered lesson for a student and lands in its notes. */
+export async function createLesson(_: NewLessonState, formData: FormData): Promise<NewLessonState> {
+  await requireAdmin();
+  const parsed = newLessonSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const { studentId, topic } = parsed.data;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc('create_lesson', {
+    p_student: studentId,
+    p_topic: topic ?? '',
+  });
+  if (error || typeof data !== 'string') {
+    return { error: 'Nie udało się utworzyć lekcji. Spróbuj ponownie.' };
+  }
+
+  revalidatePath(`/admin/uczniowie/${studentId}`);
+  redirect(`/admin/uczniowie/${studentId}/lekcje/${data}`);
+}
+
+export async function deleteLesson(lessonId: string, studentId: string): Promise<void> {
+  await requireAdmin();
+  if (!z.uuid().safeParse(lessonId).success) return;
+  const supabase = await createClient();
+  await supabase.from('lessons').delete().eq('id', lessonId).eq('student_id', studentId);
+  revalidatePath(`/admin/uczniowie/${studentId}`);
+  redirect(`/admin/uczniowie/${studentId}`);
+}
