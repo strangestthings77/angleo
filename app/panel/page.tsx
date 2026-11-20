@@ -4,6 +4,7 @@ import { PanelSkeleton } from '@/components/auth/PanelSkeleton';
 import { NextLessonCard } from '@/components/progress/NextLessonCard';
 import { StudentExerciseList } from '@/components/exercises/StudentExerciseList';
 import { Tabs } from '@/components/ui/Tabs';
+import { NewWordToasts } from '@/components/words/NewWordToasts';
 import { WordCard } from '@/components/words/WordCard';
 import { WordQuiz } from '@/components/words/WordQuiz';
 import { Heading } from '@/components/text/Heading';
@@ -57,6 +58,7 @@ async function StudentDashboard() {
   return (
     <>
       <PanelBar user={user} area="student" showProgress />
+      <NewWordToasts studentId={user.id} />
 
       <Container className="flex flex-col gap-12 pt-10 pb-section md:pt-14">
         <Suspense fallback={null}>
