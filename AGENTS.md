@@ -185,18 +185,25 @@ supabase/migrations/               schema as code — profiles (role), is_admin(
 - **Routes:** `/logowanie`, `/rejestracja`, `/panel` (student: exercises + words), `/panel/cwiczenia/[id]`,
   `/admin` (admin: all students), `/admin/uczniowie/[id]` (one student),
   `/admin/uczniowie/[id]/cwiczenia/[exerciseId]` (live view). All `noindex` and excluded from the sitemap.
+- **Sign-up is off** (`SIGN_UP_ENABLED` in `lib/student-area.ts`): `/rejestracja` redirects to
+  `/logowanie`, `signUp()` refuses, and Nicole adds students in Supabase → Authentication → Users →
+  Add user (no name — the list falls back to email). Lock it in Supabase too ("Allow new users to
+  sign up" off) — the publishable key is public. `STUDENT_AREA_ENABLED` hides sign-in and `/panel`.
 - **Roles:** every sign-up gets a `profiles` row with `role = 'student'` (trigger). Promote an
   admin from the terminal (uses the CLI login, no DB password):
   `pnpm exec supabase db query --linked "update public.profiles set role = 'admin' where email = '…';"`
   — or run the same `update` in the Supabase SQL editor. Current admin: Nicole Kurek.
   There are no update policies, so users can never change their own role.
 - **Lessons & levels:** `profiles.lessons_completed` (0–1000). Level = ⌊lessons / 10⌋ + 1 —
-  the rule lives only in `lib/progress.ts`. Students see `ProgressInline` under their name on `/panel` (admins see `ProgressCard` per student); admins edit
+  the rule lives only in `lib/progress.ts`. Students see `ProgressInline` under their name on `/panel` (admins see the level above `LessonsEditor`, beside the student's name); admins edit
   per student on `/admin` (`LessonsEditor` → `setStudentLessons` action → DB function
   `set_student_lessons()`, which re-checks `is_admin()` and touches only that column).
 - **Words:** added by the admin per student (`words.student_id`); the starter set was removed
   (migration `20261018170000`). `student_id = null` would still show to every student. `WordCard` shows the
   English side only; the Polish translation appears on hover (pointer) or tap/Enter (touch, keyboard).
+  **Live toast:** `NewWordToasts` on `/panel` listens for `words` inserts for the student (Realtime,
+  migration `20261120120000`; joins with the student's token like `LiveExerciseView`), shows
+  "Nowe słówko" top-right for 10 s and `router.refresh()`es so the Słówka tab updates.
 - **Panel tabs:** Ćwiczenia (gap-fill list) · Słówka (flip cards) · Test słówek (`WordQuiz`).
   `components/ui/Tabs.tsx` is the accessible tabs primitive (arrow keys, `#hash` deep link).
 - **Word test answers** (`lib/answer-check.ts`, tested in `answer-check.test.ts`): case, spacing,
@@ -369,7 +376,7 @@ new tokens, one-line gotchas. When a section outgrows this file, move it to
 | `/cwiczenia/[slug]`                                   | PublicExercisePlayer                                               | No login required                                |
 | `/panel`                                              | Name + ProgressInline, NextLessonCard, Tabs (exercises/words/test) | Session read inside `<Suspense>`                 |
 | `/panel/cwiczenia/[id]`                               | ExercisePlayer                                                     | Autosave + submit; result view once submitted    |
-| `/admin/uczniowie/[id]`                               | ProgressCard, LessonsEditor, ExerciseForm, AddWordForm             | Exercise list: live view, edit, reopen, delete   |
+| `/admin/uczniowie/[id]`                               | Name + LessonsEditor (level), ExerciseForm, AddWordForm            | Exercise list: live view, edit, reopen, delete   |
 | `/admin/uczniowie/[id]/cwiczenia/[exerciseId]`        | LiveExerciseView                                                   | Realtime on `exercise_attempts`                  |
 | `/admin/uczniowie/[id]/cwiczenia/[exerciseId]/edytuj` | ExerciseForm (edit mode)                                           | Warns if the student started / submitted         |
 

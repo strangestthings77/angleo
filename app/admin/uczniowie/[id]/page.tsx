@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { PanelSkeleton } from '@/components/auth/PanelSkeleton';
 import { LessonsEditor } from '@/components/progress/LessonsEditor';
-import { ProgressCard } from '@/components/progress/ProgressCard';
 import { Eyebrow } from '@/components/text/Eyebrow';
 import { Heading } from '@/components/text/Heading';
 import { Container } from '@/components/ui/Container';
@@ -60,27 +59,24 @@ async function StudentDetail({ params }: { params: PageProps<'/admin/uczniowie/[
           >
             ← Wszyscy uczniowie
           </Link>
-          <div className="flex animate-rise flex-col gap-3 rise-step-1">
-            <Eyebrow>Uczeń</Eyebrow>
-            <Heading as="h1" size="lg">
-              {student.name ?? student.email}
-            </Heading>
-            <p className="text-sm text-foreground-muted">
-              {student.email} · dołączył(a) {dateFormat.format(new Date(student.createdAt))}
-            </p>
+          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <div className="flex animate-rise flex-col gap-3 rise-step-1">
+              <Eyebrow>Uczeń</Eyebrow>
+              <Heading as="h1" size="lg">
+                {student.name ?? student.email}
+              </Heading>
+              <p className="text-sm text-foreground-muted">
+                {student.email} · dołączył(a) {dateFormat.format(new Date(student.createdAt))}
+              </p>
+            </div>
+            <div className="w-full animate-rise rounded-3xl border border-border bg-surface p-5 rise-step-2 md:w-sm">
+              <LessonsEditor studentId={student.id} lessons={student.lessons} showLevel />
+            </div>
           </div>
         </Container>
       </section>
 
       <Container className="flex flex-col gap-16 py-section">
-        <section className="flex flex-col gap-6">
-          <ProgressCard lessons={student.lessons} />
-          <div className="flex flex-col gap-3 rounded-3xl border border-border p-6">
-            <p className="text-sm font-medium text-foreground">Zmień liczbę ukończonych lekcji</p>
-            <LessonsEditor studentId={student.id} lessons={student.lessons} />
-          </div>
-        </section>
-
         <section className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
             <Eyebrow>Ćwiczenia ucznia</Eyebrow>

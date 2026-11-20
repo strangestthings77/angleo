@@ -3,13 +3,23 @@
 import { useOptimistic, useState, useTransition } from 'react';
 import { LevelBar } from '@/components/progress/LevelBar';
 import { setStudentLessons } from '@/lib/admin-actions';
+import { pluralForm } from '@/lib/blog';
 import { MAX_LESSONS, progressFor } from '@/lib/progress';
 
 const stepButton =
   'inline-flex size-9 items-center justify-center rounded-full border border-border text-base text-foreground transition-[border-color,scale] duration-150 ease-out hover:border-foreground/50 active:scale-95 disabled:opacity-40';
 
 /** Admin control: −/+ and an exact value, with an optimistic level bar. */
-export function LessonsEditor({ studentId, lessons }: { studentId: string; lessons: number }) {
+export function LessonsEditor({
+  studentId,
+  lessons,
+  showLevel = false,
+}: {
+  studentId: string;
+  lessons: number;
+  /** "Poziom N" heading above the controls (student page header) instead of the inline "Poz. N". */
+  showLevel?: boolean;
+}) {
   const [saved, setSaved] = useState(lessons);
   const [optimistic, setOptimistic] = useOptimistic(saved);
   const [draft, setDraft] = useState<string | null>(null);
@@ -30,8 +40,20 @@ export function LessonsEditor({ studentId, lessons }: { studentId: string; lesso
     });
   }
 
+  const left = `${progress.toNext} ${pluralForm(progress.toNext, ['lekcja', 'lekcje', 'lekcji'])}`;
+
   return (
     <div className="flex min-w-60 flex-col gap-2">
+      {showLevel && (
+        <div className="mb-2 flex flex-col gap-1.5">
+          <p className="font-serif text-title leading-none tracking-display text-foreground">
+            Poziom <em className="text-accent">{progress.level}</em>
+          </p>
+          <p className="text-xs text-foreground-muted tabular-nums">
+            {progress.inLevel}/10 · jeszcze {left} do poziomu {progress.level + 1}
+          </p>
+        </div>
+      )}
       <div className="flex items-center gap-2">
         <button
           type="button"
@@ -66,10 +88,14 @@ export function LessonsEditor({ studentId, lessons }: { studentId: string; lesso
         >
           +
         </button>
-        <span className="ml-1 text-xs whitespace-nowrap text-foreground-muted tabular-nums">
-          Poz. <span className="font-medium text-foreground">{progress.level}</span> ·{' '}
-          {progress.inLevel}/10
-        </span>
+        {showLevel ? (
+          <span className="ml-1 text-xs text-foreground-muted">ukończonych lekcji</span>
+        ) : (
+          <span className="ml-1 text-xs whitespace-nowrap text-foreground-muted tabular-nums">
+            Poz. <span className="font-medium text-foreground">{progress.level}</span> ·{' '}
+            {progress.inLevel}/10
+          </span>
+        )}
         {pending && (
           <span
             className="size-1.5 animate-pulse rounded-full bg-accent"
