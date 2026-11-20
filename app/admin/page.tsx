@@ -62,8 +62,8 @@ async function AdminDashboard() {
 
         {students.length === 0 ? (
           <p className="rounded-3xl border border-dashed border-border p-8 text-foreground-muted">
-            Nikt jeszcze nie założył konta. Uczniowie mogą zarejestrować się na stronie
-            /rejestracja.
+            Nikt jeszcze nie ma konta. Konto ucznia dodasz w Supabase → Authentication → Users → Add
+            user.
           </p>
         ) : (
           <div className="animate-fade overflow-x-auto rounded-3xl border border-border bg-surface">

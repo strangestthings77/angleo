@@ -4,7 +4,8 @@ import { SignUpForm } from '@/components/auth/SignUpForm';
 import { StudentAreaComingSoon } from '@/components/auth/StudentAreaComingSoon';
 import { MainLayout } from '@/layouts/MainLayout';
 import { buildMetadata } from '@/lib/metadata';
-import { STUDENT_AREA_ENABLED } from '@/lib/student-area';
+import { redirect } from 'next/navigation';
+import { SIGN_UP_ENABLED, STUDENT_AREA_ENABLED } from '@/lib/student-area';
 
 export const metadata = buildMetadata({
   title: 'Załóż konto – strefa ucznia | Angleo',
@@ -21,6 +22,8 @@ export default function SignUpPage() {
       </MainLayout>
     );
   }
+  // Accounts are created by Nicole; the proxy already redirects, this covers direct renders.
+  if (!SIGN_UP_ENABLED) redirect('/logowanie');
 
   return (
     <MainLayout>

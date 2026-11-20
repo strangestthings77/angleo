@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
-import { STUDENT_AREA_ENABLED } from '@/lib/student-area';
+import { SIGN_UP_ENABLED, STUDENT_AREA_ENABLED } from '@/lib/student-area';
 
 /** Paths that need a signed-in user. Role checks happen in the pages themselves. */
 const PROTECTED = ['/panel', '/admin'];
@@ -37,9 +37,12 @@ export async function updateSession(request: NextRequest) {
   const signedIn = Boolean(data?.claims);
   const { pathname } = request.nextUrl;
 
-  const isStudentAreaPath =
-    pathname === '/panel' || pathname.startsWith('/panel/') || pathname === '/rejestracja';
-  if (!STUDENT_AREA_ENABLED && isStudentAreaPath) {
+  const isSignUp = pathname === '/rejestracja';
+  const isPanel = pathname === '/panel' || pathname.startsWith('/panel/');
+  if (
+    (isSignUp && !(STUDENT_AREA_ENABLED && SIGN_UP_ENABLED)) ||
+    (isPanel && !STUDENT_AREA_ENABLED)
+  ) {
     const url = request.nextUrl.clone();
     url.pathname = '/logowanie';
     url.search = '';

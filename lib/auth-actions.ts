@@ -3,6 +3,7 @@
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import { SIGN_UP_ENABLED, STUDENT_AREA_ENABLED } from '@/lib/student-area';
 import { createClient } from '@/lib/supabase/server';
 
 export type AuthState = { error?: string; notice?: string } | undefined;
@@ -57,6 +58,9 @@ const signUpSchema = z.object({
 });
 
 export async function signUp(_: AuthState, formData: FormData): Promise<AuthState> {
+  if (!STUDENT_AREA_ENABLED || !SIGN_UP_ENABLED) {
+    return { error: 'Rejestracja jest wyłączona — konto założy dla Ciebie lektorka.' };
+  }
   const parsed = signUpSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message };
 
