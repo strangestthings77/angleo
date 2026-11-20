@@ -83,22 +83,75 @@ export async function createBooking(input: {
   return { start, end, location: location ?? meetingUrl ?? null };
 }
 
+type BookingWindowSetting =
+  | { type: 'calendarDays' | 'businessDays'; value: number; rolling?: boolean }
+  | { type: 'range'; value: [string, string] }
+  | { disabled: true };
+
+type EventType = {
+  title: string;
+  lengthInMinutes: number;
+  locations?: { type: string }[];
+  bookingWindow?: BookingWindowSetting | null;
+};
+
+/**
+ * The lesson's event type. Cached for minutes, so changes made in Cal.com (length, "Limit future
+ * bookings") reach the site within a few minutes.
+ */
+async function getEventType(): Promise<EventType> {
+  'use cache';
+  cacheLife('minutes');
+  const { eventTypeId } = config();
+  const body = await cal<{ data: EventType }>(`/event-types/${eventTypeId}`, '2024-06-14');
+  return body.data;
+}
+
 export type LessonInfo = { title: string; lengthInMinutes: number; online: boolean };
 
-/** Event type details for the page copy. Cached; `null` when Cal.com is unreachable. */
+/** Event type details for the page copy; `null` when Cal.com is unreachable. */
 export async function getLessonInfo(): Promise<LessonInfo | null> {
-  'use cache';
-  cacheLife('hours');
   try {
-    const { eventTypeId } = config();
-    const body = await cal<{
-      data: { title: string; lengthInMinutes: number; locations?: { type: string }[] };
-    }>(`/event-types/${eventTypeId}`, '2024-06-14');
-    const { title, lengthInMinutes, locations = [] } = body.data;
+    const { title, lengthInMinutes, locations = [] } = await getEventType();
     return { title, lengthInMinutes, online: locations.some((l) => l.type === 'integration') };
   } catch {
     return null;
   }
+}
+
+/** No limit set in Cal.com, or it can't be read. */
+const DEFAULT_HORIZON_DAYS = 60;
+/** "Rolling" limits count bookable days, so their end date isn't known up front. */
+const ROLLING_HORIZON_DAYS = 90;
+const MAX_HORIZON_DAYS = 365;
+
+/**
+ * How many days ahead the booking calendar asks Cal.com for slots — driven by the event type's
+ * "Limit future bookings" setting (Cal.com → event type → Limits). Cal.com applies that setting
+ * to `/slots` itself (business days, rolling windows, date ranges), so this only has to be an
+ * upper bound that never cuts the setting short.
+ */
+export async function getBookingHorizonDays(): Promise<number> {
+  let setting: BookingWindowSetting | null | undefined;
+  try {
+    setting = (await getEventType()).bookingWindow;
+  } catch {
+    return DEFAULT_HORIZON_DAYS;
+  }
+  const days = horizonFor(setting);
+  return Math.min(Math.max(Math.ceil(days), 1), MAX_HORIZON_DAYS);
+}
+
+function horizonFor(setting: BookingWindowSetting | null | undefined): number {
+  if (!setting || 'disabled' in setting) return DEFAULT_HORIZON_DAYS;
+  if (setting.type === 'range') {
+    const end = Date.parse(`${setting.value[1]}T23:59:59Z`);
+    // +1: the visitor's "today" can be a day behind or ahead of UTC.
+    return Number.isNaN(end) ? DEFAULT_HORIZON_DAYS : (end - Date.now()) / 86_400_000 + 1;
+  }
+  if (setting.rolling) return ROLLING_HORIZON_DAYS;
+  // Business days: N weekdays span at most N × 7/5 calendar days, plus a weekend at the edge.
+  return setting.type === 'businessDays' ? (setting.value * 7) / 5 + 2 : setting.value;
 }
 
 export type UpcomingLesson = { uid: string; start: string; end: string; location: string | null };

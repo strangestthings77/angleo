@@ -5,6 +5,7 @@ import { Container } from '@/components/ui/Container';
 import { site } from '@/content/site';
 import { MainLayout } from '@/layouts/MainLayout';
 import { getViewer } from '@/lib/auth';
+import { getBookingHorizonDays } from '@/lib/cal';
 import { buildMetadata } from '@/lib/metadata';
 import { LessonDetails } from '@/sections/contact/LessonDetails';
 
@@ -48,5 +49,11 @@ export default function BookingPage() {
 /** Reads the session (if any) so signed-in students skip the name/email fields. */
 async function ViewerBookingWidget() {
   const viewer = await getViewer();
-  return <BookingWidget viewer={viewer ? { name: viewer.name, email: viewer.email } : null} />;
+  const horizonDays = await getBookingHorizonDays();
+  return (
+    <BookingWidget
+      viewer={viewer ? { name: viewer.name, email: viewer.email } : null}
+      horizonDays={horizonDays}
+    />
+  );
 }

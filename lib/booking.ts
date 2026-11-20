@@ -2,9 +2,6 @@ import { z } from 'zod';
 
 /** Shared between the booking route handlers and the client widget. */
 
-/** Bookable range: today plus the next 13 days (two weeks). Enforced in the UI and both routes. */
-export const BOOKING_WINDOW_DAYS = 14;
-
 /** `YYYY-MM-DD` of `date` in `timeZone`. */
 export function dateKeyIn(timeZone: string, date: Date = new Date()): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone }).format(date);
@@ -15,10 +12,14 @@ export function addDays(key: string, days: number): string {
   return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10);
 }
 
-/** First and last bookable date keys for a visitor in `timeZone`. */
-export function bookingWindow(timeZone: string): { first: string; last: string } {
+/**
+ * First and last date keys the site asks Cal.com about, for a visitor in `timeZone`. `days` comes
+ * from Cal.com's "Limit future bookings" setting (`getBookingHorizonDays()`); Cal.com trims its
+ * slots to that setting itself, so this is the outer bound, not the exact rule.
+ */
+export function bookingWindow(timeZone: string, days: number): { first: string; last: string } {
   const first = dateKeyIn(timeZone);
-  return { first, last: addDays(first, BOOKING_WINDOW_DAYS - 1) };
+  return { first, last: addDays(first, days - 1) };
 }
 
 const isTimeZone = (tz: string) => {

@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { bookingWindow, slotsQuerySchema, type SlotsResponse } from '@/lib/booking';
-import { CalError, getSlots } from '@/lib/cal';
+import { CalError, getBookingHorizonDays, getSlots } from '@/lib/cal';
 import { clientIp, rateLimit } from '@/lib/rate-limit';
 
 export async function GET(request: NextRequest) {
@@ -14,8 +14,8 @@ export async function GET(request: NextRequest) {
   const { timeZone } = parsed.data;
   if (parsed.data.start > parsed.data.end) return json({ error: 'Nieprawidłowy zakres dat.' }, 400);
 
-  // Clamp to the two-week booking window, whatever the client asked for.
-  const bounds = bookingWindow(timeZone);
+  // Clamp to the window set in Cal.com ("Limit future bookings"), whatever the client asked for.
+  const bounds = bookingWindow(timeZone, await getBookingHorizonDays());
   const start = parsed.data.start > bounds.first ? parsed.data.start : bounds.first;
   const end = parsed.data.end < bounds.last ? parsed.data.end : bounds.last;
   if (start > end) return json({ slots: {} });

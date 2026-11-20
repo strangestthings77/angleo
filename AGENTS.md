@@ -113,10 +113,12 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
 ```
 
 - **Env:** `CAL_API_KEY` (server only — never `NEXT_PUBLIC_`), `CAL_EVENT_TYPE_ID`.
-- **Booking window:** today + 13 days (`BOOKING_WINDOW_DAYS = 14` in `lib/booking.ts`). The
-  widget fetches the whole window once; the slots route clamps any range to it and the booking
-  route rejects starts beyond it. Mirror it in Cal.com (event type → Limits → limit future
-  bookings) so reschedule links from Cal emails respect it too.
+- **Booking window = Cal.com's setting** (event type → Limits → "Limit future bookings"; Nicole
+  changes it there, the site follows within minutes). `getBookingHorizonDays()` (`lib/cal.ts`)
+  turns it into an outer bound — calendar/business days as set, 90 for rolling windows, a date
+  range's end, 60 when unset — and Cal.com's `/slots` trims to the exact rule itself. The widget
+  fetches that range once and only pages to the last month with a free slot; the slots route
+  clamps to it and the booking route rejects starts beyond it.
 - **API versions:** slots `2024-09-04`, bookings `2026-02-25`, event types `2024-06-14`
   (`cal-api-version` header; wrong value silently falls back to an older contract).
 - **Plan:** hosted API v2 needs a paid Cal.com plan (Teams+); the free plan has no API access.
@@ -130,7 +132,8 @@ BookingWidget (client) → GET /api/booking/slots → lib/cal.ts → Cal.com GET
   10 min / IP and 60 slot queries / min / IP (per instance — best effort on serverless).
 - **Time zones:** the widget uses the visitor's browser time zone; Cal returns slots grouped
   by local date in that zone. Date math in `components/booking/dates.ts` is UTC-only.
-- `getLessonInfo()` (duration, online) is `'use cache'` with `cacheLife('hours')`.
+- The event type (duration, online, booking window) is read once via `getEventType()`, `'use cache'`
+  with `cacheLife('minutes')`.
 
 ## SEO
 

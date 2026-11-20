@@ -124,7 +124,7 @@ export const site = {
     steps: [
       {
         title: 'Wybierz termin',
-        body: 'W kalendarzu na stronie wybierasz dzień i godzinę — terminy są dostępne na dwa tygodnie do przodu.',
+        body: 'W kalendarzu na stronie wybierasz dzień i godzinę — od razu widzisz wolne terminy na najbliższe tygodnie.',
       },
       {
         title: 'Spotkajmy się online',
@@ -153,7 +153,7 @@ export const site = {
       },
       {
         q: 'Jak umówić lekcję?',
-        a: 'Wybierz dzień i godzinę w kalendarzu na stronie „Umów lekcję”. Terminy są dostępne na dwa tygodnie do przodu, a potwierdzenie przychodzi od razu na e-mail.',
+        a: 'Wybierz dzień i godzinę w kalendarzu na stronie „Umów lekcję” — widać w nim wolne terminy na najbliższe tygodnie, a potwierdzenie przychodzi od razu na e-mail.',
       },
       {
         q: 'Czego będziemy się uczyć?',

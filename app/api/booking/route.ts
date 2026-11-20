@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import {
-  BOOKING_WINDOW_DAYS,
   bookingRequestSchema,
   bookingWindow,
   dateKeyIn,
   type BookingResponse,
 } from '@/lib/booking';
 import { getViewer } from '@/lib/auth';
-import { CalError, createBooking } from '@/lib/cal';
+import { CalError, createBooking, getBookingHorizonDays } from '@/lib/cal';
 import { clientIp, rateLimit } from '@/lib/rate-limit';
 
 /** Faster than this from form render to submit is treated as a bot. */
@@ -48,12 +47,11 @@ export async function POST(request: Request) {
   if (Date.parse(input.start) < Date.now()) {
     return json({ error: 'Ten termin już minął — wybierz inny.', code: 'unavailable' }, 409);
   }
-  if (dateKeyIn(input.timeZone, new Date(input.start)) > bookingWindow(input.timeZone).last) {
+  // Outer bound only — Cal.com rejects anything outside its own "Limit future bookings" rule.
+  const { last } = bookingWindow(input.timeZone, await getBookingHorizonDays());
+  if (dateKeyIn(input.timeZone, new Date(input.start)) > last) {
     return json(
-      {
-        error: `Rezerwacja jest możliwa najwyżej ${BOOKING_WINDOW_DAYS} dni do przodu.`,
-        code: 'unavailable',
-      },
+      { error: 'Ten termin jest zbyt odległy — wybierz bliższy.', code: 'unavailable' },
       409,
     );
   }

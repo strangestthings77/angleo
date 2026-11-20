@@ -7,7 +7,6 @@ import { addMonths, compareMonths, monthOf } from '@/components/booking/dates';
 import { MonthCalendar } from '@/components/booking/MonthCalendar';
 import { TimeSlots } from '@/components/booking/TimeSlots';
 import {
-  BOOKING_WINDOW_DAYS,
   bookingWindow,
   type BookingConfirmation,
   type BookingViewer,
@@ -31,15 +30,22 @@ const useTimeZone = () =>
 
 type SlotsResult = { key: string; slots: SlotsByDate; error: string | null };
 
-/** Custom booking flow on top of Cal.com: day → time → details → confirmation, two weeks ahead. */
-export function BookingWidget({ viewer = null }: { viewer?: BookingViewer | null }) {
+/**
+ * Custom booking flow on top of Cal.com: day → time → details → confirmation. How far ahead it
+ * reaches (`horizonDays`) follows the event type's "Limit future bookings" setting in Cal.com.
+ */
+export function BookingWidget({
+  viewer = null,
+  horizonDays,
+}: {
+  viewer?: BookingViewer | null;
+  horizonDays: number;
+}) {
   const timeZone = useTimeZone();
-  const range = timeZone ? bookingWindow(timeZone) : null;
+  const range = timeZone ? bookingWindow(timeZone, horizonDays) : null;
   const today = range?.first ?? '';
   const minMonth = range ? monthOf(range.first) : null;
-  const maxMonth = range ? monthOf(range.last) : null;
   const [monthOffset, setMonthOffset] = useState(0);
-  const month = minMonth ? addMonths(minMonth, monthOffset) : null;
 
   const [result, setResult] = useState<SlotsResult | null>(null);
   const [picked, setPicked] = useState<string | null>(null);
@@ -47,7 +53,7 @@ export function BookingWidget({ viewer = null }: { viewer?: BookingViewer | null
   const [notice, setNotice] = useState<string | null>(null);
   const [reload, setReload] = useState(0);
 
-  // The whole window is at most two weeks, so it's fetched once, not per month.
+  // The whole window is fetched once, not per month (Cal.com answers in one request).
   const first = range?.first ?? '';
   const last = range?.last ?? '';
   const requestKey = timeZone && first ? `${first}|${last}|${timeZone}|${reload}` : '';
@@ -77,6 +83,13 @@ export function BookingWidget({ viewer = null }: { viewer?: BookingViewer | null
   const slots = loading ? {} : result.slots;
   const error = notice ?? (loading ? null : result.error);
   const available = new Set(Object.keys(slots).filter((key) => slots[key].length > 0));
+
+  // Cal.com trims slots to its own limit, so the calendar stops at the last month with a free
+  // slot (until they load: the outer bound).
+  const lastAvailable = [...available].sort().at(-1);
+  const maxMonth = !range ? null : monthOf(loading ? range.last : (lastAvailable ?? range.first));
+  const wanted = minMonth ? addMonths(minMonth, monthOffset) : null;
+  const month = wanted && maxMonth && compareMonths(wanted, maxMonth) > 0 ? maxMonth : wanted;
   const monthPrefix = month ? `${month.year}-${String(month.month + 1).padStart(2, '0')}` : '';
   const availableThisMonth = [...available].filter((key) => key.startsWith(monthPrefix)).sort();
 
@@ -86,7 +99,10 @@ export function BookingWidget({ viewer = null }: { viewer?: BookingViewer | null
   const changeMonth = (delta: 1 | -1) => {
     setPicked(null);
     setNotice(null);
-    setMonthOffset((n) => n + delta);
+    // Step from the month on screen — it may be clamped below the stored offset.
+    const shown =
+      month && minMonth ? (month.year - minMonth.year) * 12 + month.month - minMonth.month : 0;
+    setMonthOffset(shown + delta);
   };
 
   const refresh = () => {
@@ -172,7 +188,7 @@ export function BookingWidget({ viewer = null }: { viewer?: BookingViewer | null
             <p className="flex h-full min-h-40 items-center justify-center rounded-2xl border border-dashed border-border p-6 text-center text-sm text-foreground-muted">
               {laterMonth
                 ? 'W tym miesiącu brak wolnych terminów — sprawdź następny.'
-                : `Brak wolnych terminów w najbliższych ${BOOKING_WINDOW_DAYS} dniach. Napisz lub zadzwoń — znajdziemy termin.`}
+                : 'Brak wolnych terminów w kalendarzu. Napisz lub zadzwoń — znajdziemy termin.'}
             </p>
           ) : (
             <TimeSlots
